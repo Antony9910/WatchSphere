@@ -1,0 +1,39 @@
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;  
+    margin-top: 50px; 
+}
+  
+  .input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 250px; 
+  }
+  
+  .button {
+    padding: 10px 20px;
+    background-color: #4CAF50; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: #45a049; 
+  }
+  
+
+  .heading {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  

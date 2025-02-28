@@ -1,0 +1,54 @@
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 30px;
+  background-color: #2e3b4e;
+  color: white;
+  height: 60px; 
+  margin-bottom:10;
+  width:100%;
+  margin-top: 10;
+}
+
+.leftSection {
+  display: flex;
+  margin-right:10;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left:40px;
+  color:orange;
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px; 
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 20px; 
+}
+
+.iconButtons {
+  display: flex;
+  gap: 15px;
+}
+
+.icon {
+  cursor: pointer;
+  color: white;
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+}
