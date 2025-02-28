@@ -105,7 +105,7 @@ const Registration = () => {
         <Grid item xs={12} md={6}>
           <Box sx={{ padding: 2, backgroundColor: '#fff', borderRadius: 2, boxShadow: 2 }}>
             <Typography variant="h4" align="center" gutterBottom sx={{fontFamily:'fantasy'}}>
-             USER-
+             USER-REGISTRATION
             </Typography>
             {message && (
               <Box sx={{ marginBottom: 2 }}>
