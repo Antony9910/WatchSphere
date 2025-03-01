@@ -315,6 +315,16 @@ app.post("/Admin",async(req,res)=>{
          type:String,
          required:true,
     },
+    password:{
+      type:String,
+      required:true,
+      minlength:6,
+    },
+    confirmPassword:{
+      type:String,
+      required:true,
+      minlength:6,
+    },
     place: {
         type: String,
         required: true,
@@ -351,7 +361,7 @@ const User = mongoose.model('User', userSchema);
           console.log('Received data:', req.body);
           console.log('Received files:', req.files);
    
-          const { name, email, address, contact, districtId,state, placeId ,pinCode} = req.body;
+          const { name, email, address, contact, district,state, place ,pinCode,password,confirmPassword} = req.body;
           const fileValue = req.files ? JSON.parse(JSON.stringify(req.files)) : {};
    
    
@@ -364,10 +374,11 @@ const User = mongoose.model('User', userSchema);
              email,
              address,
              contact,
-             districtId,
-             placeId,
+             district,
+             place,
              state,
              pinCode,
+             password,confirmPassword,
              profileImage: profileimgsrc,
              proofImage: proofimgsrc,
           });

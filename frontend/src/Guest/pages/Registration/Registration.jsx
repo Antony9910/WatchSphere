@@ -12,9 +12,11 @@ const Registration = () => {
   const [address, setAddress] = useState('');
   const [contact, setContact] = useState('');
   const [pinCode, setPinCode] = useState('');
+  const [password,setPassword]=useState('');
+  const [confirmPassword,setConfirmPassword]=useState('');
   const [district, setDistrict] = useState('');
   const [place, setPlace] = useState('');
-  const [proof, setProof] = useState(null);
+  const [proof, setProof] = useState(null); 
   const [photo, setPhoto] = useState(null);
   const [message, setMessage] = useState('');
   const [districtRows, setDistrictRows] = useState([]);
@@ -71,6 +73,8 @@ const Registration = () => {
     formDataToSend.append('district', selectedDistrict);
     formDataToSend.append('place', selectedPlace);
     formDataToSend.append('pinCode', pinCode);
+    formDataToSend.append('password',password);
+    formDataToSend.append('confirmPassword',confirmPassword)
     
     if (proof) formDataToSend.append('proof', proof);
     if (photo) formDataToSend.append('photo', photo);
@@ -234,6 +238,28 @@ const Registration = () => {
                     pattern="[0-6]{10}"
                     required
                     placeholder="Enter pin-code"
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                   
+                    required
+                    placeholder="Enter Password"
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="ConfirmPassword"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  
+                    required
+                    placeholder="Enter Confirm Password"
                   />
                 </Grid>
                   <Grid item xs={12} md={6}>
