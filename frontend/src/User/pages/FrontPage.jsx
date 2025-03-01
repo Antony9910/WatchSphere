@@ -91,12 +91,12 @@ const UserPage = () => {
         Edit Profile
         </Typography>
         <Typography>
-          Edit Details of User
+           Edit Details of User
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon>Edit</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><Link  to={'Profile/'} style={{color:'white',textDecoration:'none'}}><EditIcon></EditIcon>Edit</Link></Button>
       
       </CardActions>
     </Card>

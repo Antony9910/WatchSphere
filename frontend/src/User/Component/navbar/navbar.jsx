@@ -3,6 +3,7 @@ import Styles from "../navbar/navbar.module.css";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+
 import MessageIcon from "@mui/icons-material/Message";
 import img from './images/W.jpg';
 import SearchIcon from "@mui/icons-material/Search";
@@ -111,6 +112,16 @@ const Navbar = () => {
              <h3>
               {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
               <MessageIcon></MessageIcon>
+            </h3> 
+          </Box>
+          <Box
+            sx={{
+              marginLeft: 2,
+              ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'white',
+            }}
+          >
+             <h3>
+             <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
             </h3> 
           </Box>
         </div>

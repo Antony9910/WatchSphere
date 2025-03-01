@@ -1,14 +1,15 @@
 import React from 'react'
 import { Routes,Route} from 'react-router-dom'
-import Products from '../Shop/pages/products'
+
 import UserPage from '../User/pages/FrontPage'
+import EditProfile from '../User/pages/EditProfile'
 
 const ShopRoutes = () => {
   return (
     <div>
     <Routes>
     <Route path='/' element={<UserPage />} />
-   
+    <Route path='Profile' element={<EditProfile/>}/>
 
     </Routes>
     </div>
