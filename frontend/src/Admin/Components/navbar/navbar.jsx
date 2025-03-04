@@ -16,7 +16,7 @@ const Navbar = () => {
   return (
     <div className={Styles.navbar}>
       <div className={Styles.leftSection}>
-      <Box sx={{marginLeft:20}}>
+      <Box sx={{marginLeft:20,marginTop:1}}>
   <img src={img}  width={80} height={70}alt="Image" style={{borderRadius:50}} />
 </Box>
         <div className={Styles.logo}>

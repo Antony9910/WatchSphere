@@ -28,9 +28,19 @@ const Login = () => {
         const { id, login } = res.data;
         console.log(login);
 
-        if (login === "Admin") {
+        if (login == "Admin") {
           sessionStorage.setItem("aid", id);
           navigate("/admin");
+        }
+        else if(login == "User")
+        {
+          sessionStorage.setItem("aid", id);
+          navigate("/user");
+        }
+        else if(login == "Seller")
+        {
+          sessionStorage.setItem("aid", id);
+          navigate("/seller");
         }
       })
       .catch((err) => {

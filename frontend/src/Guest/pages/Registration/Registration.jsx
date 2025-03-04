@@ -14,8 +14,6 @@ const Registration = () => {
   const [pinCode, setPinCode] = useState('');
   const [password,setPassword]=useState('');
   const [confirmPassword,setConfirmPassword]=useState('');
-  const [district, setDistrict] = useState('');
-  const [place, setPlace] = useState('');
   const [proof, setProof] = useState(null); 
   const [photo, setPhoto] = useState(null);
   const [message, setMessage] = useState('');

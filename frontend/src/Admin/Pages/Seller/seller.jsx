@@ -1,66 +1,148 @@
-import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { blue, red } from '@mui/material/colors';
-import { Button } from '@mui/material';
-import GroupIcon from '@mui/icons-material/Group';
+import * as React from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { Link } from "react-router-dom";
+import { Button, Box, Typography, Container } from "@mui/material";
+import Person2Icon from "@mui/icons-material/Person2";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
+const SellerList = () => {
+  const [sellerRows, setSellerRows] = useState([]);
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+  useEffect(() => {
+    fetchSeller();
+  }, []);
 
-export default function DenseTable() {
+  const fetchSeller = () => {
+    axios
+      .get("http://localhost:5000/sellerReg")
+      .then((res) => {
+        console.log(res.data.seller);
+        setSellerRows(res.data.seller);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`http://localhost:5000/sellerReg/${id}`)
+      .then((res) => {
+        console.log(res.data.message);
+        alert(res.data.message);
+        fetchSeller();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const handleApprove = (id) => {
+    axios
+      .post(`http://localhost:5000/SellerReg/${id}`)
+      .then((res) => {
+        console.log(res.data.message);
+        alert(res.data.message);
+        fetchSeller();
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
-    <h2 style={{ textAlign: 'center', color: 'blue', fontSize: '40px' }}><GroupIcon></GroupIcon>Seller-List
-    <TableContainer>
-      <Table sx={{ maxWidth: 650 ,height:50,alignItems:'center',marginLeft:60,marginTop:10,backgroundColor:'skyblue',color:'white'}} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-            <TableCell align="right">Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
+    <Box sx={{ marginLeft: 10 }}>
+      <Typography
+        variant="h4"
+        align="center"
+        gutterBottom
+        sx={{ fontFamily: "fantasy", color: "blue" }}
+      >
+        <Person2Icon sx={{ fontSize: 40 }} /> SELLER_LIST
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table sx={{ width: "80%", marginLeft: 25 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell align="center"></TableCell>
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+                Profile-Pic
               </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-              <TableCell align="right"><Button variant="contained" color="success">
-  Accept
-</Button></TableCell>
-<TableCell align="right"><Button variant="contained" color="warning">
-  Reject
-</Button></TableCell>
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+                Name
+              </TableCell>
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+                Email
+              </TableCell>
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+                Address
+              </TableCell>
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+                Proof
+              </TableCell>
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+                Action
+              </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </h2>
+          </TableHead>
+          <TableBody>
+            {sellerRows.map((seller, index) => (
+              <TableRow key={index}>
+                <TableCell align="center">{index + 1}</TableCell>
+                <TableCell align="center">
+                  <img
+                    src={seller.profileImage}
+                    alt="Profile"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      objectFit: "cover",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </TableCell>
+                <TableCell align="center">{seller.name}</TableCell>
+                <TableCell align="center">{seller.email}</TableCell>
+                <TableCell align="center">{seller.address}</TableCell>
+                <TableCell align="center">
+                  <Link
+                    to={seller.profileImage}
+                    target="_blank"
+                    style={{ textDecoration: "none" }}
+                  >
+                    {seller.name} PROOF
+                  </Link>
+                </TableCell>
+                <TableCell align="center">
+                  <Button
+                    variant="contained"
+                    onClick={() => handleApprove(seller._id)}
+                    sx={{ marginRight: 2 }}
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="warning"
+                    onClick={() => handleDelete(seller._id)}
+                  >
+                    Reject
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
-}
+};
+
+export default SellerList;

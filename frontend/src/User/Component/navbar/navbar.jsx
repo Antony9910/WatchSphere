@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Styles from "../navbar/navbar.module.css";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
@@ -13,6 +13,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import axios from 'axios';
 
 const UserAvatar = () => {
   const [anchorEl, setAnchorEl] = useState(null);  // state to manage the dropdown
@@ -28,6 +29,23 @@ const UserAvatar = () => {
     setAnchorEl(null); // Close the dropdown
   };
 }
+//  const [userRows, setUserRows] = useState([]);
+
+//   useEffect(() => {
+//     fetchUser();
+//   }, []);
+// const fetchUser = () => {
+//   axios
+//     .get(`http://localhost:5000/userReg/${id}`)
+//     .then((res) => {
+//       console.log(res.data.user);
+//       setUserRows(res.data.user);
+//     })
+//     .catch((err) => {
+//       console.error(err);
+//     });
+// };
+
 const Navbar = () => {
   return (
     <div className={Styles.navbar}>
@@ -100,7 +118,7 @@ const Navbar = () => {
           >
              <h3>
               {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
-             <Link to={'/*'}></Link><LogoutIcon></LogoutIcon>Logout
+              <LogoutIcon></LogoutIcon><Link to={"/*"} style={{textDecoration:'none',color:'orange'}}>Logout</Link>
             </h3> 
           </Box>
           <Box
@@ -120,9 +138,11 @@ const Navbar = () => {
               ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'white',
             }}
           >
-             <h3>
-             <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-            </h3> 
+            
+              
+ 
+
+             
           </Box>
         </div>
       </Box>

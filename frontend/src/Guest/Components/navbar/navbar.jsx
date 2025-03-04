@@ -74,7 +74,7 @@ const Navbar = () => {
                 textTransform: 'none',
                 display: 'flex',
                 alignItems: 'center',
-                ":hover": { transform: "scale(1.05)", boxShadow: 6 },
+                ":hover": { transform: "scale(1.05)", boxShadow: 6, },
               }}
             >
               <AppRegistrationIcon sx={{ marginRight: 1 }} />
@@ -87,20 +87,30 @@ const Navbar = () => {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>
-                <Link to="/Register" style={{ color: 'orange', textDecoration: 'none' }}>
+                <Link to="/Register" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy',   ":hover": { transform: "scale(1.05)", boxShadow: 6,color:'orange'}}}>
                   User Registration
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link to="/AgentRegister" style={{ color: 'orange', textDecoration: 'none' }}>
-                  Agent Registration
+                <Link to="/SellerRegister" style={{ color: 'orange', textDecoration: 'none' ,fontFamily:'fantasy'}}>
+                  Seller Registration
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link to="/AgentRegister" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy' }}>
+                  Shop Registration
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link to="/AgentRegister" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy' }}>
+                 Agent Registration
                 </Link>
               </MenuItem>
             </Menu>
           </Box>
 
           {/* Login Link */}
-          <Box sx={{ marginLeft: 2, ":hover": { transform: "scale(1.05)", boxShadow: 6 }, color: 'orange' }}>
+          <Box sx={{ marginLeft: 2, ":hover": { transform: "scale(1.05)", boxShadow: 6}, color: 'orange' }}>
             <h3><Link to={"/login"} style={{ color: 'orange', textDecoration: 'none', marginRight: 8 }}><LoginIcon />Login</Link></h3>
           </Box>
         </div>

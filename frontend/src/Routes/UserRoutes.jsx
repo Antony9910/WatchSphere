@@ -4,7 +4,7 @@ import { Routes,Route} from 'react-router-dom'
 import UserPage from '../User/pages/FrontPage'
 import EditProfile from '../User/pages/EditProfile'
 
-const ShopRoutes = () => {
+const UserRoutes = () => {
   return (
     <div>
     <Routes>
@@ -16,4 +16,4 @@ const ShopRoutes = () => {
   )
 }
 
-export default ShopRoutes
+export default UserRoutes
