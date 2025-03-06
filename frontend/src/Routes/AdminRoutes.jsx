@@ -1,5 +1,5 @@
 import React from "react";
- import District from "../admin/Pages/district/District";
+
 import { Route, Routes } from "react-router-dom";
 import Place from "../Admin/Pages/place/Place";
 import Category from "../admin/Pages/category/category";
@@ -11,6 +11,7 @@ import Shop from "../admin/Pages/shop/Shop";
 import Customer from "../admin/Pages/Customer/Customer";
 import Agent from "../admin/Pages/Agent/agent";
 import SelectActionCard from "../Admin/Pages/Home/Home";
+import District from "../Admin/Pages/district/District";
 
 
 

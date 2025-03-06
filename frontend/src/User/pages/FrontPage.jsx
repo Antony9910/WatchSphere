@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -27,6 +27,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ShopIcon from '@mui/icons-material/Shop';
 import StoreIcon from '@mui/icons-material/Store';
 import PlaceIcon from '@mui/icons-material/Place';
+import axios from 'axios';
 
 
 
@@ -41,7 +42,25 @@ const UserPage = () => {
     autoplaySpeed: 1000, 
     arrows: true
 };
+ const [name, setName] = useState('');
+ 
+ useEffect(() => {
+  fetchUser();
+}, []);
+
+const fetchUser = () => {
+  const id = sessionStorage.getItem('aid');
+  axios.get(`http://localhost:5000/userReg/${id}`).then((res) => {
+    const user = res.data.user;
+    // Set each individual field with data
+    setName(user.name);
+  
+  }).catch((err) => {
+    console.error(err);
+  });
+};
   return (
+   
     <Box>
     <Box sx={{ width: "101%", overflow: "hidden",position:'relative' }}>
     <Slider {...settings}>
@@ -69,8 +88,8 @@ const UserPage = () => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy',marginTop:-2,marginLeft:9,}}>
-          WELCOME TO WATCHSPHERE
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy',marginTop:-4,marginLeft:9,width:'100%'}}>
+          WELCOME TO WATCHSPHERE <Box sx={{color:'green',marginLeft:10}}>{name}</Box>
         </Typography>
         
       </CardContent>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Styles from "../navbar/navbar.module.css";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
@@ -29,24 +29,27 @@ const UserAvatar = () => {
     setAnchorEl(null); // Close the dropdown
   };
 }
-//  const [userRows, setUserRows] = useState([]);
 
-//   useEffect(() => {
-//     fetchUser();
-//   }, []);
-// const fetchUser = () => {
-//   axios
-//     .get(`http://localhost:5000/userReg/${id}`)
-//     .then((res) => {
-//       console.log(res.data.user);
-//       setUserRows(res.data.user);
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//     });
-// };
 
 const Navbar = () => {
+
+  const [profileImage, setProfile] = useState('');
+
+useEffect(() => {
+  fetchUser();
+}, []);
+
+const fetchUser = () => {
+  const id = sessionStorage.getItem('aid');
+  axios.get(`http://localhost:5000/userReg/${id}`).then((res) => {
+    const user = res.data.user;
+    // Set each individual field with data
+    setProfile(user.profileImage);
+  }).catch((err) => {
+    console.error(err);
+  });
+};
+
   return (
     <div className={Styles.navbar}>
       <div className={Styles.leftSection}>
@@ -138,7 +141,7 @@ const Navbar = () => {
               ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'white',
             }}
           >
-            
+               <Avatar alt="Remy Sharp" src={profileImage} />
               
  
 

@@ -3,6 +3,8 @@ import { Routes,Route} from 'react-router-dom'
 
 import UserPage from '../User/pages/FrontPage'
 import EditProfile from '../User/pages/EditProfile'
+import EditImage from '../User/pages/EditImage'
+
 
 const UserRoutes = () => {
   return (
@@ -10,6 +12,7 @@ const UserRoutes = () => {
     <Routes>
     <Route path='/' element={<UserPage />} />
     <Route path='Profile' element={<EditProfile/>}/>
+     <Route path='Pro' element={<EditImage/>}/>
 
     </Routes>
     </div>

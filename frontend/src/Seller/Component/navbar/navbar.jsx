@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Styles from "../navbar/navbar.module.css";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
@@ -11,6 +11,8 @@ import { InputBase, IconButton, Box, Button } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useEffect } from "react";
+import axios from 'axios';
 
 const UserAvatar = () => {
   const [anchorEl, setAnchorEl] = useState(null);  // state to manage the dropdown
@@ -27,6 +29,23 @@ const UserAvatar = () => {
   };
 }
 const Navbar = () => {
+  const [profileImage, setProfile] = useState('');
+
+  useEffect(() => {
+    fetchSeller();
+  }, []);
+  
+  const fetchSeller = () => {
+    const id = sessionStorage.getItem("aid");
+    axios.get(`http://localhost:5000/sellerReg/${id}`).then((res) => {
+      const Seller = res.data.seller;
+      // Set each individual field with data
+      setProfile(Seller.profileImage);
+    }).catch((err) => {
+      console.error(err);
+    });
+  };
+  
   return (
     <div className={Styles.navbar}>
       <div className={Styles.leftSection}>
@@ -110,6 +129,18 @@ const Navbar = () => {
               {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
               <MessageIcon></MessageIcon>
             </h3> 
+          </Box>
+          <Box
+            sx={{
+              marginLeft: 2,
+              ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'white',
+            }}
+          >
+               <Avatar alt="Remy Sharp" src={profileImage} />
+              
+ 
+
+             
           </Box>
         </div>
       </Box>

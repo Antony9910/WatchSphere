@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, InputAdornment, Typography } from '@mui/material';
 import { blue, orange, red } from '@mui/material/colors';
 import GoogleIcon from '@mui/icons-material/Google';
 import LoginIcon from '@mui/icons-material/Login';
@@ -9,6 +9,8 @@ import img from './image/watch.avif';
 import img1 from './image/image1.jpg'
 import { useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
+import EmailIcon from '@mui/icons-material/Email';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -31,6 +33,8 @@ const Login = () => {
         if (login == "Admin") {
           sessionStorage.setItem("aid", id);
           navigate("/admin");
+          alert("Login successfully")
+        
         }
         else if(login == "User")
         {
@@ -104,15 +108,24 @@ const Login = () => {
           >
             <form onSubmit={handleSubmit}> 
               <Box sx={{ marginTop: 30 }}>
+            
                 <TextField
-                  label="Email"
+                  label="Email"  
                   color="primary"
                   focused
                   sx={{ marginTop: 2, width: 300 }}
                   value={email}
                   placeholder='Enter your email'
                   onChange={(e) => setEmail(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <EmailIcon />
+                      </InputAdornment>
+                    ),
+                  }}
                 />
+                
               </Box>
               <Box sx={{ marginTop: 5 }}>
                 <TextField
@@ -121,8 +134,15 @@ const Login = () => {
                   focused
                   sx={{ marginBottom: 2, width: 300 }}
                   placeholder='Enter your password'
-                  value={password} 
+                  value={password} type="password"
                   onChange={(e) => setPassword(e.target.value)}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                       <VisibilityIcon/>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Box>
 

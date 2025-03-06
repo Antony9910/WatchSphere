@@ -80,6 +80,7 @@ const Registration = () => {
     try {
       const response = await axios.post('http://localhost:5000/userReg', formDataToSend);
       setMessage('Registration successful!');
+      alert("Registration Done Successfully")
       console.log('Registration successful:', response.data);
       navigate("/login");
         
