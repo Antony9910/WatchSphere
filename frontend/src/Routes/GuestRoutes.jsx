@@ -8,6 +8,7 @@ import Registration from '../Guest/pages/Registration/Registration'
 import Login from '../Guest/pages/login/login'
 import SellerRegistration from '../Guest/pages/Registration/SellerRegistration'
 import Home from '../Guest/pages/Home/Home'
+import ShopRegistration from '../Guest/pages/Registration/ShopRegistration'
 
 
 
@@ -23,6 +24,7 @@ const GuestRoutes = () => {
     <Route path='about' element={<About/>}/>
     <Route path='register' element={<Registration/>}/>
     <Route path='SellerRegister' element={<SellerRegistration/>}/>
+    <Route path='ShopRegister' element={<ShopRegistration/>}/>
 
 
 </Routes>

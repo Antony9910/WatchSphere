@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -24,6 +24,7 @@ import "slick-carousel/slick/slick-theme.css";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
+import axios from 'axios';
 
 
 
@@ -38,6 +39,21 @@ const FrontPage = () => {
     autoplaySpeed: 1000, 
     arrows: true
 };
+const [name,setName] = useState('')
+useEffect(() => {
+    fetchShop();
+  }, []);
+  
+  const fetchShop = () => {
+    const id = sessionStorage.getItem("aid");
+    axios.get(`http://localhost:5000/shopRegById/${id}`).then((res) => {
+      const Shop = res.data.shop;
+      // Set each individual field with data
+      setName(Shop.name);
+    }).catch((err) => {
+      console.error(err);
+    });
+  };
   return (
     <Box>
     <Box sx={{ width: "101%", overflow: "hidden",position:'relative' }}>
@@ -62,7 +78,7 @@ const FrontPage = () => {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy',marginTop:-2,marginLeft:9,}}>
-          WELCOME TO SELLER PAGE
+          WELCOME TO SELLER PAGE  {name}
         </Typography>
         
       </CardContent>
@@ -88,7 +104,7 @@ const FrontPage = () => {
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon>Edit</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to={'/shop/profile'} style={{textDecoration:'none',color:'white'}}>Edit</Link></Button>
       
       </CardActions>
     </Card>

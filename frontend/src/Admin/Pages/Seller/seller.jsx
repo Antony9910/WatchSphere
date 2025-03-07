@@ -90,6 +90,9 @@ const SellerList = () => {
               <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Action
               </TableCell>
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+                Status
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -136,6 +139,14 @@ const SellerList = () => {
                     Reject
                   </Button>
                 </TableCell>
+                <TableCell align="center">
+    {seller.isApproved ? (
+    <Typography color="green">Approved</Typography>
+  ) : (
+    <Typography color="orange">Pending</Typography>
+  )}
+</TableCell>
+
               </TableRow>
             ))}
           </TableBody>

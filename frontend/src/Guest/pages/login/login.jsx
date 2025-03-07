@@ -46,6 +46,11 @@ const Login = () => {
           sessionStorage.setItem("aid", id);
           navigate("/seller");
         }
+        else if(login == "Shop")
+        {
+          sessionStorage.setItem("aid",id);
+          navigate("/shop")
+        }
       })
       .catch((err) => {
         console.error(err);

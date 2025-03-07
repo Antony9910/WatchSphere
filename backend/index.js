@@ -287,10 +287,24 @@ app.post("/Login", async (req, res) => {
       });
 
       if (seller) {
+         if(seller.isApproved){
          return res.send({
             id: seller._id,
             login: "Seller",
          });
+      }
+      }
+      const shop=await Shop.findOne({
+
+         email:email,password:password,
+      })
+      if (shop) {
+         if(shop.isApproved){
+         return res.send({
+            id: seller._id,
+            login: "Shop",
+         });
+      }
       }
 
       // If no match is found for admin, user, or seller
@@ -550,6 +564,28 @@ app.get('/sellerReg', async (req, res) => {
    }
 });
 
+//Seller Approval By Admin
+app.post('/SellerReg/:id', async (req, res) => {
+   const { id } = req.params;
+ 
+   try {
+     const seller = await Seller.findById(id); 
+     if (!seller) {
+       return res.status(404).send({ message: 'Seller not found' });
+     }
+ 
+ 
+     seller.isApproved = true;   //Update to true when Approve
+     await seller.save();
+ 
+     res.status(200).send({ message: 'Seller approved successfully' });
+   } catch (err) {
+     console.error(err);
+     res.status(500).send({ message: 'Error approving seller' });
+   }
+ });
+ 
+
 app.get(`/sellerReg/:id`, async (req, res) => {
    try {
       const id = req.params.id;
@@ -557,13 +593,14 @@ app.get(`/sellerReg/:id`, async (req, res) => {
       if (!seller) {
          return res.status(404).json({ message: 'Seller not found' });
       }
-      // isApproved = true;
+       isApproved = true;
       await seller.save();
       res.status(200).json({ message: 'Seller approved successfully', seller });  // Ensure the structure is `{ user: userData }`
    } catch (err) {
       res.status(500).json({ message: 'Error fetching seller', error: err });
    }
 });
+
 app.get(`/sellerPro/:id`, async (req, res) => {
    try {
       const id = req.params.id;
@@ -787,3 +824,227 @@ app.post('/UserUploadById/:id', upload.fields([{ name: 'photo' }]), async (req, 
    }
 });
 
+//shop
+const shopSchema = new mongoose.Schema({
+
+   name: {
+      type: String,
+      required: true,
+   },
+   email: {
+      type: String,
+      required: true,
+      unique: true,
+   },
+   address: {
+      type: String,
+      required: true,
+   },
+ shop:{
+         type:String,
+         required:true,
+ },
+   
+   password: {
+      type: String,
+      required: true,
+      minlength: 5,
+   },
+   confirmPassword: {
+      type: String,
+      required: true,
+      minlength: 5,
+   },
+   //  place: {
+   //      type: String,
+   //      required: true,
+   //  },
+   profileImage: {
+      type: String,
+      required: true,
+   },
+   proofImage: {
+      type: String,
+      required: true,
+
+   },
+   isApproved: {
+      type: Boolean,
+      default: false,
+   },
+
+});
+
+// Create the User model from the schema
+const Shop = mongoose.model('Shop', shopSchema);
+
+
+
+app.post('/shopReg', upload.fields([{ name: 'proof' }, { name: 'photo' }]), async (req, res) => {
+   try {
+      // Log the received data and files
+      console.log('Received data:', req.body);
+      console.log('Received files:', req.files);
+
+      const { name, email, address,password, confirmPassword,shop} = req.body;
+      const fileValue = req.files ? JSON.parse(JSON.stringify(req.files)) : {};
+
+
+      var profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.photo[0].filename}`;
+      var proofimgsrc = `http://127.0.0.1:${port}/images/${fileValue.proof[0].filename}`;
+
+
+
+      const newShop = new Shop({
+         name,
+         email,
+         address,
+         shop,
+       
+         password,
+         confirmPassword,
+         profileImage: profileimgsrc,
+         proofImage: proofimgsrc,
+      });
+
+
+      await newShop.save();
+      res.status(200).json({ message: 'Registration successful', data: newShop });
+   
+   } catch (error) {
+      console.error('Error during Seller registration:', error);
+      res.status(500).json({ message: 'Error registering user. Please try again.' });
+   }
+});
+
+app.get("/ShopRegById/:id", async (req, res) => {
+
+   try {
+      const id = req.params.id;
+      const shop = await Shop.findById(id)
+      if (!shop) {
+         res.json({ message: "Shop updated successfully", shop: {} })
+      } else {
+         res.send({ shop }).status(200);
+      }
+   } catch (err) {
+      console.error("Error deleting user", err);
+      res.status(500).send("Internal server error")
+
+   }
+})
+app.put("/ShopRegById/:id", async (req, res) => {
+   try {
+
+      const id = req.params.id;
+
+      const { name, email, address,password,shop,confirmPassword } = req.body;
+      console.log(req.body)
+      let shops = await Shop.findByIdAndUpdate(id, { name, email,shop, address,password,confirmPassword }, { new: true })
+      res.json({ message: "Shop update successfully" })
+   } catch (err) {
+      console.error("Error Updating User", err);
+      res.status(500).send("Internal server error")
+
+   }
+});
+app.get('/shopReg', async (req, res) => {
+   try {
+      const shop = await Shop.find(); // Get all users from the database
+      res.status(200).json({ shop: shop });
+   } catch (err) {
+      res.status(500).json({ message: 'Error fetching seller', error: err });
+   }
+});
+app.get("/ShopProfileById/:id", async (req, res) => {
+
+   try {
+      const id = req.params.id;
+      const shop = await Shop.findById(id)
+      if (!shop) {
+         res.json({ message: "shop  profile updated successfully", shop: {} })
+      } else {
+         res.send({ shop }).status(200);
+      }
+   } catch (err) {
+      console.error("Error deleting user", err);
+      res.status(500).send("Internal server error")
+
+   }
+})
+app.put("/ShopProfileById/:id", async (req, res) => {
+   try {
+      const id = req.params.id;
+      const { profileImage } = req.body;
+
+    
+      let shop = await Shop.findByIdAndUpdate(id, { profileImage }, { new: true });
+      
+      if (!shop) {
+         return res.status(404).json({ message: "Shop not found" });
+      }
+
+      res.json({ message: "Shop profile updated successfully", shop });
+   } catch (err) {
+      console.error("Error Updating User", err);
+      res.status(500).send("Internal server error");
+   }
+});
+
+
+app.post('/ShopUploadById/:id', upload.fields([{ name: 'photo' }]), async (req, res) => {
+   try {
+      
+       console.log('Received files:', req.files);
+
+       const fileValue = req.files ? JSON.parse(JSON.stringify(req.files)) : {};
+       const profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.photo[0].filename}`;
+
+    
+       const shopId = req.params.id;
+       const shop = await Shop.findByIdAndUpdate(
+           shopId,
+           { profileImage: profileimgsrc },
+           { new: true }
+       );
+
+       if (!shop) {
+           return res.status(404).json({ message: 'Shop not found' });
+       }
+
+       res.status(200).json({ message: 'Profile updated successfully', data: shop });
+   } catch (error) {
+       console.error('Error during Shop upload:', error);
+       res.status(500).json({ message: 'Error uploading profile. Please try again.' });
+   }
+});
+app.delete("/shopReg/:id", async (req, res) => {
+   try {
+      const id = req.params.id;
+      const deleteShop = await Shop.findByIdAndDelete(id)
+      if (!deleteShop) {
+         return res.send({ message: "Shop not found " })
+      } else {
+         res.json({ message: "Seller deleted successfully", deleteShop })
+      }
+   } catch (err) {
+      console.error("Error deleting shop", err);
+      res.status(500).send("Internal server error")
+
+   }
+})
+
+app.post(`/shopReg/:id`, async (req, res) => {
+   try {
+      const id = req.params.id;
+      const shop = await Shop.findById(id);
+      if (!shop) {
+         return res.status(404).json({ message: 'Shop not found' });
+      }
+       shop.isApproved = true;
+      await shop.save();
+      res.status(200).json({ message: 'Shop approved successfully', shop }); 
+   } catch (err) {
+      res.status(500).json({ message: 'Error fetching shop', error: err });
+   }
+});   

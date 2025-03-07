@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Styles from "../navbar/navbar.module.css";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
@@ -11,6 +11,7 @@ import { InputBase, IconButton, Box, Button } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import LogoutIcon from '@mui/icons-material/Logout';
+import axios from "axios";
 
 const UserAvatar = () => {
   const [anchorEl, setAnchorEl] = useState(null);  // state to manage the dropdown
@@ -27,6 +28,23 @@ const UserAvatar = () => {
   };
 }
 const Navbar = () => {
+  const [profileImage, setProfile] = useState('');
+
+  useEffect(() => {
+    fetchShop();
+  }, []);
+  
+  const fetchShop = () => {
+    const id = sessionStorage.getItem("aid");
+    axios.get(`http://localhost:5000/shopRegById/${id}`).then((res) => {
+      const Shop = res.data.shop;
+      // Set each individual field with data
+      setProfile(Shop.profileImage);
+    }).catch((err) => {
+      console.error(err);
+    });
+  };
+  
   return (
     <div className={Styles.navbar}>
       <div className={Styles.leftSection}>
@@ -97,7 +115,7 @@ const Navbar = () => {
           >
              <h3>
               {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
-             <Link to={'/*'}></Link><LogoutIcon></LogoutIcon>Logout
+             <Link to={'/*'}><LogoutIcon></LogoutIcon>Logout</Link>
             </h3> 
           </Box>
           <Box
@@ -109,6 +127,17 @@ const Navbar = () => {
              <h3>
               {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
               <MessageIcon></MessageIcon>
+            </h3> 
+          </Box>
+          <Box
+            sx={{
+              marginLeft: 2,
+              ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'white',
+            }}
+          >
+             <h3>
+              {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
+              <Avatar alt="Remy Sharp" src={profileImage} />
             </h3> 
           </Box>
         </div>

@@ -97,12 +97,12 @@ const Navbar = () => {
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link to="/AgentRegister" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy' }}>
+                <Link to="/ShopRegister" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy' }}>
                   Shop Registration
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link to="/AgentRegister" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy' }}>
+                <Link to="/ShopRegister" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy' }}>
                  Agent Registration
                 </Link>
               </MenuItem>
