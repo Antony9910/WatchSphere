@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Styles from "../navbar/navbar.module.css";
-import Avatar from "@mui/material/Avatar";
+
 import Stack from "@mui/material/Stack";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MessageIcon from "@mui/icons-material/Message";
@@ -12,7 +12,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-
+import Avatar from "@mui/material/Avatar";
+import axios from "axios";
 const UserAvatar = () => {
   const [anchorEl, setAnchorEl] = useState(null);  // state to manage the dropdown
   const navigate = useNavigate();  // navigate for redirection after sign out (optional)
@@ -28,6 +29,22 @@ const UserAvatar = () => {
   };
 }
 const Navbar = () => {
+   const [profileImage, setProfile] = useState('');
+  
+    useEffect(() => {
+      fetchAgent();
+    }, []);
+    
+    const fetchAgent = () => {
+      const id = sessionStorage.getItem("aid");
+      axios.get(`http://localhost:5000/AgentRegById/${id}`).then((res) => {
+        const Agent = res.data.agent;
+        // Set each individual field with data
+        setProfile(Agent.profileImage);
+      }).catch((err) => {
+        console.error(err);
+      });
+    };
   return (
     <div className={Styles.navbar}>
       <div className={Styles.leftSection}>
@@ -99,7 +116,7 @@ const Navbar = () => {
           >
              <h3>
               {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
-             <Link to={'/*'}></Link><LogoutIcon></LogoutIcon>Logout
+              <Link to={'/*'} style={{color:'orange',textDecoration:'none'}}><LogoutIcon></LogoutIcon>Logout</Link>
             </h3> 
           </Box>
           <Box
@@ -113,6 +130,18 @@ const Navbar = () => {
               <MessageIcon></MessageIcon>
             </h3> 
           </Box>
+          <Box
+                      sx={{
+                        marginLeft: 2,
+                        ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'white',
+                      }}
+                    >
+                         <Avatar alt="Remy Sharp" src={profileImage} />
+                        
+           
+          
+                       
+                    </Box>
         </div>
       </Box>
 

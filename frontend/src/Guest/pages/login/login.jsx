@@ -33,24 +33,34 @@ const Login = () => {
         if (login == "Admin") {
           sessionStorage.setItem("aid", id);
           navigate("/admin");
-          alert("Login successfully")
+          alert(" Admin Login successfully")
         
         }
         else if(login == "User")
         {
           sessionStorage.setItem("aid", id);
           navigate("/user");
+          alert("User Login successfully")
         }
         else if(login == "Seller")
         {
           sessionStorage.setItem("aid", id);
           navigate("/seller");
+          alert("Seller Login successfully")
         }
         else if(login == "Shop")
         {
           sessionStorage.setItem("aid",id);
           navigate("/shop")
+          alert(" Shop Login successfully")
         }
+        else if(login =="Agent"){
+
+          sessionStorage.setItem("aid",id);
+          navigate("/Agent")
+          alert("Agent Login Successfully")
+        }
+
       })
       .catch((err) => {
         console.error(err);

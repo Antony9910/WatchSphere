@@ -100,7 +100,7 @@ const fetchSeller = () => {
         Edit Profile
         </Typography>
         <Typography>
-          Edit Details of Shop
+          Edit Details of Seller 
         </Typography>
       
       </CardContent>
@@ -128,7 +128,7 @@ const fetchSeller = () => {
       </CardContent>
       <CardActions>
         <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Product/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add</Link></Button>
-      
+        <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'category/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add Category</Link></Button>
       </CardActions>
     </Card>
 

@@ -11,6 +11,7 @@ import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import { Button, Box, Typography, Container } from "@mui/material";
 import Person2Icon from "@mui/icons-material/Person2";
+import StoreIcon from '@mui/icons-material/Store';
 
 const ShopList = () => {
   const [shopRows, setShopRows] = useState([]);
@@ -65,7 +66,7 @@ const ShopList = () => {
         gutterBottom
         sx={{ fontFamily: "fantasy", color: "blue" }}
       >
-        <Person2Icon sx={{ fontSize: 40 }} /> SELLER_LIST
+        <StoreIcon sx={{ fontSize: 40 }} /> SHOP-LIST
       </Typography>
       <TableContainer component={Paper}>
         <Table sx={{ width: "80%", marginLeft: 25 }}>

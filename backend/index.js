@@ -306,6 +306,19 @@ app.post("/Login", async (req, res) => {
          });
       }
       }
+      const agent =await Agent.findOne({
+
+         email:email,password:password,
+      })
+      if(agent){
+         if(agent.isApproved)
+         {
+         return res.send({
+            id:agent._id,
+            login:"Agent",
+         })
+      }
+   }
 
       // If no match is found for admin, user, or seller
       return res.send({
@@ -1044,6 +1057,220 @@ app.post(`/shopReg/:id`, async (req, res) => {
        shop.isApproved = true;
       await shop.save();
       res.status(200).json({ message: 'Shop approved successfully', shop }); 
+   } catch (err) {
+      res.status(500).json({ message: 'Error fetching shop', error: err });
+   }
+});   
+
+const AgentSchema =new mongoose.Schema({
+
+   name:{
+      type:String,
+      required:true,
+   },
+   email:{
+
+      type:String,
+      required:true,
+   },
+   address:{
+      type:String,
+      required:true,
+   },
+   gender:{
+      type:String,
+      required:true,
+   },
+  
+   password: {
+      type: String,
+      required: true,
+      minlength: 5,
+   },
+   confirmPassword: {
+      type: String,
+      required: true,
+      minlength: 5,
+   },
+   profileImage: {
+      type: String,
+      required: true,
+   },
+   proofImage: {
+      type: String,
+      required: true,
+
+   },
+   isApproved: {
+      type: Boolean,
+      default: false,
+   },
+
+
+});
+const Agent =mongoose.model('Agent',AgentSchema)
+
+app.post('/agentReg', upload.fields([{name:'proof'},{name:'photo'}]),async (req,res)=>
+{
+
+   try{
+
+      console.log('Received data:',req.body);
+      console.log('Received files',req.files);
+      const {name,email,address,gender,password,confirmPassword} =req.body;
+      const fileValue = req.files ? JSON.parse(JSON.stringify(req.files)) : {};
+      var proofimgsrc = `http://127.0.0.1:${port}/images/${fileValue.proof[0].filename}`;
+      var profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.photo[0].filename}`;
+
+
+
+      const newAgent = new Agent({
+         name,
+         email,
+         address,
+          gender,
+       
+         password,
+         confirmPassword,
+         profileImage: profileimgsrc,
+         proofImage: proofimgsrc,
+      });
+
+
+      await newAgent.save();
+      res.status(200).json({ message: 'Registration successful', data: newAgent });
+   
+   } catch (error) {
+      console.error('Error during Agent registration:', error);
+      res.status(500).json({ message: 'Error registering Agent. Please try again.' });
+   }
+});
+app.get("/AgentRegById/:id", async (req, res) => {
+
+   try {
+      const id = req.params.id;
+      const agent = await Agent.findById(id)
+      if (!agent) {
+         res.json({ message: "Shop updated successfully", agent: {} })
+      } else {
+         res.send({ agent }).status(200);
+      }
+   } catch (err) {
+      console.error("Error deleting user", err);
+      res.status(500).send("Internal server error")
+
+   }
+})
+app.put("/AgentRegById/:id", async (req, res) => {
+   try {
+
+      const id = req.params.id;
+
+      const { name, email, address,password,gender,confirmPassword } = req.body;
+      console.log(req.body)
+      let agents = await Agent.findByIdAndUpdate(id, { name, email,address,gender,password,confirmPassword }, { new: true })
+      res.json({ message: "Agent profile update successfully" })
+   } catch (err) {
+      console.error("Error Updating User", err);
+      res.status(500).send("Internal server error")
+
+   }
+});
+app.get("/AgentProfileById/:id", async (req, res) => {
+
+   try {
+      const id = req.params.id;
+      const agent = await Agent.findById(id)
+      if (!agent) {
+         res.json({ message: "Agent  profile updated successfully", agent: {} })
+      } else {
+         res.send({ agent }).status(200);
+      }
+   } catch (err) {
+      console.error("Error deleting user", err);
+      res.status(500).send("Internal server error")
+
+   }
+})
+app.put("/AgentProfileById/:id", async (req, res) => {
+   try {
+      const id = req.params.id;
+      const { profileImage } = req.body;
+
+    
+      let agent = await Agent.findByIdAndUpdate(id, { profileImage }, { new: true });
+      
+      if (!agent) {
+         return res.status(404).json({ message: "Agent not found" });
+      }
+
+      res.json({ message: "Agent profile updated successfully", agent });
+   } catch (err) {
+      console.error("Error Updating User", err);
+      res.status(500).send("Internal server error");
+   }
+});
+
+
+app.post('/AgentUploadById/:id', upload.fields([{ name: 'photo' }]), async (req, res) => {
+   try {
+      
+       console.log('Received files:', req.files);
+
+       const fileValue = req.files ? JSON.parse(JSON.stringify(req.files)) : {};
+       const profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.photo[0].filename}`;
+
+    
+       const agentId = req.params.id;
+       const agent = await Agent.findByIdAndUpdate(
+           agentId,
+           { profileImage: profileimgsrc },
+           { new: true }
+       );
+
+       if (!agent) {
+           return res.status(404).json({ message: 'Agent not found' });
+       }
+
+       res.status(200).json({ message: 'Profile updated successfully', data: agent });
+   } catch (error) {
+       console.error('Error during Shop upload:', error);
+       res.status(500).json({ message: 'Error uploading profile. Please try again.' });
+   }
+});
+app.get('/agentReg', async (req, res) => {
+   try {
+      const agent = await Agent.find(); // Get all users from the database
+      res.status(200).json({ agent: agent });
+   } catch (err) {
+      res.status(500).json({ message: 'Error fetching agent', error: err });
+   }
+});
+app.delete("/agentReg/:id", async (req, res) => {
+   try {
+      const id = req.params.id;
+      const deleteAgent = await Agent.findByIdAndDelete(id)
+      if (!deleteAgent) {
+         return res.send({ message: "Agent not found " })
+      } else {
+         res.json({ message: "Agent deleted successfully", deleteAgent })
+      }
+   } catch (err) {
+      console.error("Error deleting agent", err);
+      res.status(500).send("Internal server error")
+
+   }
+})
+app.post(`/agentReg/:id`, async (req, res) => {
+   try {
+      const id = req.params.id;
+      const agent = await Agent.findById(id);
+      if (!agent) {
+         return res.status(404).json({ message: 'Agent not found' });
+      }
+       agent.isApproved = true;
+      await agent.save();
+      res.status(200).json({ message: 'Shop approved successfully',agent }); 
    } catch (err) {
       res.status(500).json({ message: 'Error fetching shop', error: err });
    }
