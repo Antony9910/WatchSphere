@@ -23,7 +23,7 @@ const EditProfile = () => {
   }, []);
 
   const fetchSeller = () => {
-    const id = sessionStorage.getItem('aid');
+    const id = sessionStorage.getItem('sid');
     axios.get(`http://localhost:5000/SellerRegById/${id}`).then((res) => {
       const seller = res.data.seller;
       setName(seller.name);
@@ -60,7 +60,7 @@ const EditProfile = () => {
           console.error(err);
         });
     } else {
-      // If sellerEditId is null, create a new seller
+     
       axios
         .post("http://localhost:5000/sellerReg", data)
         .then((res) => {

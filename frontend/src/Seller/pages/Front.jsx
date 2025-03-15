@@ -106,6 +106,7 @@ const fetchSeller = () => {
       </CardContent>
       <CardActions>
       <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><Link  to={'Profile/'} style={{color:'white',textDecoration:'none'}}><EditIcon></EditIcon>Edit</Link></Button>
+     
       </CardActions>
     </Card>
 
@@ -129,6 +130,9 @@ const fetchSeller = () => {
       <CardActions>
         <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Product/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add</Link></Button>
         <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'category/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add Category</Link></Button>
+       
+        <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Color/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Color</Link></Button>
+        <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'view/'} style={{color:'white',textDecoration:'none'}}><EditIcon></EditIcon>Edit</Link></Button>
       </CardActions>
     </Card>
 
@@ -150,7 +154,7 @@ const fetchSeller = () => {
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon>View</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon><Link to={'/seller/book'}>View</Link></Button>
         <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon>Generate Bill</Button>
       
       

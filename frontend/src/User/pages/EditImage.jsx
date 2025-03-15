@@ -20,7 +20,7 @@ const EditImage = () => {
 
 
   const fetchUser = () => {
-    const id = sessionStorage.getItem('aid');
+    const id = sessionStorage.getItem('uid');
     axios.get(`http://localhost:5000/UserProfileById/${id}`).then((res) => {
       const user = res.data.user;
       setProfileImage(user.profileImage);
@@ -32,7 +32,7 @@ const EditImage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const id = sessionStorage.getItem('aid');
+    const id = sessionStorage.getItem('uid');
 
    
     const formDataToSend = new FormData();

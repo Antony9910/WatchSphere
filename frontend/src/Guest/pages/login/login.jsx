@@ -38,14 +38,15 @@ const Login = () => {
         }
         else if(login == "User")
         {
-          sessionStorage.setItem("aid", id);
+          sessionStorage.setItem("uid", id);
           navigate("/user");
           alert("User Login successfully")
         }
         else if(login == "Seller")
         {
-          sessionStorage.setItem("aid", id);
+          sessionStorage.setItem("sid", id);
           navigate("/seller");
+     
           alert("Seller Login successfully")
         }
         else if(login == "Shop")

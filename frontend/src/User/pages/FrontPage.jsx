@@ -49,7 +49,7 @@ const UserPage = () => {
 }, []);
 
 const fetchUser = () => {
-  const id = sessionStorage.getItem('aid');
+  const id = sessionStorage.getItem('uid');
   axios.get(`http://localhost:5000/userReg/${id}`).then((res) => {
     const user = res.data.user;
     // Set each individual field with data

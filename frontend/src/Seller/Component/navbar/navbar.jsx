@@ -36,7 +36,7 @@ const Navbar = () => {
   }, []);
   
   const fetchSeller = () => {
-    const id = sessionStorage.getItem("aid");
+    const id = sessionStorage.getItem("sid");
     axios.get(`http://localhost:5000/sellerReg/${id}`).then((res) => {
       const Seller = res.data.seller;
       // Set each individual field with data

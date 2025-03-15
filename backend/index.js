@@ -301,7 +301,7 @@ app.post("/Login", async (req, res) => {
       if (shop) {
          if(shop.isApproved){
          return res.send({
-            id: seller._id,
+            id: shop._id,
             login: "Shop",
          });
       }
@@ -1275,3 +1275,444 @@ app.post(`/agentReg/:id`, async (req, res) => {
       res.status(500).json({ message: 'Error fetching shop', error: err });
    }
 });   
+
+const categorySchema=new mongoose.Schema({
+
+   watch_Category:{
+
+      type:String,
+      required:true,
+    
+   },
+   // user_category:{
+
+   //    type:String,
+   //    required:true,
+   // }
+})
+const category = mongoose.model('Category', categorySchema);
+app.post("/Category", async (req, res) => {
+   try {
+      const { watch_Category} = req.body;
+
+    
+      let existingWatchCategory = await category.findOne({ watch_Category });
+      
+
+      if (existingWatchCategory) {
+         return res.status(400).json({ message: "Watch category already exists" });
+      }
+
+
+    
+      const newCategory = new category({
+         watch_Category,
+         
+      });
+
+      await newCategory.save();
+      res.status(201).json({ message: "Category inserted successfully", data: newCategory });
+   } catch (err) {
+      console.error(err.message);
+      res.status(500).json({ message: "Internal server error" });
+   }
+});
+app.get("/CategoryPost", async (req, res) => {
+
+   try {
+
+      const watch = await category.find();
+      if (watch.length == 0) {
+         return res.json({ message: "District not found", watch: [] });
+      }
+      else {
+         res.send({ watch }).status(200);
+      }
+   } catch (err) {
+
+      console.error("error finding District", err);
+      res.status(500).json({ message: "internal server error" });
+   }
+
+
+})
+const UserCategorySchema=new mongoose.Schema({
+
+   user_Category:{
+
+      type:String,
+      required:true,
+    
+   },
+   // user_category:{
+
+   //    type:String,
+   //    required:true,
+   // }
+})
+const userCategory = mongoose.model('UserCategory',  UserCategorySchema);
+app.post("/UserCategory", async (req, res) => {
+   try {
+     const { user_Category } = req.body;
+ 
+     // Check if the category already exists in the database
+     let existingUserCategory = await userCategory.findOne({ user_Category });
+ 
+     // If it exists, return a 400 error
+     if (existingUserCategory) {
+       return res.status(400).json({ message: "User category already exists" });
+     }
+ 
+     // Create a new instance of the userCategory model
+     const newUserCategory = new userCategory({
+       user_Category, // This is the category data coming from the request body
+     });
+ 
+     // Save the new category to the database
+     await newUserCategory.save();
+ 
+     // Return a success response with the new category data
+     res.status(201).json({ message: "Category inserted successfully", data: newUserCategory });
+   } catch (err) {
+     console.error("Error saving user category:", err);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ 
+
+  
+ app.get("/CategoryPost", async (req, res) => {
+   try {
+     const watch = await category.find();  // Ensure this returns an array of category objects
+     if (!watch || watch.length === 0) {
+       return res.json({ message: "No categories found", user: [] });
+     }
+     res.status(200).send({ watch });  // Send the 'watch' field containing the data
+   } catch (err) {
+     console.error("Error fetching categories", err);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ app.get("/UserCategoryPost", async (req, res) => {
+   try {
+     const user = await userCategory.find();  // Ensure this returns an array of category objects
+     if (!user || user.length === 0) {
+       return res.json({ message: "No categories found", user: [] });
+     }
+     res.status(200).send({ user });  // Send the 'watch' field containing the data
+   } catch (err) {
+     console.error("Error fetching categories", err);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ app.get("/ColorPost", async (req, res) => {
+   try {
+     const color = await Color.find();  // Ensure this returns an array of category objects
+     if (!color || color.length === 0) {
+       return res.json({ message: "No categories found", color: [] });
+     }
+     res.status(200).send({ color });  // Send the 'watch' field containing the data
+   } catch (err) {
+     console.error("Error fetching categories", err);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ app.get('/product', async (req, res) => {
+   try {
+      const products = await Product.find().populate('sellerId','name')           //.populate('sellerId)
+     console.log(products);
+     res.json(products);
+   } catch (error) {
+     res.status(500).json({ message: 'Error fetching products', error });
+   }
+ });
+ 
+   
+
+const productSchema=new mongoose.Schema({
+
+   productName:{
+         type:String,required:true,
+   },
+   modelNum:{
+      type:String,required:true,
+   },
+   WatchId:
+   {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"category"
+   },
+      watch_Category:{
+
+      type:String,
+      required:true,
+    
+   },
+    sellerId:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Seller",
+     
+},
+user_Category:{
+      type:String,
+      required:true,
+   },
+   UserId:
+   {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:" UserCategory"
+   },
+   colorId:
+   {
+        type:mongoose.Schema.Types.ObjectId,
+         ref:"color"
+   },
+   color: { 
+      type: [String], required: true
+    }, 
+
+
+   price:
+
+   {
+      type:Number,required:true
+   },
+   discount:
+   {
+      type:Number,required:true
+   },
+   offer:{
+      type:String,required:true
+   },
+   profileImage: {
+      type: String,
+      required: true,
+   },
+
+
+
+
+})
+const Product =mongoose.model('Product',productSchema)
+
+app.post('/product', upload.fields([{ name: 'photo' }]), async (req, res) => {
+   try {
+      console.log('Received data:', req.body);
+      console.log('Received files:', req.files);
+
+      const { productName, modelNum, colorId, price, WatchId, watch_Category, UserId,color, sellerId,user_Category,offer,discount } = req.body;
+      const fileValue = req.files ? req.files.photo : [];
+
+      if (!fileValue || fileValue.length === 0) {
+         return res.status(400).json({ message: 'Product photo is required.' });
+      }
+
+      const profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue[0].filename}`;
+
+   
+
+      // Create new product with the data
+      const newProduct = new Product({
+         productName,
+         modelNum,
+         price,
+        
+         WatchId,
+         colorId,
+         UserId,
+         color,
+         offer,
+         sellerId,
+         discount,
+         watch_Category,
+         user_Category,
+         profileImage: profileimgsrc,
+      });
+
+      await newProduct.save();
+
+      const populatedProduct = await Product.findById(newProduct._id)
+         .populate('WatchId')
+         .populate('UserId')
+         .populate('colorId')
+         .populate('sellerId');
+
+    
+      res.status(200).json({
+         message: 'Product registration successful',
+         data: populatedProduct, 
+      });
+
+   } catch (error) {
+      console.error('Error during product registration:', error);
+      res.status(500).json({ message: 'Error registering product. Please try again.' });
+   }
+});
+
+//Booking product
+const BookingSchema=new mongoose.Schema({
+
+   ProductId:{
+      type:mongoose.Schema.Types.ObjectId,
+    ref:"Product"
+ },
+ SellerId:{
+   type:mongoose.Schema.Types.ObjectId,
+   ref:"Seller"
+ }
+})
+const Booking = mongoose.model('Booking', BookingSchema);
+app.post("/prebook", async (req, res) => {
+   try {
+     const { productId, sellerId } = req.body;
+ 
+     
+     if (!productId || !sellerId) {
+       return res.status(400).json({ message: "Missing productId or sellerId" });
+     }
+ 
+     
+     const newBooking = new Booking({
+       ProductId: productId,
+       SellerId: sellerId,
+     });
+ 
+     await newBooking.save();
+ 
+
+     const product = await Product.findById(productId).populate("sellerId");
+ 
+     res.status(201).json({ message: "Booking successful!", booking: newBooking, product });
+   } catch (error) {
+     console.error("Error in booking:", error);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ app.get("/prebook", async (req, res) => {
+   try {
+     const bookings = await Booking.find()
+       .populate("ProductId","productName price ")  // Populate Product details
+       .populate("SellerId","name profileImage");  // Populate Seller details
+ 
+     res.status(200).json({ bookings });
+   } catch (error) {
+     console.error("Error fetching bookings:", error);
+     res.status(500).json({ message: "Error fetching bookings" });
+   }
+ });
+ 
+const ColorSchema=new mongoose.Schema({
+
+   color:{
+
+      type:String,
+      required:true,
+    
+   },
+   
+})
+
+const Color = mongoose.model('Color', ColorSchema);
+app.post("/ColorReg", async (req, res) => {
+   try {
+      const { color} = req.body;
+
+    
+      let existingColor = await Color.findOne({ color});
+      
+
+      if (existingColor) {
+         return res.status(400).json({ message: "Color already exists" });
+      }
+
+
+    
+      const newColor = new Color({
+         color,
+         
+      });
+
+      await newColor.save();
+      res.status(201).json({ message: "Colour inserted successfully", data: newColor });
+   } catch (err) {
+      console.error(err.message);
+      res.status(500).json({ message: "Internal server error" });
+   }
+});
+
+const VariantSchema =new mongoose.Schema({
+
+   ProductId:{
+        type:mongoose.Schema.Types.ObjectId,
+      ref:"Product"
+   },
+   ColorId:
+   {
+        type:mongoose.Schema.Types.ObjectId,
+      ref:"Color"
+   },
+   color:{
+
+      type:String,
+      required:true,
+    
+   },
+   material:
+   {
+      type:"String",
+      required:true,
+   }
+   
+
+
+
+});
+const Variant = mongoose.model('Variant', VariantSchema);
+// app.post('/Variant', async (req, res) => {
+//    try {
+//       const { material, ProductId, ColorId } = req.body;
+
+//       // Create a new Variant document
+//       const newVariant = new Variant({
+//          material,
+//          ProductId,
+//          ColorId,
+//       });
+
+   
+//       await newVariant.save();
+
+//       const populatedVariant = await Variant.findById(newVariant._id)
+//          .populate('ProductId') 
+
+//       res.status(200).json({
+//          message: 'Product registration successful',
+//          data: populatedVariant,
+//       });
+//    } catch (error) {
+//       console.error('Error during product registration:', error);
+//       res.status(500).json({ message: 'Error registering product. Please try again.' });
+//    }
+// });
+app.get('/product', async (req, res) => {
+   try {
+     const products = await Product.find();
+     res.json(products);
+   } catch (err) {
+     res.status(500).json({ error: 'Error fetching products' });
+   }
+ });
+ 
+ // Get Single Product by ID
+ app.get('/product/:id', async (req, res) => {
+   try {
+     const product = await Product.findById(req.params.id);
+     if (!product) {
+       return res.status(404).json({ error: 'Product not found' });
+     }
+     res.json(product);
+   } catch (err) {
+     res.status(500).json({ error: 'Error fetching product' });
+   }
+ });
+ 

@@ -32,7 +32,7 @@ const EditImage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const id = sessionStorage.getItem('aid');
+    const id = sessionStorage.getItem('sid');
 
    
     const formDataToSend = new FormData();

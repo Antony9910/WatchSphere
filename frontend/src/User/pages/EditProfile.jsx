@@ -27,7 +27,7 @@ const EditProfile = () => {
   }, []);
 
   const fetchUser = () => {
-    const id = sessionStorage.getItem('aid');
+    const id = sessionStorage.getItem('uid');
     axios.get(`http://localhost:5000/UserRegById/${id}`).then((res) => {
       const user = res.data.user;
       setName(user.name);
@@ -50,7 +50,7 @@ const EditProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const id = sessionStorage.getItem('aid');
+    const id = sessionStorage.getItem('uid');
 
     const data = {
       name: name,
