@@ -81,16 +81,16 @@ const Navbar = () => {
               ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'orange'
             }}
           >
-            <h3>  <Link to={'/seller'}style={{color:'orange',textDecoration:'none'}}><HomeIcon></HomeIcon>Home</Link></h3>
+            <h3>  <Link to={'/agent'}style={{color:'orange',textDecoration:'none'}}><HomeIcon></HomeIcon>Home</Link></h3>
           </Box>
-          <Box
+          {/* <Box
             sx={{
               marginLeft: 2,
               ":hover": { transform: "scale(1.05)", boxShadow: 6,color:'orange' },
             }}
           >
               <h3><Link to={"/about"} style={{ color: 'orange',textDecoration:'none' }}><InfoIcon></InfoIcon>About</Link></h3>
-          </Box>
+          </Box> */}
           {/* <Box
             sx={{
               marginLeft: 2,

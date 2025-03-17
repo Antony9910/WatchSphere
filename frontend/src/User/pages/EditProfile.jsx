@@ -226,7 +226,7 @@ const EditProfile = () => {
                   sx={{ fontFamily: 'fantasy' }}
                   type="submit"
                 >
-                  <EditIcon /> <Link to={'/user/pro'}>Edit Pic</Link>
+                  <EditIcon /> <Link to={'/user/pro'} style={{textDecoration:'none',color:'white'}}>Edit Pic</Link>
                 </Button>
 
                

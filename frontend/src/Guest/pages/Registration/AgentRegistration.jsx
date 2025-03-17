@@ -12,9 +12,10 @@ const AgentRegistration = () => {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [gender,setGender]= useState('');
+  const [vehicle,setVehicle]= useState('');
   const [password,setPassword]=useState('');
   const [confirmPassword,setConfirmPassword]=useState('');
-  const [date,setDate]=useState('');
+  const [VehicleNum,setVehicleNum]=useState('');
   const [proof, setProof] = useState(null); 
   const [photo, setPhoto] = useState(null);
   const [message, setMessage] = useState('');
@@ -31,8 +32,9 @@ const AgentRegistration = () => {
     formDataToSend.append('email', email);
     formDataToSend.append('address', address);
    formDataToSend.append('gender',gender);
+   formDataToSend.append('vehicle',vehicle);
     formDataToSend.append('password',password);
-    formDataToSend.append('date',setDate)
+    formDataToSend.append('VehicleNum',VehicleNum);
     formDataToSend.append('confirmPassword',confirmPassword)
     
     if (proof) formDataToSend.append('proof', proof);
@@ -124,6 +126,31 @@ const AgentRegistration = () => {
     <MenuItem >Others</MenuItem>
   </Select>
 </FormControl>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                <FormControl fullWidth>
+  <InputLabel id="demo-simple-select-label">Vehicle</InputLabel>
+  <Select
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={vehicle}
+    label="vehicle"
+    onChange={(e)=>setVehicle(e.target.value)}
+  >
+    <MenuItem value="Bike">Bike</MenuItem>
+    <MenuItem  value="Scooter">Scooter</MenuItem>
+   
+  </Select>
+</FormControl>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Vehicle Num"
+                    value={VehicleNum}
+                    onChange={(e) => setVehicleNum(e.target.value)}
+                    required
+                  />
                 </Grid>
 
                 {/* <Grid item xs={12} md={6}>

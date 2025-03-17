@@ -25,6 +25,8 @@ const EditProfile = () => {
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
   const [gender, setGender] = useState("");
+  const [vehicle,setVehicle] = useState("");
+  const [VehicleNum,setVehicleNum]=useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [agentEditId, setAgentEditId] = useState(null);
   const [profileImage, setProfileImage] = useState("");
@@ -42,8 +44,10 @@ const EditProfile = () => {
         setName(agent.name);
         setEmail(agent.email);
         setAddress(agent.address);
+        setVehicle(agent.vehicle);
         setPassword(agent.password);
         setGender(agent.gender);
+        setVehicleNum(agent.VehicleNum);
         setProfileImage(agent.profileImage);
         setConfirmPassword(agent.confirmPassword);
         setAgentEditId(agent._id);
@@ -63,6 +67,8 @@ const EditProfile = () => {
       address: address,
       password: password,
       gender:gender,
+      vehicle:vehicle,
+      VehicleNum:VehicleNum,
       confirmPassword: confirmPassword,
     };
     if (agentEditId !== null) {
@@ -142,6 +148,18 @@ const EditProfile = () => {
                   </TableRow>
                   <TableRow>
                     <TableCell sx={{ fontFamily: "fantasy" }}>
+                      Vehicle:
+                    </TableCell>
+                    <TableCell>{vehicle}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ fontFamily: "fantasy" }}>
+                      VehicleNum:
+                    </TableCell>
+                    <TableCell>{VehicleNum}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ fontFamily: "fantasy" }}>
                       Password
                     </TableCell>
                     <TableCell>{password}</TableCell>
@@ -200,6 +218,35 @@ const EditProfile = () => {
                         fullWidth
                         value={address}
                         onChange={(e) => setAddress(e.target.value)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Vehicle</TableCell>
+                    <TableCell>
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">Vehicle</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={vehicle}
+                        label="vehicle"
+                        onChange={(e) => setVehicle(e.target.value)}
+                      >
+                        <MenuItem value="Bike">Bike</MenuItem>
+                        <MenuItem value="Scooter">Scooter</MenuItem>
+                       
+                      </Select>
+                    </FormControl>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>VehicleNum</TableCell>
+                    <TableCell>
+                      <TextField
+                        fullWidth
+                        value={VehicleNum}
+                        onChange={(e) => setVehicleNum(e.target.value)}
                       />
                     </TableCell>
                   </TableRow>

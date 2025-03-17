@@ -45,7 +45,7 @@ useEffect(() => {
 }, []);
 
 const fetchSeller = () => {
-  const id = sessionStorage.getItem("aid");
+  const id = sessionStorage.getItem("uid");
   axios.get(`http://localhost:5000/sellerReg/${id}`).then((res) => {
     const Seller = res.data.seller;
     // Set each individual field with data
@@ -129,10 +129,10 @@ const fetchSeller = () => {
       </CardContent>
       <CardActions>
         <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Product/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add</Link></Button>
-        <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'category/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add Category</Link></Button>
-       
+        <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'category/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>WATCH</Link></Button>
+        <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'UserCategory/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>User </Link></Button>
         <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Color/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Color</Link></Button>
-        <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'view/'} style={{color:'white',textDecoration:'none'}}><EditIcon></EditIcon>Edit</Link></Button>
+        <Button size="small"  sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'view/'} style={{color:'white',textDecoration:'none'}}><EditIcon></EditIcon>View</Link></Button>
       </CardActions>
     </Card>
 

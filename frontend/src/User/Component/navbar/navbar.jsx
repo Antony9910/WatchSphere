@@ -40,7 +40,7 @@ useEffect(() => {
 }, []);
 
 const fetchUser = () => {
-  const id = sessionStorage.getItem('aid');
+  const id = sessionStorage.getItem('uid');
   axios.get(`http://localhost:5000/userReg/${id}`).then((res) => {
     const user = res.data.user;
     // Set each individual field with data
@@ -86,16 +86,16 @@ const fetchUser = () => {
               ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'orange'
             }}
           >
-            <h3>  <Link to={'/seller'}style={{color:'orange',textDecoration:'none'}}><HomeIcon></HomeIcon>Home</Link></h3>
+            <h3>  <Link to={'/user'}style={{color:'orange',textDecoration:'none'}}><HomeIcon></HomeIcon>Home</Link></h3>
           </Box>
-          <Box
+          {/* <Box
             sx={{
               marginLeft: 2,
               ":hover": { transform: "scale(1.05)", boxShadow: 6,color:'orange' },
             }}
           >
               <h3><Link to={"/about"} style={{ color: 'orange',textDecoration:'none' }}><InfoIcon></InfoIcon>About</Link></h3>
-          </Box>
+          </Box> */}
           {/* <Box
             sx={{
               marginLeft: 2,
@@ -110,8 +110,8 @@ const fetchUser = () => {
               ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'orange'
             }}
           >
-            <AddShoppingCartIcon></AddShoppingCartIcon>Cart
-            {/* <h3><Link to={"/Register"} style={{color:'orange',textDecoration:'none'}}>Registration</Link></h3> */}
+          
+             <h3><Link to={"/user/cart"} style={{color:'orange',textDecoration:'none'}}>  <AddShoppingCartIcon></AddShoppingCartIcon>Cart</Link></h3> 
           </Box>
           <Box
             sx={{

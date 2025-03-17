@@ -126,8 +126,7 @@ const Home = () => {
         DIGITAL WATCHES
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary',fontStyle:'italic' }}>
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
+        Digital watches are a popular category of timepieces that display the time through a digital interface, typically using an LCD or LED screen, rather than the traditional analog dial. Here’s an overview of digital watches, including types, features, and popular brands
         </Typography>
       </CardContent>
      

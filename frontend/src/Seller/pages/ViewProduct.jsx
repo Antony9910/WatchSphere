@@ -44,7 +44,7 @@ const ViewProduct = () => {
                     <Grid item>
                    
                         <Button variant="outlined" color="secondary" sx={{ backgroundColor: "orange", color: "white" }}>
-                         <Link to={'/seller/edit'}> Edit</Link>
+                         <Link to={`/seller/edit/${product._id}`}> Edit</Link>
                         </Button>
                      
                     </Grid>

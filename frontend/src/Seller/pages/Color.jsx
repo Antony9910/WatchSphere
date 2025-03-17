@@ -5,6 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Box, TextField } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 
 const Color = () => {
@@ -72,7 +73,7 @@ const Color = () => {
           </CardContent>
           
           <CardActions sx={{ justifyContent: 'center' }}>
-            <Button variant="contained" color="primary" type="submit">ADD</Button>
+            <Button variant="contained" color="primary" type="submit" sx={{fontFamily:'fantasy'}}><AddIcon></AddIcon>ADD</Button>
           </CardActions>
           </form>
         </Card>

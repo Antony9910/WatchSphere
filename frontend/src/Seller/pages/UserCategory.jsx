@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { Box, TextField } from '@mui/material';
 import axios from 'axios';
 
-const Category = () => {
+const UserCategory = () => {
 
 
   const [user,setUser] =useState('')
@@ -32,17 +32,17 @@ const Category = () => {
   
   return (
     <Box sx={{ padding: 3 }}>
-      {/* Title Section */}
+     
       <Box sx={{ textAlign: 'center', marginBottom: 5 }}>
         <Typography variant="h3" sx={{ fontFamily: 'fantasy', fontWeight: 'bold', color: '#1976d2' }}>
-          SECTIONS
+          USER-CATEGORY
         </Typography>
       </Box>
 
-      {/* Card Section: Add Category and Add Color */}
+
       <Box sx={{ display: 'flex', justifyContent: 'space-evenly', gap: 3 }}>
         
-        {/* Add Category Card */}
+   
         <Card sx={{ maxWidth: 345, padding: 3, boxShadow: 3, borderRadius: 3 }}>
         <form onSubmit={handleSubmit}>
           <CardContent>
@@ -51,24 +51,16 @@ const Category = () => {
             </Typography>
 
             <TextField
-              label="Watch Category"
-              color="secondary"
-              fullWidth
-              focused
-              onChange={(e) => setUser(e.target.value)}
-              sx={{ marginBottom: 2 }}
-              placeholder="Enter watch category"
-            />
-            
-            {/* <TextField
               label="User Category"
               color="secondary"
               fullWidth
               focused
               onChange={(e) => setUser(e.target.value)}
               sx={{ marginBottom: 2 }}
-              placeholder="Enter user category"
-            /> */}
+              placeholder="Enter User category"
+            />
+            
+      
           </CardContent>
           
           <CardActions sx={{ justifyContent: 'center' }}>
@@ -108,4 +100,4 @@ const Category = () => {
   );
 }
 
-export default Category;
+export default UserCategory;

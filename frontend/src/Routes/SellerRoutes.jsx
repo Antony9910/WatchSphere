@@ -27,7 +27,8 @@ const SellerRoutes = () => {
     <Route path='variant' element={<Variant/>}/>
     <Route path='book' element={<ViewBooking/>}/>
     <Route path='view' element={<ViewProduct/>}/>
-     <Route path='edit' element={<EditProduct/>}/> 
+     <Route path='/edit/:productId' element={<EditProduct/>}/> 
+     <Route path="UserCategory" element={<UserCategory/>}/>
   
 
     </Routes>

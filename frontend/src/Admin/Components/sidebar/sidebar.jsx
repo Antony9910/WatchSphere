@@ -44,12 +44,12 @@ const Sidebar = () => {
         {/* <Link to={'/admin/subcategory'} className={Styles.linkItem}>
           <Person2Icon className={Styles.icon} /> Sub-category
         </Link> */}
-        <Link to={'/admin/brand'} className={Styles.linkItem}>
+        {/* <Link to={'/admin/brand'} className={Styles.linkItem}>
           <Person2Icon className={Styles.icon} /> Brand
-        </Link>
-        <Link to={'/admin/newAd'} className={Styles.linkItem}>
+        </Link> */}
+        {/* <Link to={'/admin/newAd'} className={Styles.linkItem}>
           <AdminPanelSettingsTwoToneIcon className={Styles.icon} /> NewAd
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

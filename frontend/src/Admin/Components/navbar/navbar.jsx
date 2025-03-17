@@ -83,7 +83,7 @@ const Navbar = () => {
           >
              <h3>
               {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Login</Link> */}
-              <Link to={'/*'} style={{textDecoration:'none'}}><LogoutIcon></LogoutIcon><Box sx={{color:'orange'}}>Sign- Out</Box></Link>
+              <LogoutIcon></LogoutIcon><Link to={'/*'}>Logout</Link>
             </h3> 
           </Box>
         </div>
