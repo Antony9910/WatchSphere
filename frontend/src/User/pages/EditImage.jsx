@@ -97,11 +97,11 @@ const EditImage = () => {
                 </TableBody>
               </CardContent>
               <CardActions>
-                <Button variant="contained" sx={{ fontFamily: 'fantasy' }} type="submit">
+                <Button variant="contained" sx={{ fontFamily: 'cursive' }} type="submit">
                   <EditIcon /> Save Changes
                 </Button>
                 <Button variant="contained" sx={{ fontFamily: 'fantasy' }} type="submit">
-                <Link to={'/user/profile'} style={{textDecoration:'none',color:'white'}}>Profile</Link></Button>
+                <Link to={'/user/profile'} style={{textDecoration:'none',color:'white',fontFamily:'cursive'}}>Profile</Link></Button>
               
               </CardActions>
             </Grid>

@@ -24,6 +24,7 @@ const Product = () => {
   const [photo, setPhoto] = useState(null);
   const [message, setMessage] = useState("");
   const [watchRows, setWatchRows] = useState([]);
+  const [stock,setStock] = useState([]);
   const [userRows, setUserRows] = useState([]);
   const [selectedWatch, setSelectedWatch] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
@@ -112,6 +113,7 @@ const Product = () => {
     formDataToSend.append("modelNum", model);
     formDataToSend.append("watch_Category", selectedWatch);
     formDataToSend.append("productDesc",productDesc);
+    formDataToSend.append("stock",stock)
     formDataToSend.append("user_Category", selectedUser);
     formDataToSend.append("sellerId", sessionStorage.getItem("sid"));
     console.log(sessionStorage.getItem("sid"));
@@ -154,7 +156,7 @@ const Product = () => {
                 gutterBottom
                 sx={{ fontFamily: "fantasy" }}
               >
-                PRODUCT REGISTRATION
+                SPARE PRODUCT REGISTRATION
               </Typography>
               {message && (
                 <Box sx={{ marginBottom: 2 }}>
@@ -168,7 +170,7 @@ const Product = () => {
                   <Grid item xs={12} md={6}>
                     <TextField
                       fullWidth
-                      label="ProductName"
+                      label="ProductName" 
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
@@ -207,6 +209,15 @@ const Product = () => {
                       label="Discount Price"
                       value={discount}
                       onChange={(e) => setDiscount(e.target.value)}
+                      required
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="No of stock"
+                      value={stock}
+                      onChange={(e) => setStock(e.target.value)}
                       required
                     />
                   </Grid>
@@ -288,7 +299,7 @@ const Product = () => {
                   </Grid>
 
                   {/* Image Upload */}
-                  {/* <Grid item xs={12} md={6}>
+                   <Grid item xs={12} md={6}>
                     <input
                       type="file"
                       onChange={(e) => setPhoto(e.target.files[0])}
@@ -296,7 +307,17 @@ const Product = () => {
                       accept="image/*"
                       style={{ width: "100%" }}
                     />
-                  </Grid> */}
+                  </Grid> 
+                     {/* <Box sx={{marginTop:2,marginLeft:3}}>
+                    <input
+                      type="file"
+                      onChange={(e) => setPhoto(e.target.files[0])}
+                      required
+                      accept="image/*"
+                      style={{ width: "100%" }}
+                    />
+                
+                </Box> */}
                   <Grid item xs={12} md={6}>
                     <TextField
                       label="Description"
@@ -307,23 +328,14 @@ const Product = () => {
                       rows={4} // You can adjust the number of rows based on how tall you want the textarea
                     />
                   </Grid>
-                <Box sx={{marginTop:2,marginLeft:3}}>
-                    <input
-                      type="file"
-                      onChange={(e) => setPhoto(e.target.files[0])}
-                      required
-                      accept="image/*"
-                      style={{ width: "100%" }}
-                    />
-                
-                </Box>
+             
                   {/* Submit Button */}
                   <Grid item xs={12} md={12}>
                     <Button
                       type="submit"
                       variant="contained"
                       color="primary"
-                      sx={{ mt: 2, ml: 25, fontFamily: "fantasy" }}
+                      sx={{ mt: 2, ml: 25, fontFamily: "cursive" }}
                     >
                       Submit
                     </Button>

@@ -172,7 +172,7 @@ const Place = () => {
               >
                 {districtRows &&
                   districtRows.map((row,index) => (
-                    <MenuItem key={index} value={row._id}>{row.districtName}</MenuItem>
+                    <MenuItem key={index} sx={{fontFamily:'cursive'}} value={row._id}>{row.districtName}</MenuItem>
                   ))}
               </Select>
             </FormControl>
@@ -196,10 +196,10 @@ const Place = () => {
           >
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontFamily: "fantasy" }}>SL.NO</TableCell>
-                <TableCell sx={{ fontFamily: "fantasy" }}>place</TableCell>
-                <TableCell sx={{ fontFamily: "fantasy" }}>District</TableCell>
-                <TableCell sx={{ fontFamily: "fantasy" }}>Action</TableCell>
+                <TableCell sx={{ fontFamily: "cursive" }}>SL.NO</TableCell>
+                <TableCell sx={{ fontFamily: "cursive" }}>place</TableCell>
+                <TableCell sx={{ fontFamily: "cursive" }}>District</TableCell>
+                <TableCell sx={{ fontFamily: "cursive" }}>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -211,9 +211,9 @@ const Place = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{row.placeName}</TableCell>
-                    <TableCell>{row.districtId.districtName }</TableCell>
+                    <TableCell sx={{fontFamily:'cursive'}}>{index + 1}</TableCell>
+                    <TableCell sx={{fontFamily:'cursive'}}>{row.placeName}</TableCell>
+                    <TableCell sx={{fontFamily:'cursive'}}>{row.districtId.districtName }</TableCell>
 
                     <TableCell>
                       <IconButton

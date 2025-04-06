@@ -73,28 +73,28 @@ const ShopList = () => {
           <TableHead>
             <TableRow>
               <TableCell align="center"></TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Profile-Pic
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Name
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Shop-Name
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Email
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Address
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Proof
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Action
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Status
               </TableCell>
             </TableRow>
@@ -115,15 +115,15 @@ const ShopList = () => {
                     }}
                   />
                 </TableCell>
-                <TableCell align="center">{shop.name}</TableCell>
-                <TableCell align="center">{shop.shop}</TableCell>
-                <TableCell align="center">{shop.email}</TableCell>
-                <TableCell align="center">{shop.address}</TableCell>
+                <TableCell align="center" sx={{fontFamily:'cursive'}}>{shop.name}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'cursive'}}>{shop.shop}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'cursive'}}>{shop.email}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'cursive'}}>{shop.address}</TableCell>
                 <TableCell align="center">
                   <Link
                     to={shop.profileImage}
                     target="_blank"
-                    style={{ textDecoration: "none" }}
+                    style={{ textDecoration: "none",fontFamily:'cursive' }}
                   >
                     {shop.name} PROOF
                   </Link>
@@ -132,14 +132,14 @@ const ShopList = () => {
                   <Button
                     variant="contained"
                     onClick={() => handleApprove(shop._id)}
-                    sx={{ marginRight: 2 }}
+                    sx={{ marginRight: 2,fontFamily:'cursive' }}
                   >
                     Accept
                   </Button>
                   <Button
                     variant="contained"
                     color="warning"
-                    onClick={() => handleDelete(shop._id)}
+                    onClick={() => handleDelete(shop._id)}sx={{fontFamily:'cursive'}}
                   >
                     Reject
                   </Button>

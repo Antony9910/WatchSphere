@@ -14,6 +14,7 @@ const EditProfile = () => {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [password, setPassword] = useState('');
+  const [contact,setContact] =useState('');
   const [confirmPassword,setConfirmPassword]= useState('');
   const [sellerEditId, setSellerEditId] = useState(null);
   const [profileImage,setProfileImage]=useState('')
@@ -29,7 +30,8 @@ const EditProfile = () => {
       setName(seller.name);
       setEmail(seller.email);
       setAddress(seller.address);
-      setPassword(seller.password)
+      setPassword(seller.password);
+      setContact(seller.contact);
       setProfileImage(seller.profileImage)
       setConfirmPassword(seller.confirmPassword)
       setSellerEditId(seller._id); 
@@ -40,13 +42,14 @@ const EditProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const id = sessionStorage.getItem('aid');
+    const id = sessionStorage.getItem('sid');
 
     const data = {
       name: name,
       email: email,
       address: address,
       password:password,
+      contact:contact,
       confirmPassword:confirmPassword
     }
     if (sellerEditId !== null) {
@@ -99,6 +102,10 @@ const EditProfile = () => {
                     <TableCell>{address}</TableCell>
                   </TableRow>
                   <TableRow>
+                    <TableCell sx={{fontFamily:'fantasy'}}>contact:</TableCell>
+                    <TableCell>{contact}</TableCell>
+                  </TableRow>
+                  <TableRow>
                     <TableCell sx={{fontFamily:'fantasy'}}>Password</TableCell>
                     <TableCell>{password}</TableCell>
                   </TableRow>
@@ -138,6 +145,16 @@ const EditProfile = () => {
                         fullWidth
                         value={address} 
                         onChange={(e) => setAddress(e.target.value)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>contact</TableCell>
+                    <TableCell>
+                      <TextField
+                        fullWidth
+                        value={contact} 
+                        onChange={(e) => setContact(e.target.value)}
                       />
                     </TableCell>
                   </TableRow>

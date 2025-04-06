@@ -51,13 +51,13 @@ const Login = () => {
         }
         else if(login == "Shop")
         {
-          sessionStorage.setItem("aid",id);
+          sessionStorage.setItem("Sid",id);
           navigate("/shop")
           alert(" Shop Login successfully")
         }
         else if(login =="Agent"){
 
-          sessionStorage.setItem("aid",id);
+          sessionStorage.setItem("Aid",id);
           navigate("/Agent")
           alert("Agent Login Successfully")
         }
@@ -143,7 +143,7 @@ const Login = () => {
                 />
                 
               </Box>
-              <Box sx={{ marginTop: 5 }}>
+              <Box sx={{ marginTop: 5,fontFamily:'cursive' }}>
                 <TextField
                   label="Password"
                   color="primary"
@@ -177,7 +177,7 @@ const Login = () => {
               <Box sx={{ marginBottom: 0 }}>
                 <Button
                   variant="contained"
-                  sx={{ marginTop: 7, width: 300, height: 40 }}
+                  sx={{ marginTop: 7, width: 300, height: 40,fontFamily:'cursive' }}
                   type="submit" 
                 >
                   Sign-in
@@ -195,7 +195,8 @@ const Login = () => {
                   color: 'orange',
                   alignItems: 'center',
                   display: 'flex',
-                  marginLeft: 20
+                  marginLeft: 20,
+                  fontFamily:'cursive'
                 }}
               >
                 Sign in with <GoogleIcon /> <GitHubIcon />

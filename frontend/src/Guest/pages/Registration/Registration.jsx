@@ -204,7 +204,7 @@ const Registration = () => {
               >
                 {districtRows &&
                   districtRows.map((row,index) => (
-                    <MenuItem key={index} value={row._id}>{row.districtName}</MenuItem>
+                    <MenuItem key={index} value={row.districtName}>{row.districtName}</MenuItem>
                   ))}
               </Select>
             </FormControl>
@@ -222,7 +222,7 @@ const Registration = () => {
               >
                 {PlaceRows &&
                   PlaceRows.map((row,index) => (
-                    <MenuItem key={index} value={row._id}>{row.placeName}</MenuItem>
+                    <MenuItem key={index} value={row.placeName}>{row.placeName}</MenuItem>
                   ))}
               </Select>
             </FormControl>

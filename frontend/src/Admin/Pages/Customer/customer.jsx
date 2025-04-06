@@ -41,12 +41,12 @@ const UserList = () => {
           <TableHead>
             <TableRow>
               <TableCell align="center" className={Styles.TableCell}></TableCell>
-              <TableCell align="center" sx={{ fontFamily: 'fantasy' }}>Image</TableCell>
-              <TableCell align="center" sx={{ fontFamily: 'fantasy' }}>Name</TableCell>
-              <TableCell align="center" sx={{ fontFamily: 'fantasy' }}>Email</TableCell>
-              <TableCell align="center" sx={{ fontFamily: 'fantasy' }}>Address</TableCell>
-              <TableCell align="center" sx={{ fontFamily: 'fantasy' }}>Contact</TableCell>
-              <TableCell align="center" sx={{ fontFamily: 'fantasy' }}>State</TableCell>
+              <TableCell align="center" sx={{ fontFamily: 'cursive' }}>Image</TableCell>
+              <TableCell align="center" sx={{ fontFamily: 'cursive' }}>Name</TableCell>
+              <TableCell align="center" sx={{ fontFamily: 'cursive' }}>Email</TableCell>
+              <TableCell align="center" sx={{ fontFamily: 'cursive' }}>Address</TableCell>
+              <TableCell align="center" sx={{ fontFamily: 'cursive' }}>Contact</TableCell>
+              <TableCell align="center" sx={{ fontFamily: 'cursive' }}>State</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -60,11 +60,11 @@ const UserList = () => {
                     style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '50%' }}
                   />
                 </TableCell>
-                <TableCell align="center">{user.name}</TableCell>
-                <TableCell align="center">{user.email}</TableCell>
-                <TableCell align="center">{user.address}</TableCell>
-                <TableCell align="center">{user.contact}</TableCell>
-                <TableCell align="center">{user.state}</TableCell>
+                <TableCell align="center" sx={{fontFamily:'cursive'}}>{user.name}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'cursive'}}>{user.email}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'cursive'}}>{user.address}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'cursive'}}>{user.contact}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'cursive'}}>{user.state}</TableCell>
               </TableRow>
             ))}
           </TableBody>

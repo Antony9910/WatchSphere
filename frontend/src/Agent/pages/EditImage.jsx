@@ -20,7 +20,7 @@ const EditImage = () => {
 
 
   const fetchAgent = () => {
-    const id = sessionStorage.getItem('aid');
+    const id = sessionStorage.getItem('Aid');
     axios.get(`http://localhost:5000/AgentProfileById/${id}`).then((res) => {
       const agent = res.data.agent;
       setProfileImage(agent.profileImage);

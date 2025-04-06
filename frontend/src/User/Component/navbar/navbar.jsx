@@ -111,8 +111,9 @@ const fetchUser = () => {
             }}
           >
           
-             <h3><Link to={"/user/cart"} style={{color:'orange',textDecoration:'none'}}>  <AddShoppingCartIcon></AddShoppingCartIcon>Cart</Link></h3> 
+             <h3><Link to={"/user/cartPage"} style={{color:'orange',textDecoration:'none'}}>  <AddShoppingCartIcon></AddShoppingCartIcon>Cart</Link></h3> 
           </Box>
+          
           <Box
             sx={{
               marginLeft: 2,

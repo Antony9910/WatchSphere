@@ -20,7 +20,7 @@ const EditImage = () => {
 
 
   const fetchShop = () => {
-    const id = sessionStorage.getItem('aid');
+    const id = sessionStorage.getItem('Sid');
     axios.get(`http://localhost:5000/ShopProfileById/${id}`).then((res) => {
       const shop = res.data.shop;
       setProfileImage(shop.profileImage);

@@ -1,103 +1,93 @@
-import React, { useEffect, useState } from "react";
-import { Card, CardContent, Typography, CircularProgress, Button, Box } from "@mui/material";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import { Card, CardContent, Typography, Grid, Box, Chip } from "@mui/material";
 
-const ViewBooking = () => {
-  const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
+const Book = () => {
+   const [bookings, setBookings] = useState([]);
+   const sellerId = sessionStorage.getItem("sid");
 
-  useEffect(() => {
-    fetchBookings();
-  }, []);
+   useEffect(() => {
+      const fetchBookings = async () => {
+         try {
+            const response = await axios.get(`http://localhost:5000/bookings/${sellerId}`);
+            setBookings(response.data);
+         } catch (error) {
+            console.error("Error fetching bookings:", error);
+         }
+      };
 
-  const fetchBookings = () => {
-    axios
-      .get('http://localhost:5000/prebook')
-      .then((res) => {
-        setBookings(res.data.bookings);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Error fetching bookings:', err);
-        setLoading(false);
-      });
-  };
+      fetchBookings();
+   }, [sellerId]);
 
-  return (
-    <Box sx={{ padding: "40px", backgroundColor: "#f5f5f5", minHeight: "100vh" }}>
-      <Typography variant="h3" color="primary" align="center" gutterBottom>
-        Your Pre-Booked Watches
-      </Typography>
 
-      {loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
-          <CircularProgress />
-        </Box>
-      ) : (
-        <>
-          {Array.isArray(bookings) && bookings.length === 0 ? (
-            <Typography variant="h6" color="textSecondary" align="center">
-              No pre-booked watches found.
-            </Typography>
-          ) : (
-            <Box 
-              sx={{ 
-                display: "flex", 
-                flexWrap: "wrap", 
-                justifyContent: "center", 
-                gap: 4 
-              }}
-            >
-              {bookings.map((booking) => (
-                <Box 
-                  key={booking._id} 
-                  sx={{ 
-                    width: { xs: "100%", sm: "48%", md: "30%" }, 
-                    maxWidth: 400, 
-                    borderRadius: 2, 
-                    boxShadow: 3 
-                  }}
-                >
-                  <Card sx={{ width: "100%" }}>
-                    <CardContent>
-                      <Typography variant="h6" color="primary" gutterBottom>
-                        Product Name: {booking.ProductId ? booking.ProductId.productName : "Unknown Product"}
-                      </Typography>
-                      <Typography variant="body1" color="textSecondary" paragraph>
-                        <strong>Seller:</strong> {booking.SellerId ? booking.SellerId.name : "Unknown Seller"}
-                      </Typography>
-                      <Typography variant="body1" color="textSecondary" paragraph>
-  <strong>Price:</strong> {booking.ProductId ? booking.ProductId.price : "Unknown Seller"}
-</Typography>
-<Typography variant="body1" color="textSecondary" paragraph>
-  <strong>img:</strong> 
-  <img src={booking.SellerId ? booking.SellerId.profileImage : "default-image-path.jpg"} alt="Seller Image" width={20} />
-</Typography>
+   const getStatusColor = (status) => {
+      switch (status.toLowerCase()) {
+         case "pending":
+            return "warning";
+         case "confirmed":
+            return "success";
+         case "cancelled":
+            return "error";
+         case "completed":
+            return "primary";
+         default:
+            return "default";
+      }
+   };
 
-                      
+   return (
+      <Box sx={{ maxWidth: "1200px", margin: "auto", padding: "20px", textAlign: "center" }}>
+         <Typography variant="h4" sx={{fontFamily:'cursive'}} gutterBottom>
+            📦 Seller Bookings
+         </Typography>
 
-                   
-                      {/* <Typography variant="body1" color="textSecondary" paragraph>
-                        <strong>User:</strong> {booking.UserId ? booking.UserId.name : "Unknown Seller"}
-                      </Typography> */}
-                      <Box display="flex" justifyContent="space-between">
-                        <Button variant="outlined" color="primary" size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue'  }}>
-                        ACCEPT
-                        </Button>
-                        <Button variant="contained" color="secondary" size="small">
-                          Cancel Booking
-                        </Button>
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Box>
-              ))}
-            </Box>
-          )}
-        </>
-      )}
-    </Box>
-  );
+         <Grid container spacing={3} justifyContent="center">
+            {bookings.length > 0 ? (
+               bookings.map((booking) => (
+                  <Grid item xs={12} sm={6} md={4} key={booking._id}>
+                     <Card sx={{ boxShadow: 3, borderLeft: `5px solid`, borderColor: getStatusColor(booking.status), transition: "0.3s", "&:hover": { transform: "scale(1.05)" } }}>
+                        <CardContent>
+                           <Box display="flex" justifyContent="space-between" alignItems="center">
+                              
+                              <Typography variant="h6" sx={{ fontWeight: "bold",fontFamily:'cursive' }}>
+                                 {booking.productDetails.productName}
+                              </Typography>
+                              <Chip label={booking.status} color={getStatusColor(booking.status)} />
+                           </Box>
+                           <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                              <img src={booking.productDetails.profileImage} width={50}></img>
+                           </Typography>
+                           <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                              <strong>Booking ID:</strong> {booking._id}
+                           </Typography>
+                           <Typography variant="body2">
+                              <strong>Price:</strong> ${booking.productDetails.price}
+                           </Typography>
+                           <Typography variant="body2">
+                              <strong>Quantity:</strong> {booking.quantity}
+                           </Typography>
+                           <Typography variant="body2">
+                              <strong>Total Price:</strong> {booking.totalPrice}
+                           </Typography>
+                           <hr style={{ margin: "10px 0" }} />
+                           <Typography variant="body2">
+                              <strong>Customer:</strong> {booking.userDetails.name}
+                           </Typography>
+                           <Typography variant="body2" sx={{fontFamily:'cursive'}}>
+                              <strong>Email:</strong> {booking.userDetails.email}
+                           </Typography>
+                        </CardContent>
+                     </Card>
+                  </Grid>
+               ))
+            ) : (
+               <Typography variant="h6" color="textSecondary">
+                  No bookings found.
+               </Typography>
+            )}
+         </Grid>
+      </Box>
+   );
 };
 
-export default ViewBooking;
+export default Book;

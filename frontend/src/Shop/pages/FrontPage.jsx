@@ -45,7 +45,7 @@ useEffect(() => {
   }, []);
   
   const fetchShop = () => {
-    const id = sessionStorage.getItem("aid");
+    const id = sessionStorage.getItem("Sid");
     axios.get(`http://localhost:5000/shopRegById/${id}`).then((res) => {
       const Shop = res.data.shop;
       // Set each individual field with data
@@ -98,13 +98,13 @@ useEffect(() => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         Edit Profile
         </Typography>
-        <Typography>
+        <Typography sx={{fontFamily:'cursive'}}>
           Edit Details of Shop
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to={'/shop/profile'} style={{textDecoration:'none',color:'white'}}>Edit</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to={'/shop/profile'} style={{textDecoration:'none',color:'white',fontFamily:'cursive'}}>Edit</Link></Button>
       
       </CardActions>
     </Card>
@@ -121,14 +121,17 @@ useEffect(() => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         Add Product
         </Typography>
-        <Typography>
+        <Typography sx={{fontFamily:'cursive'}}>
         Add Watch Details and spare parts details
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Product/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add</Link></Button>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Category/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add Category</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Product/'} style={{color:'white',textDecoration:'none',fontFamily:'cursive'}}><AddIcon></AddIcon> Second Hand</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Category/'} style={{color:'white',textDecoration:'none',fontFamily:'cursive'}}><AddIcon></AddIcon> Spare parts</Link></Button>
+    
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'views/'} style={{color:'white',textDecoration:'none',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon>view </Link></Button>
+        
       </CardActions>
     </Card>
 
@@ -141,17 +144,17 @@ useEffect(() => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
         View Booking
         </Typography>
-        <Typography>
+        <Typography sx={{fontFamily:'cursive'}}>
        View Booking Details of the Customer
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon>View</Button>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon>Generate Bill</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link  to={'view/'} style={{color:'white',textDecoration:'none',fontFamily:'cursive'}}>view </Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon>Generate Bill</Button>
       
       
       </CardActions>
@@ -171,17 +174,17 @@ useEffect(() => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
         View Complaint
         </Typography>
-        <Typography>
+        <Typography sx={{fontFamily:'cursive'}}>
           View Complaint from Customer
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon>View</Button>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon>Generate Complaint Report</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/shop/Complaint'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon>Generate Complaint Report</Button>
       
       
       </CardActions>
@@ -219,16 +222,16 @@ useEffect(() => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
         Generate Solution
         </Typography>
-        <Typography>
+        <Typography sx={{fontFamily:'cursive'}}>
           Generate Solution based on Complaints from Customer
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><AddIcon></AddIcon>Add</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><AddIcon></AddIcon>Add</Button>
       
       </CardActions>
     </Card>
@@ -242,16 +245,16 @@ useEffect(() => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
         View Feedback
         </Typography>
-        <Typography>
+        <Typography sx={{fontFamily:'cursive'}}>
           Generate Solution based on Complaints from Customer
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon>View</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon>View</Button>
       
       </CardActions>
     </Card>

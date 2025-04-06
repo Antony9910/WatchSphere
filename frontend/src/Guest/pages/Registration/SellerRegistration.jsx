@@ -13,7 +13,7 @@ const SellerRegistration = () => {
 
   const [password,setPassword]=useState('');
   const [confirmPassword,setConfirmPassword]=useState('');
-  const [date,setDate]=useState('');
+ const [contact, setContact] = useState('');
   const [proof, setProof] = useState(null); 
   const [photo, setPhoto] = useState(null);
   const [message, setMessage] = useState('');
@@ -31,7 +31,7 @@ const SellerRegistration = () => {
     formDataToSend.append('address', address);
  
     formDataToSend.append('password',password);
-    formDataToSend.append('date',setDate)
+    formDataToSend.append('contact',contact)
     formDataToSend.append('confirmPassword',confirmPassword)
     
     if (proof) formDataToSend.append('proof', proof);
@@ -107,28 +107,19 @@ const SellerRegistration = () => {
                     required
                   />
                 </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    type="date"
-                    label=""
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    required
-                  />
-                </Grid>
+              
 
-                {/* <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Contact"
-                    value={contact}
-                    onChange={(e) => setContact(e.target.value)}
-                    pattern="[0-9]{10}"
-                    required
-                    placeholder="Enter 10-digit contact number"
-                  />
-                </Grid> */}
+                   <Grid item xs={12} md={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Contact"
+                                    value={contact}
+                                    onChange={(e) => setContact(e.target.value)}
+                                    pattern="[0-9]{10}"
+                                    required
+                                    placeholder="Enter 10-digit contact number"
+                                  />
+                                </Grid>
                 {/* <Grid item xs={12} md={6}>
                   <TextField
                     fullWidth

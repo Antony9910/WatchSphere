@@ -21,25 +21,25 @@ const Sidebar = () => {
       <div className={Styles.links}>
         
         <Link to={'/admin/district'} className={Styles.linkItem}>
-          <AddLocationIcon className={Styles.icon} /> <Box sx={{fontFamily:'fantasy'}}>District</Box>
+          <AddLocationIcon className={Styles.icon} /> <Box sx={{fontFamily:'cursive'}}>District</Box>
         </Link>
         <Link to={'/admin/place'} className={Styles.linkItem}>
-          <AddLocationIcon className={Styles.icon} /><Box sx={{fontFamily:'fantasy'}}>Place</Box> 
+          <AddLocationIcon className={Styles.icon} /><Box sx={{fontFamily:'cursive'}}>Place</Box> 
         </Link>
         {/* <Link to={'/admin/category'} className={Styles.linkItem}>
           <Person2Icon className={Styles.icon} /> Category
         </Link> */}
         <Link to={'/admin/seller'} className={Styles.linkItem}>
-          <Person2Icon className={Styles.icon} /> Seller-List
+          <Person2Icon className={Styles.icon} /><Box sx={{fontFamily:'cursive'}}> SellerList</Box> 
         </Link>
         <Link to={'/admin/Shop'} className={Styles.linkItem}>
-          <ShopIcon className={Styles.icon} /> Shop-List
+          <ShopIcon className={Styles.icon} /><Box sx={{fontFamily:'cursive'}}> ShopList</Box> 
         </Link>
         <Link to={'/admin/Customer'} className={Styles.linkItem}>
-          <Person2Icon className={Styles.icon} /> Customer-List
+          <Person2Icon className={Styles.icon} /><Box sx={{fontFamily:'cursive'}}> CustomerList</Box> 
         </Link>
         <Link to={'/admin/Agent'} className={Styles.linkItem}>
-          <Person2Icon className={Styles.icon} /> Agent-List
+          <Person2Icon className={Styles.icon} /><Box sx={{fontFamily:'cursive'}}> Agent-List</Box> 
         </Link>
         {/* <Link to={'/admin/subcategory'} className={Styles.linkItem}>
           <Person2Icon className={Styles.icon} /> Sub-category

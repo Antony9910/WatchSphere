@@ -8,6 +8,11 @@ import { Avatar, Grid, TableBody, TableCell, TableRow, TextField } from '@mui/ma
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
 
 
 const EditProfile = () => {
@@ -15,6 +20,12 @@ const EditProfile = () => {
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [contact, setContact] = useState('');
+  const [place,setPlace] =useState("");
+  const [district,setDistrict] =useState("");
+   const [districtRows, setDistrictRows] = useState([]);
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+        const [selectedPlace, setSelectedPlace] = useState("");
+          const [PlaceRows, setPlaceRows] = useState([]);
   const [state, setState] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [userEditId, setUserEditId] = useState(null);
@@ -24,6 +35,8 @@ const EditProfile = () => {
 
   useEffect(() => {
     fetchUser();
+    fetchPlace();
+    fetchDistrict();
   }, []);
 
   const fetchUser = () => {
@@ -35,6 +48,8 @@ const EditProfile = () => {
       setAddress(user.address);
       setContact(user.contact);
       setState(user.state);
+      setPlace(user.place);
+      setDistrict(user.district);
       setProfileImage(user.profileImage);  
       setPassword(user.password);
       setConfirmPassword(user.confirmPassword);
@@ -43,7 +58,36 @@ const EditProfile = () => {
       console.error(err);
     });
   };
-
+  const fetchPlace = () => {
+    axios
+      .get("http://localhost:5000/PlacePost")
+      .then((res) => {
+        console.log(res.data.place);
+        setPlaceRows(res.data.place);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  const handlePlaceChange = (e) => {
+    setSelectedPlace(e.target.value);
+   
+  };
+  const handleDistrictChange = (e) => {
+    setSelectedDistrict(e.target.value);
+   
+  };
+   const fetchDistrict = () => {
+      axios
+        .get("http://localhost:5000/DistrictPost")
+        .then((res) => {
+          console.log(res.data.district);
+          setDistrictRows(res.data.district);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
  
 
   
@@ -57,6 +101,8 @@ const EditProfile = () => {
       email: email,
       address: address,
       password:password,
+      place:selectedPlace,
+      district:selectedDistrict,
       contact:contact,
       state:state,
       confirmPassword:ConfirmPassword
@@ -84,6 +130,7 @@ const EditProfile = () => {
         });
     }
   };
+  
 
   return (
     <Box sx={{ marginBottom: 10 }}>
@@ -119,9 +166,18 @@ const EditProfile = () => {
                     <TableCell>{state}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell><strong>Password:</strong></TableCell>
-                    <TableCell>{password}</TableCell>
+                                      <TableCell sx={{fontFamily:'fantasy'}}>Place</TableCell>
+                                      <TableCell>{place}</TableCell>
                   </TableRow>
+                  
+                                    <TableRow>
+                                      <TableCell sx={{fontFamily:'fantasy'}}>District</TableCell>
+                                      <TableCell>{district}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                      <TableCell sx={{fontFamily:'fantasy'}}>password</TableCell>
+                                      <TableCell>{password}</TableCell>
+                                    </TableRow>
                   {/* <TableRow>
                     <TableCell><strong>Photo:</strong></TableCell>
                     <TableCell>
@@ -185,6 +241,46 @@ const EditProfile = () => {
                       />
                     </TableCell>
                   </TableRow>
+                   <TableRow>
+                                                        <TableCell>Place</TableCell>
+                                                        <TableCell>
+                                                        <FormControl fullWidth sx={{width:260}}>
+                                                                                    <InputLabel id="demo-simple-select-label">Place</InputLabel>
+                                                                                    <Select
+                                                                                      labelId="demo-simple-select-label"
+                                                                                      id="demo-simple-select"
+                                                                                      value={selectedPlace}
+                                                                                      label="Place"
+                                                                                      onChange={handlePlaceChange}
+                                                                                    >
+                                                                                      {PlaceRows &&
+                                                                                        PlaceRows.map((row,index) => (
+                                                                                          <MenuItem key={index} value={row.placeName}>{row.placeName}</MenuItem>
+                                                                                        ))}
+                                                                                    </Select>
+                                                                                  </FormControl>
+                                                        </TableCell>
+                                                      </TableRow>
+                                                         <TableRow>
+                                                                                            <TableCell>District</TableCell>
+                                                                                            <TableCell>
+                                                                                            <FormControl fullWidth sx={{width:260}}>
+                                                                                                                        <InputLabel id="demo-simple-select-label">District</InputLabel>
+                                                                                                                        <Select
+                                                                                                                          labelId="demo-simple-select-label"
+                                                                                                                          id="demo-simple-select"
+                                                                                                                          value={selectedDistrict}
+                                                                                                                          label="District"
+                                                                                                                          onChange={handleDistrictChange}
+                                                                                                                        >
+                                                                                                                          {districtRows &&
+                                                                                                                            districtRows.map((row,index) => (
+                                                                                                                              <MenuItem key={index} value={row.districtName}>{row.districtName}</MenuItem>
+                                                                                                                            ))}
+                                                                                                                        </Select>
+                                                                                                                      </FormControl>
+                                                                                            </TableCell>
+                                                                                          </TableRow>
                   <TableRow>
                     <TableCell>Password</TableCell>
                     <TableCell>
@@ -216,17 +312,17 @@ const EditProfile = () => {
               <CardActions> 
                 <Button
                   variant="contained"
-                  sx={{ fontFamily: 'fantasy' }}
+                  sx={{ fontFamily: 'cursive' }}
                   type="submit"
                 >
                   <EditIcon /> Save Changes
                 </Button>
                 <Button
                   variant="contained"
-                  sx={{ fontFamily: 'fantasy' }}
+                  sx={{ fontFamily: 'cursive' }}
                   type="submit"
                 >
-                  <EditIcon /> <Link to={'/user/pro'} style={{textDecoration:'none',color:'white'}}>Edit Pic</Link>
+                  <EditIcon /> <Link to={'/user/pro'} style={{textDecoration:'none',color:'white',fontFamily:'cursive'}}>Edit Pic</Link>
                 </Button>
 
                

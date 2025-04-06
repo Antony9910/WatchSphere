@@ -7,6 +7,10 @@ const EditProduct = () => {
   const { productId } = useParams();
   const [productName, setProductName] = useState("");
   const [price,setPrice] = useState("");
+  const [productDesc,setProductDesc] =useState("");
+  const [offer,setOffer]= useState("");
+  const [discount,setDiscount] =useState("");
+  const [stock,setStock] =useState("");
   const [productEditId, setProductEditId] = useState(null);
 
   useEffect(() => {
@@ -20,19 +24,49 @@ const EditProduct = () => {
         console.log(res.data);  
         const product = res.data;  
         setProductName(product.productName);  
+        setPrice(product.price);
+        setOffer(product.offer);
+        setStock(product.stock);
+        setDiscount(product.discount);
+        setProductDesc(product.productDesc);
         setProductEditId(productId);
       })
       .catch((err) => console.error("Error fetching product:", err));
   };
 
   const handleChange = (e) => {
-    setProductName(e.target.value);
-  };
+    const { name, value } = e.target;
+  
+    if (name === "productName") {
+      setProductName(value);
+    } else if (name === "price") {
+      setPrice(value);
+    } else if (name === "offer") {
+      setOffer(value);
+    }
+    else if(name==="stock"){
 
+      setStock(value);
+    }
+    else if(name=="productDesc")
+    {
+      setProductDesc(value);
+    }
+    else if(name=="discount")
+    {
+      setDiscount(value);
+    }
+  };
+  
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = {
-      productName: productName
+      productName: productName,
+      price:price,
+      offer:offer,
+      stock:stock,
+      productDesc:productDesc
     };
 
     if (productEditId !== null) {
@@ -62,6 +96,7 @@ const EditProduct = () => {
         <Typography variant="h4" fontWeight="bold">
           Edit Product
         </Typography>
+       
         <form onSubmit={handleSubmit}>
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid item xs={12} md={6}>
@@ -74,6 +109,46 @@ const EditProduct = () => {
                 name="productName"
               />
             </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Product Price"
+                variant="outlined"
+                value={price}
+                onChange={handleChange}
+                name="price"
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Product offer"
+                variant="outlined"
+                value={offer}
+                onChange={handleChange}
+                name="offer"
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                label="Product Stock"
+                variant="outlined"
+                value={stock}
+                onChange={handleChange}
+                name="stock"
+              />
+            </Grid>
+              <Grid item xs={12} md={6}>
+                                <TextField
+                                  label="Description"
+                                  value={productDesc}
+                                  onChange={(e) => setProductDesc(e.target.value)}
+                                  required sx={{width:530}}
+                                  multiline // This makes it a textarea
+                                  rows={4} // You can adjust the number of rows based on how tall you want the textarea
+                                />
+                              </Grid>
 
             <Grid item xs={12}>
               <Button variant="contained" color="primary" type="submit">

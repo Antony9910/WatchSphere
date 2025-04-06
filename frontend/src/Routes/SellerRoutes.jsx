@@ -10,9 +10,12 @@ import OutlinedCard from '../Seller/pages/Category'
 import UserCategory from '../Seller/pages/UserCategory'
 import Color from '../Seller/pages/Color'
 import Variant from '../Seller/pages/Variant'
-import ViewBooking from '../Seller/pages/ViewBooking'
+
 import ViewProduct from '../Seller/pages/ViewProduct'
 import EditProduct from '../Seller/pages/EditProduct'
+import Book from '../Seller/pages/ViewBooking'
+import Complaint from '../Seller/pages/Complaint'
+import ComplaintReport from '../Seller/pages/ComplaintReport'
 
 const SellerRoutes = () => {
   return (
@@ -25,10 +28,12 @@ const SellerRoutes = () => {
     <Route path='Category' element={< OutlinedCard/>}/>
     <Route path='Color' element={<Color/>}/>
     <Route path='variant' element={<Variant/>}/>
-    <Route path='book' element={<ViewBooking/>}/>
+    <Route path='Book' element={<Book/>}/>
     <Route path='view' element={<ViewProduct/>}/>
-     <Route path='/edit/:productId' element={<EditProduct/>}/> 
-     <Route path="UserCategory" element={<UserCategory/>}/>
+    <Route path='/edit/:productId' element={<EditProduct/>}/> 
+    <Route path="UserCategory" element={<UserCategory/>}/>
+    <Route path="Complaint" element={<Complaint/>}/>
+    <Route path='ComplaintReport' element={<ComplaintReport/>}/>
   
 
     </Routes>

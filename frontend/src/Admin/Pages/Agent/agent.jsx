@@ -46,7 +46,7 @@ const AgentList = () => {
 
   const handleApprove = (id) => {
     axios
-      .post(`http://localhost:5000/AgentReg/${id}`)
+      .post(`http://localhost:5000/agentRegs/${id}`)
       .then((res) => {
         console.log(res.data.message);
         alert(res.data.message);
@@ -72,25 +72,25 @@ const AgentList = () => {
           <TableHead>
             <TableRow>
               <TableCell align="center"></TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Profile-Pic
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Name
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Email
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Address
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Proof
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Action
               </TableCell>
-              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
+              <TableCell sx={{ fontFamily: "cursive" }} align="center">
                 Status
               </TableCell>
             </TableRow>
@@ -111,14 +111,14 @@ const AgentList = () => {
                     }}
                   />
                 </TableCell>
-                <TableCell align="center">{agent.name}</TableCell>
-                <TableCell align="center">{agent.email}</TableCell>
-                <TableCell align="center">{agent.address}</TableCell>
+                <TableCell align="center" sx={{fontFamily:'cursive'}}>{agent.name}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'cursive'}}>{agent.email}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'cursive'}}>{agent.address}</TableCell>
                 <TableCell align="center">
                   <Link
                     to={agent.profileImage}
                     target="_blank"
-                    style={{ textDecoration: "none" }}
+                    style={{ textDecoration: "none",fontFamily:'cursive' }}
                   >
                     {agent.name} PROOF
                   </Link>
@@ -127,23 +127,23 @@ const AgentList = () => {
                   <Button
                     variant="contained"
                     onClick={() => handleApprove(agent._id)}
-                    sx={{ marginRight: 2 }}
+                    sx={{ marginRight: 2,fontFamily:'cursive' }}
                   >
                     Accept
                   </Button>
                   <Button
                     variant="contained"
                     color="warning"
-                    onClick={() => handleDelete(agent._id)}
+                    onClick={() => handleDelete(agent._id)}sx={{fontFamily:'cursive'}}
                   >
                     Reject
                   </Button>
                 </TableCell>
                 <TableCell align="center">
     {agent.isApproved ? (
-    <Typography color="green">Approved</Typography>
+    <Typography color="green" sx={{fontFamily:'cursive'}}>Approved</Typography>
   ) : (
-    <Typography color="orange">Pending</Typography>
+    <Typography color="orange"sx={{fontFamily:'cursive'}}>Pending</Typography>
   )}
 </TableCell>
 

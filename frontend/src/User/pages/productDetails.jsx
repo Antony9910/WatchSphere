@@ -66,9 +66,9 @@ const ProductDetails = () => {
               <Typography variant="body1">For: {product.user_Category}</Typography>
               <Typography variant="body1">Selected Color: {selectedColor || "None"}</Typography> 
               <Grid container spacing={2} sx={{ mt: 3 }}>
-                <Grid item>
+                {/* <Grid item>
                   <Button variant="contained" color="primary" size="large" onClick={handlePreBook}>BUY Now</Button>
-                </Grid>
+                </Grid> */}
                 <Grid item>
                  
                   <Link to={`/user/cart/${product._id}`} style={{ textDecoration: "none" }}>

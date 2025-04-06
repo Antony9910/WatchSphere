@@ -491,10 +491,6 @@ const sellerSchema = new mongoose.Schema({
       required: true,
    },
 
-   date: {
-      type: String,
-      required: true,
-   },
    password: {
       type: String,
       required: true,
@@ -522,6 +518,10 @@ const sellerSchema = new mongoose.Schema({
       type: Boolean,
       default: false,
    },
+   contact: {
+      type: String,
+      required: true,
+   },
 
 });
 
@@ -536,7 +536,7 @@ app.post('/sellerReg', upload.fields([{ name: 'proof' }, { name: 'photo' }]), as
       console.log('Received data:', req.body);
       console.log('Received files:', req.files);
 
-      const { name, email, address, date, password, confirmPassword } = req.body;
+      const { name, email, address, contact, password, confirmPassword } = req.body;
       const fileValue = req.files ? JSON.parse(JSON.stringify(req.files)) : {};
 
 
@@ -549,8 +549,7 @@ app.post('/sellerReg', upload.fields([{ name: 'proof' }, { name: 'photo' }]), as
          name,
          email,
          address,
-
-         date,
+         contact,
          password,
          confirmPassword,
          profileImage: profileimgsrc,
@@ -560,7 +559,7 @@ app.post('/sellerReg', upload.fields([{ name: 'proof' }, { name: 'photo' }]), as
 
       await newSeller.save();
       res.status(200).json({ message: 'Registration successful', data: newSeller });
-      alert("Registration done")
+      
 
    } catch (error) {
       console.error('Error during Seller registration:', error);
@@ -667,8 +666,8 @@ app.put("/UserRegById/:id", async (req, res) => {
 
       const id = req.params.id;
 
-      const { name, email, address, contact, state,password,confirmPassword } = req.body;
-      let user = await User.findByIdAndUpdate(id, {name, email, address, contact, state, password, confirmPassword,},{new:true})
+      const { name, email, address, contact, state,password,confirmPassword,district,place } = req.body;
+      let user = await User.findByIdAndUpdate(id, {name, email, address, contact, state, password, confirmPassword,district,place},{new:true})
       res.json({ message: "User update successfully" })
    } catch (err) {
       console.error("Error Updating User", err);
@@ -700,9 +699,9 @@ app.put("/SellerRegById/:id", async (req, res) => {
 
       const id = req.params.id;
 
-      const { name, email, address,password,confirmPassword } = req.body;
+      const { name, email, address,password,confirmPassword,contact } = req.body;
       console.log(req.body)
-      let seller = await Seller.findByIdAndUpdate(id, { name, email, address,password,confirmPassword }, { new: true })
+      let seller = await Seller.findByIdAndUpdate(id, { name, email, address,password,confirmPassword,contact }, { new: true })
       res.json({ message: "Seller update successfully" })
    } catch (err) {
       console.error("Error Updating User", err);
@@ -839,6 +838,10 @@ app.post('/UserUploadById/:id', upload.fields([{ name: 'photo' }]), async (req, 
 
 //shop
 const shopSchema = new mongoose.Schema({
+   placeId: {                                             //Foreign key Concept
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Place",                                         //
+   },
 
    name: {
       type: String,
@@ -857,6 +860,19 @@ const shopSchema = new mongoose.Schema({
          type:String,
          required:true,
  },
+ contact: {
+   type: String,
+   required: true,
+},
+district: {
+   type: String,
+   required: true,
+},
+
+place: {
+   type: String,
+   required: true,
+},
    
    password: {
       type: String,
@@ -885,6 +901,15 @@ const shopSchema = new mongoose.Schema({
       type: Boolean,
       default: false,
    },
+   placeId: {                                             
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Place",                                         
+   },
+   state:
+   {
+      type: String,
+      required: true,
+   },
 
 });
 
@@ -899,7 +924,7 @@ app.post('/shopReg', upload.fields([{ name: 'proof' }, { name: 'photo' }]), asyn
       console.log('Received data:', req.body);
       console.log('Received files:', req.files);
 
-      const { name, email, address,password, confirmPassword,shop} = req.body;
+      const { name, email, address,password,district,place,state,contact,confirmPassword,shop} = req.body;
       const fileValue = req.files ? JSON.parse(JSON.stringify(req.files)) : {};
 
 
@@ -913,8 +938,10 @@ app.post('/shopReg', upload.fields([{ name: 'proof' }, { name: 'photo' }]), asyn
          email,
          address,
          shop,
-       
+         district,place,
          password,
+         contact,
+         state,
          confirmPassword,
          profileImage: profileimgsrc,
          proofImage: proofimgsrc,
@@ -951,9 +978,9 @@ app.put("/ShopRegById/:id", async (req, res) => {
 
       const id = req.params.id;
 
-      const { name, email, address,password,shop,confirmPassword } = req.body;
+      const { name, email, address,password,shop,confirmPassword,contact,district,place } = req.body;
       console.log(req.body)
-      let shops = await Shop.findByIdAndUpdate(id, { name, email,shop, address,password,confirmPassword }, { new: true })
+      let shops = await Shop.findByIdAndUpdate(id, { name, email,shop, address,password,confirmPassword,contact,district,place }, { new: true })
       res.json({ message: "Shop update successfully" })
    } catch (err) {
       console.error("Error Updating User", err);
@@ -1068,10 +1095,22 @@ const AgentSchema =new mongoose.Schema({
       type:String,
       required:true,
    },
+   placeId: {                                             
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Place",                                         
+   },
    email:{
 
       type:String,
       required:true,
+   },
+   place: {
+      type: String,
+      required: true,
+   },
+   district: {
+      type: String,
+      required: true,
    },
    address:{
       type:String,
@@ -1114,20 +1153,26 @@ const AgentSchema =new mongoose.Schema({
 
       type:String,
       required:true,
-   }
-
+   },
+   ContactPhone: {
+      type:String,
+      required:true,
+   },
+ 
 
 });
 const Agent =mongoose.model('Agent',AgentSchema)
 
-app.post('/agentReg', upload.fields([{name:'proof'},{name:'photo'}]),async (req,res)=>
+app.post('/agentRegs', upload.fields([{name:'proof'},{name:'photo'}]),async (req,res)=>
 {
 
    try{
 
       console.log('Received data:',req.body);
+      
+
       console.log('Received files',req.files);
-      const {name,email,address,gender,password,vehicle,confirmPassword, VehicleNum} =req.body;
+      const {name,email,address,gender,password,district,place,vehicle, ContactPhone,confirmPassword,VehicleNum} =req.body;
       const fileValue = req.files ? JSON.parse(JSON.stringify(req.files)) : {};
       var proofimgsrc = `http://127.0.0.1:${port}/images/${fileValue.proof[0].filename}`;
       var profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.photo[0].filename}`;
@@ -1140,8 +1185,10 @@ app.post('/agentReg', upload.fields([{name:'proof'},{name:'photo'}]),async (req,
          address,
           gender,
          vehicle,
-         password,
          VehicleNum,
+         password,
+         district,place,
+         ContactPhone,
          confirmPassword,
          profileImage: profileimgsrc,
          proofImage: proofimgsrc,
@@ -1162,12 +1209,12 @@ app.get("/AgentRegById/:id", async (req, res) => {
       const id = req.params.id;
       const agent = await Agent.findById(id)
       if (!agent) {
-         res.json({ message: "Shop updated successfully", agent: {} })
+         res.json({ message: "Agent updated successfully", agent: {} })
       } else {
          res.send({ agent }).status(200);
       }
    } catch (err) {
-      console.error("Error deleting user", err);
+      console.error("Error deleting Agent", err);
       res.status(500).send("Internal server error")
 
    }
@@ -1178,9 +1225,9 @@ app.put("/AgentRegById/:id", async (req, res) => {
 
       const id = req.params.id;
 
-      const { name, email, address,password,gender,vehicle,confirmPassword,VehicleNum } = req.body;
+      const { name, email, address,password,place,gender,vehicle,confirmPassword,contact,VehicleNum } = req.body;
       console.log(req.body)
-      let agents = await Agent.findByIdAndUpdate(id, { name, email,address,gender,vehicle,password,confirmPassword,VehicleNum }, { new: true })
+      let agents = await Agent.findByIdAndUpdate(id, { name, email,address,gender,vehicle,password,confirmPassword,VehicleNum,place,contact }, { new: true })
       res.json({ message: "Agent profile update successfully" })
    } catch (err) {
       console.error("Error Updating User", err);
@@ -1273,7 +1320,7 @@ app.delete("/agentReg/:id", async (req, res) => {
 
    }
 })
-app.post(`/agentReg/:id`, async (req, res) => {
+app.post("/agentRegs/:id", async (req, res) => {
    try {
       const id = req.params.id;
       const agent = await Agent.findById(id);
@@ -1282,7 +1329,7 @@ app.post(`/agentReg/:id`, async (req, res) => {
       }
        agent.isApproved = true;
       await agent.save();
-      res.status(200).json({ message: 'Shop approved successfully',agent }); 
+      res.status(200).json({ message: 'Agent approved successfully',agent }); 
    } catch (err) {
       res.status(500).json({ message: 'Error fetching shop', error: err });
    }
@@ -1389,6 +1436,62 @@ app.post("/UserCategory", async (req, res) => {
      res.status(500).json({ message: "Internal server error" });
    }
  });
+ const ProductCategorySchema=new mongoose.Schema({
+
+   product_Category:{
+
+      type:String,
+      required:true,
+    
+   },
+   // user_category:{
+
+   //    type:String,
+   //    required:true,
+   // }
+})
+const productCategory = mongoose.model('ProductCategory',  ProductCategorySchema);
+app.post("/ProductCategory", async (req, res) => {
+   try {
+     const { product_Category } = req.body;
+ 
+   
+     let existingProductCategory = await product_Category.findOne({ product_Category });
+ 
+
+     if (existingProductCategory) {
+       return res.status(400).json({ message: "User category already exists" });
+     }
+ 
+  
+     const newProductCategory = new productCategory({
+       product_Category, 
+     });
+ 
+  
+     await newProductCategory.save();
+ 
+     res.status(201).json({ message: "Category inserted successfully", data: newProductCategory });
+   } catch (err) {
+     console.error("Error saving user category:", err);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ app.get("/ProductCategoryPost", async (req, res) => {
+   try {
+     const user = await productCategory.find();  // Ensure this returns an array of category objects
+     if (!user || user.length === 0) {
+       return res.json({ message: "No categories found", user: [] });
+     }
+     res.status(200).send({ user });  // Send the 'watch' field containing the data
+   } catch (err) {
+     console.error("Error fetching categories", err);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ 
+ 
+ 
  
 
   
@@ -1493,13 +1596,18 @@ user_Category:{
       type:Number,required:true
    },
    offer:{
-      type:String,required:true
+      type:Number,required:true
    },
    profileImage: {
       type: String,
       required: true,
    },
    productDesc:{
+
+      type:String,
+      required:true,
+   },
+   stock:{
 
       type:String,
       required:true,
@@ -1516,7 +1624,7 @@ app.post('/product', upload.fields([{ name: 'photo' }]), async (req, res) => {
       console.log('Received data:', req.body);
       console.log('Received files:', req.files);
 
-      const { productName, modelNum, colorId, price, WatchId, watch_Category, UserId,color, sellerId,user_Category,offer,discount,productDesc } = req.body;
+      const { productName, modelNum, colorId, price, WatchId,stock, watch_Category, UserId,color, sellerId,user_Category,offer,discount,productDesc } = req.body;
       const fileValue = req.files ? req.files.photo : [];
 
       if (!fileValue || fileValue.length === 0) {
@@ -1540,6 +1648,7 @@ app.post('/product', upload.fields([{ name: 'photo' }]), async (req, res) => {
          offer,
          sellerId,
          discount,
+         stock,
          productDesc,
          watch_Category,
          user_Category,
@@ -1565,58 +1674,126 @@ app.post('/product', upload.fields([{ name: 'photo' }]), async (req, res) => {
       res.status(500).json({ message: 'Error registering product. Please try again.' });
    }
 });
+const SpareSchema=new mongoose.Schema({
 
-//Booking product
-// const BookingSchema=new mongoose.Schema({
+   partName:{
+         type:String,required:true,
+   },
+   part:{
+      type:Number,required:true,
+   },
+   material:{
 
-//    ProductId:{
-//       type:mongoose.Schema.Types.ObjectId,
-//     ref:"Product"
-//  },
-//  SellerId:{
-//    type:mongoose.Schema.Types.ObjectId,
-//    ref:"Seller"
-//  }
-// })
-// const Booking = mongoose.model('Booking', BookingSchema);
-// app.post("/prebook", async (req, res) => {
-//    try {
-//      const { productId, sellerId } = req.body;
+      type:String,required:true,
+   },
  
+      watchCategory:{
+
+      type:String,
+      required:true,
+    
+   },
+    shopId:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Shop",
      
-//      if (!productId || !sellerId) {
-//        return res.status(400).json({ message: "Missing productId or sellerId" });
-//      }
- 
-     
-//      const newBooking = new Booking({
-//        ProductId: productId,
-//        SellerId: sellerId,
-//      });
- 
-//      await newBooking.save();
- 
+},
 
-//      const product = await Product.findById(productId).populate("sellerId");
  
-//      res.status(201).json({ message: "Booking successful!", booking: newBooking, product });
-//    } catch (error) {
-//      console.error("Error in booking:", error);
-//      res.status(500).json({ message: "Internal server error" });
-//    }
-//  });
- app.get("/prebook", async (req, res) => {
-   try {
-     const bookings = await Booking.find()
-       .populate("ProductId","productName price ")  // Populate Product details
-       .populate("SellerId","name profileImage");  // Populate Seller details
- 
-     res.status(200).json({ bookings });
-   } catch (error) {
-     console.error("Error fetching bookings:", error);
-     res.status(500).json({ message: "Error fetching bookings" });
+   colorId:
+   {
+        type:mongoose.Schema.Types.ObjectId,
+         ref:"color"
+   },
+   color: { 
+      type: [String], required: true
+    }, 
+
+
+   price:
+
+   {
+      type:Number,required:true
+   },
+   compatibility:
+   {
+      type:String,required:true
+   },
+  
+   profileImage: {
+      type: String,
+      required: true,
+   },
+   productDesc:{
+
+      type:String,
+      required:true,
+   },
+   stock:{
+
+      type:String,
+      required:true,
    }
- });
+
+
+
+
+})
+const Spare = mongoose.model('Spare',SpareSchema)
+
+app.post('/spare', upload.fields([{ name: 'photo' }]), async (req, res) => {
+   try {
+      console.log('Received data:', req.body);
+      console.log('Received files:', req.files);
+
+      const { partName, part, colorId, price,stock,material,compatibility, watchCategory, color, shopId,productDesc } = req.body;
+      const fileValue = req.files ? req.files.photo : [];
+
+      if (!fileValue || fileValue.length === 0) {
+         return res.status(400).json({ message: 'Product photo is required.' });
+      }
+
+      const profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue[0].filename}`;
+
+   
+
+      // Create new product with the data
+      const newSpare = new Spare({
+         partName,
+         part,
+         price,
+        material,
+        compatibility,
+         colorId,
+         color,
+         shopId,
+   
+         stock,
+         productDesc,
+         watchCategory,
+         profileImage: profileimgsrc,
+      });
+
+      await newSpare.save();
+
+      const populatedSpare = await Spare.findById(newSpare._id)
+      
+         .populate('colorId')
+         .populate('shopId');
+
+    
+      res.status(200).json({
+         message: 'Product registration successful',
+         data: populatedSpare, 
+      });
+
+   } catch (error) {
+      console.error('Error during product registration:', error);
+      res.status(500).json({ message: 'Error registering product. Please try again.' });
+   }
+});
+
+
  
 const ColorSchema=new mongoose.Schema({
 
@@ -1662,66 +1839,169 @@ app.post("/ColorReg", async (req, res) => {
 const CartSchema = new mongoose.Schema({
    UserId: {
      type: mongoose.Schema.Types.ObjectId,
-     ref: "User",  // Reference to User schema
+     ref: "User", 
      required: true
    },
    ProductId: {
      type: mongoose.Schema.Types.ObjectId,
-     ref: "Product",  // Reference to Product schema
+     ref: "Product",
      required: true
    },
+  
+   
    quantity: {
-     type: Number,  // Changed to Number for quantity
+     type: Number,  
      required: true,
      min: 1
+   },
+   totalPrice:{
+      type:Number,
+      required:true,
+   },
+   BookingId:{
+
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Booking",
+      required: true
+      
    }
  });
  
- const Cart = mongoose.model("Cart", CartSchema);
- const BookingSchema = new mongoose.Schema({
+ const Cart = mongoose.model("CartItem", CartSchema);
+ app.post("/cart", async (req, res) => {
+   try {
+     const { UserId, ProductId, quantity, totalPrice,BookingId } = req.body;
+
+     if (!UserId || !ProductId ||!quantity || !totalPrice || !BookingId) {
+       return res.status(400).json({ message: "UserId, ProductId, quantity,BookingId and totalPrice are required" });
+     }
+
+     const newCart = new Cart({
+       UserId,
+       ProductId,  
+       BookingId,
+       quantity,
+       totalPrice,
+     });
+
+     await newCart.save();
+
+     res.status(201).json({
+       message: "Product added to cart successfully",
+       data: newCart,
+     });
+   } catch (err) {
+     console.error("Error saving to cart:", err);
+     res.status(500).json({ message: "Internal server error" });
+   }
+});
+const watchCartSchema = new mongoose.Schema({
    UserId: {
      type: mongoose.Schema.Types.ObjectId,
-     ref: "User",  // Reference to User schema
+     ref: "User", 
      required: true
    },
-   ProductId: {
+   watchId: {
      type: mongoose.Schema.Types.ObjectId,
-     ref: "Product",  // Reference to Product schema
+     ref: "Watch",
      required: true
    },
+   WatchBookingId:{
+
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "WatchBooking",
+      required: true
+   },
+  
+   
    quantity: {
-     type: Number,
+     type: Number,  
      required: true,
      min: 1
    },
-   date: {
-     type: Date,
+   totalPrice:{
+      type:Number,
+      required:true,
+   }
+ });
+ 
+ const watchCart = mongoose.model("WatchCart", watchCartSchema);
+ app.post("/watchCart", async (req, res) => {
+   try {
+     const { UserId, watchId, quantity, totalPrice, WatchBookingId } = req.body;
+
+     if (!UserId || !watchId ||!quantity || !totalPrice || ! WatchBookingId) {
+       return res.status(400).json({ message: "UserId, ProductId, quantity, and totalPrice are required" });
+     }
+
+     const newCart = new watchCart({
+       UserId,
+       watchId, 
+       quantity,
+       WatchBookingId,
+       totalPrice,
+     });
+
+     await newCart.save();
+
+     res.status(201).json({
+       message: "Product added to cart successfully",
+       data: newCart,
+     });
+   } catch (err) {
+     console.error("Error saving to cart:", err);
+     res.status(500).json({ message: "Internal server error" });
+   }
+});
+const shopCartSchema = new mongoose.Schema({
+   UserId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "User", 
      required: true
    },
-   status: {
-     type: String,
-     enum: ["pending", "confirmed", "cancelled"],
-     default: "pending"
+   SpareId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "Spare",
+     required: true
+   },
+
+  ShopBookingId:{
+   type: mongoose.Schema.Types.ObjectId,
+   ref: "ShopBooking",
+   required: true
+  },
+   
+   quantity: {
+     type: Number,  
+     required: true,
+     min: 1
+   },
+   totalPrice:{
+      type:Number,
+      required:true,
    }
  });
  
- const Booking = mongoose.model("Booking", BookingSchema);
- app.post("/Cart", async (req, res) => {
+ const shopCart = mongoose.model("CartShop", shopCartSchema);
+ app.post("/ShopCart", async (req, res) => {
    try {
-     const { UserId, ProductId, quantity } = req.body;
- 
-     if (!UserId || !ProductId || !quantity) {
-       return res.status(400).json({ message: "UserId, ProductId, and quantity are required" });
+     const { UserId, SpareId, quantity, totalPrice,   ShopBookingId } = req.body;
+
+     if (!UserId || !SpareId ||!quantity || !totalPrice ||! ShopBookingId) {
+       return res.status(400).json({ message: "UserId, ProductId, quantity, and totalPrice are required" });
      }
- 
-     const newCart = new Cart({
+
+     const newCart = new shopCart({
        UserId,
-       ProductId,
+       SpareId, 
+      
+       ShopBookingId,
        quantity,
+       totalPrice,
      });
- 
+
      await newCart.save();
- 
+
      res.status(201).json({
        message: "Product added to cart successfully",
        data: newCart,
@@ -1730,181 +2010,214 @@ const CartSchema = new mongoose.Schema({
      console.error("Error saving to cart:", err);
      res.status(500).json({ message: "Internal server error" });
    }
- });
- app.post("/Cart", async (req, res) => {
-   try {
-     const { UserId, ProductId, quantity, } = req.body;
+});
+
+
+
  
-     if (!UserId || !ProductId || !quantity) {
-       return res.status(400).json({ message: "UserId, ProductId, and quantity are required" });
-     }
+//  const WatchBooking = mongoose.model("WatchBooking", watchBookingSchema);
+
  
-     const newCart = new Cart({
-       UserId,
-       ProductId,
-       quantity,
-     });
  
-     await newCart.save();
+//  const BookingSchema = new mongoose.Schema({
+//    UserId: {
+//      type: mongoose.Schema.Types.ObjectId,
+//      ref: "User",  // Reference to User schema
+//      required: true
+//    },
+//    ProductId: {
+//      type: mongoose.Schema.Types.ObjectId,
+//      ref: "Product",  // Reference to Product schema
+//      required: true
+//    },
+  
+//    quantity: {
+//      type: Number,
+//      required: true,
+//      min: 1
+//    },
+//    date: {
+//      type: Date,
+//      required: true
+//    },
+//    status: {
+//      type: String,
+//      enum: ["pending", "confirmed", "cancelled"],
+//      default: "pending"
+//    },
+//  });
  
-     res.status(201).json({
-       message: "Product added to cart successfully",
-       data: newCart,
-     });
-   } catch (err) {
-     console.error("Error saving to cart:", err);
-     res.status(500).json({ message: "Internal server error" });
-   }
- });
- app.post("/booking", async (req, res) => {
-   try {
-     const { UserId, ProductId, quantity, status } = req.body;
+//  const Booking = mongoose.model("Booking", BookingSchema);
+
+ 
+//  app.post("/booking", async (req, res) => {
+//    try {
+//      const { UserId, ProductId, quantity, status } = req.body;
  
 
-     console.log("Received booking data:", req.body);
+//      console.log("Received booking data:", req.body);
  
-     if (!UserId || !ProductId || !quantity || !status) {
-       return res.status(400).json({ message: "UserId, ProductId, quantity, and status are required" });
-     }
- 
-     const newBooking = new Booking({
-       UserId,
-       ProductId,
-       quantity,
-       date: new Date(),
-       status, // Make sure the status is either 'pending', 'confirmed', or 'cancelled'
-     });
- 
-     await newBooking.save();
- 
-     res.status(201).json({
-       message: "Booking created successfully",
-       booking: newBooking,
-     });
-   } catch (error) {
-     console.error("Error creating booking:", error);
-     res.status(500).json({ message: "Internal server error" });
-   }
- });
- 
- 
- 
- 
- app.get("/cart/:userId", async (req, res) => {
-   const { userId } = req.params;
- 
-   try {
-     const cartItems = await Cart.find({ UserId: userId }).populate("ProductId");
-     res.status(200).json(cartItems);
-   } catch (error) {
-     console.error("Error fetching cart:", error);
-     res.status(500).json({ message: "Internal server error" });
-   }
- });
-//  app.post("/convert-cart-to-booking", async (req, res) => {
-//    try {
-//      const { UserId, status } = req.body;  // Pass in the userId and status
- 
-//      // Fetch all the cart items for the user
-//      const cartItems = await Cart.find({ UserId }).populate("ProductId");
- 
-//      if (cartItems.length === 0) {
-//        return res.status(400).json({ message: "No items in the cart" });
+//      if (!UserId || !ProductId || !quantity || !status) {
+//        return res.status(400).json({ message: "UserId, ProductId,quantity, and status are required" });
 //      }
  
-//      // Iterate over the cart items and create bookings
-//      const bookings = [];
-//      for (let item of cartItems) {
-//        const newBooking = new Booking({
-//          UserId: item.UserId,
-//          ProductId: item.ProductId,
-//          quantity: item.quantity,
-//          status,
-//          date: new Date(),
-//        });
+//      const newBooking = new Booking({
+//        UserId,
+//        ProductId,
+
+//        quantity,
+//        date: new Date(),
+//        status, 
+//      });
  
-//        await newBooking.save();
-//        bookings.push(newBooking);
-//      }
- 
-//      // Optionally, clear the cart after converting to booking
-//      await Cart.deleteMany({ UserId });
+//      await newBooking.save();
  
 //      res.status(201).json({
-//        message: "Cart converted to bookings successfully",
-//        bookings,
+//        message: "Booking created successfully",
+//        booking: newBooking,
 //      });
 //    } catch (error) {
-//      console.error("Error converting cart to bookings:", error);
+//      console.error("Error creating booking:", error);
 //      res.status(500).json({ message: "Internal server error" });
 //    }
 //  });
-  
-
-
-
-const VariantSchema =new mongoose.Schema({
-
-   ProductId:{
-        type:mongoose.Schema.Types.ObjectId,
-      ref:"Product"
-   },
-   ColorId:
-   {
-        type:mongoose.Schema.Types.ObjectId,
-      ref:"Color"
-   },
-   color:{
-
-      type:String,
-      required:true,
-    
-   },
-   material:
-   {
-      type:"String",
-      required:true,
-   }
-   
-
-
-
-});
-const Variant = mongoose.model('Variant', VariantSchema);
-// app.post('/Variant', async (req, res) => {
-//    try {
-//       const { material, ProductId, ColorId } = req.body;
-
-//       // Create a new Variant document
-//       const newVariant = new Variant({
-//          material,
-//          ProductId,
-//          ColorId,
-//       });
-
-   
-//       await newVariant.save();
-
-//       const populatedVariant = await Variant.findById(newVariant._id)
-//          .populate('ProductId') 
-
-//       res.status(200).json({
-//          message: 'Product registration successful',
-//          data: populatedVariant,
-//       });
-//    } catch (error) {
-//       console.error('Error during product registration:', error);
-//       res.status(500).json({ message: 'Error registering product. Please try again.' });
-//    }
-// });
-app.get('/product', async (req, res) => {
+ 
+ app.get("/Booking/:userId", async (req, res) => {
    try {
-     const products = await Product.find();
+     const { userId } = req.params;
+     const status = req.query.status || "pending"; 
+     const bookings = await Booking.find({ UserId: userId, status }).populate("ProductId");
+ 
+     res.json(bookings);
+   } catch (error) {
+     console.error("Error fetching cart items:", error);
+     res.status(500).send("Failed to fetch cart items.");
+   }
+ });
+ 
+ 
+ app.get("/shopBooking/:userId", async (req, res) => {
+   try {
+     const { userId } = req.params;
+     const status = req.query.status || "pending"; 
+     const bookings = await ShopBooking.find({ UserId: userId, status }).populate("ProductId");
+ 
+     res.json(bookings);
+   } catch (error) {
+     console.error("Error fetching cart items:", error);
+     res.status(500).send("Failed to fetch cart items.");
+   }
+ });
+ 
+ 
+
+ app.get("/cart/:userId", async (req, res) => {
+   const userId = req.params.userId;
+   try {
+     const cartItems = await Cart.find({ UserId: userId })
+                                 .populate('ProductId', 'productName price profileImage modelNum color totalPrice'); // Populate both productName and price
+  
+     res.json(cartItems);
+   } catch (error) {
+     console.error("Error fetching cart items:", error);
+     res.status(500).json({ error: "Failed to fetch cart items" });
+   }
+ });
+ app.get("/watchCart/:userId", async (req, res) => {
+   const userId = req.params.userId;
+   try {
+     const cartItems = await watchCart.find({ UserId: userId })
+                                 .populate('watchId', 'company price profileImage discount color model'); // Populate both productName and price
+  
+     res.json(cartItems);
+   } catch (error) {
+     console.error("Error fetching cart items:", error);
+     res.status(500).json({ error: "Failed to fetch cart items" });
+   }
+ });
+ app.get('/ShopCart/:userId', async (req, res) => {
+   try {
+     const { userId } = req.params;
+ 
+     const shopCartItems = await shopCart.find({ UserId: userId })
+       .populate('SpareId', 'partName material price profileImage totalPrice color ')  
+       .populate('SpareId.shopId', 'shop').populate('UserId'); 
+ 
+    
+     if (!shopCartItems || shopCartItems.length === 0) {
+       return res.status(404).json({ message: "No items found in the shop cart." });
+     }
+ 
+    
+     res.status(200).json(shopCartItems);
+   } catch (error) {
+     console.error("Error fetching shop cart items:", error);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ app.get('/WatchCart/:userId', async (req, res) => {
+   try {
+     const { userId } = req.params;
+ 
+     const watchCartItems = await watchCart.find({ UserId: userId })
+       .populate('watchId', 'partName material price profileImage totalPrice color ')  
+       .populate('watchId.shopId', 'shop').populate('UserId'); 
+ 
+    
+     if (!watchCartItems || watchCartItems.length === 0) {
+       return res.status(404).json({ message: "No items found in the shop cart." });
+     }
+ 
+    
+     res.status(200).json(watchhCartItems);
+   } catch (error) {
+     console.error("Error fetching shop cart items:", error);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ 
+
+
+
+
+
+
+ app.get('/productssss/:sellerId', async (req, res) => {
+   const { sellerId } = req.params; // Get the sellerId from the URL parameter
+   try {
+     const products = await Product.find({ sellerId: sellerId }); // Find products that belong to this seller
      res.json(products);
    } catch (err) {
      res.status(500).json({ error: 'Error fetching products' });
    }
  });
+ app.get('/spare1/:sellerId', async (req, res) => {
+   const { shopId } = req.params; // Get the sellerId from the URL parameter
+   try {
+     const spares = await Spare.find({ shopId: shopId }); // Find products that belong to this seller
+     res.json(spares);
+   } catch (err) {
+     res.status(500).json({ error: 'Error fetching products' });
+   }
+ });
+ 
+ app.get('/spare', async (req, res) => {
+   try {
+     const spare = await Spare.find().populate('shopId', 'shop');;
+     res.json(spare);
+   } catch (err) {
+     res.status(500).json({ error: 'Error fetching spare' });
+   }
+ });
+ app.get('/Watch', async (req, res) => {
+   try {
+     const watch = await Watch.find().populate('shopId', 'shop');;
+     res.json(watch);
+   } catch (err) {
+     res.status(500).json({ error: 'Error fetching watch' });
+   }
+ });
+ 
  
 
  app.get('/product/:id', async (req, res) => {
@@ -1934,6 +2247,29 @@ app.get('/product', async (req, res) => {
 
    }
 })
+app.get('/spare/:id', async (req, res) => {
+   try {
+     const spare = await Spare.findById(req.params.id).populate('shopId', 'shop'); ;
+     if (!spare) {
+       return res.status(404).json({ error: 'Product not found' });
+     }
+     res.json(spare);
+   } catch (err) {
+     res.status(500).json({ error: 'Error fetching product' });
+   }
+ })
+ app.get('/watch/:id', async (req, res) => {
+   try {
+     const watch = await Watch.findById(req.params.id).populate('shopId', 'shop'); ;
+     if (!watch) {
+       return res.status(404).json({ error: 'Product not found' });
+     }
+     res.json(watch);
+   } catch (err) {
+     res.status(500).json({ error: 'Error fetching product' });
+   }
+ })
+
 
 
 
@@ -1954,10 +2290,10 @@ app.get('/product', async (req, res) => {
  
  app.put("/product/:id", async (req, res) => {
    try {
-     const {  productName } = req.body;
+     const {  productName,price,offer,stock,productDesc,discount } = req.body;
      const product = await Product.findByIdAndUpdate(
        req.params.id,
-       { productName },
+       { productName,price,offer,stock,productDesc,discount},
        { new: true }
      );
  
@@ -1971,35 +2307,1582 @@ app.get('/product', async (req, res) => {
      res.status(500).json({ error: 'Internal server error' });
    }
  });
- const bookingSchema = new mongoose.Schema({
-  productId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product', // Reference to the Product model
-    required: true
-  },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Reference to the User model
-    required: true
-  },
-  quantity: {
-    type: Number,
-    required: true,
-    min: 1
-  },
-  color: {
-    type: String,
-    required: true
-  },
-  date: {
-    type: Date,
-    required: true
-  },
-  status: {
-    type: String,
-    enum: ['pending', 'confirmed', 'canceled'],
-    default: 'pending'
-  }
-}, {
-  timestamps: true
+ app.delete("/product/:id", async (req, res) => {
+   try {
+      const id = req.params.id;
+      const deleteProduct = await Product.findByIdAndDelete(id)
+      if (!deleteProduct) {
+         return res.send({ message: "Product not found " })
+      } else {
+         res.json({ message: "Product deleted successfully", deleteProduct })
+      }
+   } catch (err) {
+      console.error("Error deleting Product", err);
+      res.status(500).send("Internal server error")
+
+   }
+})
+app.delete("/watch/:id", async (req, res) => {
+   try {
+      const id = req.params.id;
+      const deleteWatch = await Watch.findByIdAndDelete(id)
+      if (!deleteWatch) {
+         return res.send({ message: "Product not found " })
+      } else {
+         res.json({ message: "Watch deleted successfully", deleteWatch })
+      }
+   } catch (err) {
+      console.error("Error deleting Product", err);
+      res.status(500).send("Internal server error")
+
+   }
+})
+app.delete("/spare/:id", async (req, res) => {
+   try {
+      const id = req.params.id;
+      const deleteSpare = await Spare.findByIdAndDelete(id)
+      if (!deleteSpare) {
+         return res.send({ message: "Product not found " })
+      } else {
+         res.json({ message: "Product deleted successfully", deleteSpare })
+      }
+   } catch (err) {
+      console.error("Error deleting Product", err);
+      res.status(500).send("Internal server error")
+
+   }
+})
+ 
+
+app.put("/spare/:id", async (req, res) => {
+   try {
+     const {  partName,price,material,stock,productDesc,watchCategory,color } = req.body;
+     const spare = await Spare.findByIdAndUpdate(
+       req.params.id,
+       { partName,price,material,stock,productDesc,watchCategory,color},
+       { new: true }
+     );
+ 
+     if (!spare) {
+       return res.status(404).json({ error: 'Product not found' });
+     }
+ 
+     res.json({ message: " Spare Product updated successfully", spare });
+   } catch (err) {
+     console.error("Error updating product", err);
+     res.status(500).json({ error: 'Internal server error' });
+   }
+ });
+
+ //second hand watch
+ const watchSchema=new mongoose.Schema({
+
+   model:{
+         type:String,required:true,
+   },
+   company:{
+      type:String,required:true,
+   },
+   WatchId:
+   {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"category"
+   },
+      watch_Category:{
+
+      type:String,
+      required:true,
+    
+   },
+    shopId:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Shop",
+     
+},
+user_Category:{
+      type:String,
+      required:true,
+   },
+   UserId:
+   {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:" UserCategory"
+   },
+   colorId:
+   {
+        type:mongoose.Schema.Types.ObjectId,
+         ref:"color"
+   },
+   color: { 
+      type: [String], required: true
+    }, 
+
+
+   price:
+
+   {
+      type:Number,required:true
+   },
+   discount:
+   {
+      type:Number,required:true
+   },
+   offer:{
+      type:Number,required:true
+   },
+   profileImage: {
+      type: String,
+      required: true,
+   },
+   proofImage:{
+
+      type:String,
+      required:true,
+   },
+   productDesc:{
+
+      type:String,
+      required:true,
+   },
+   stock:{
+
+      type:String,
+      required:true,
+   },
+   waranty:{
+            type:Number,
+            required:true,
+   }
+
+
+
+
+})
+
+const Watch =mongoose.model('Watch',watchSchema)
+
+app.post('/watch', upload.fields([{ name: 'photo' },{ name: 'proof' }]), async (req, res) => {
+   try {
+      console.log('Received data:', req.body);
+      console.log('Received files:', req.files);
+
+      const { model, company, waranty, colorId, price, WatchId,stock, watch_Category, UserId,color, shopId,user_Category,offer,discount,productDesc} = req.body;
+      const fileValue = req.files ? JSON.parse(JSON.stringify(req.files)) : {};
+
+      if (!fileValue || fileValue.length === 0) {
+         return res.status(400).json({ message: 'Product photo is required.' });
+      }
+
+      const profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.photo[0].filename}`;
+      const proofimgsrc = `http://127.0.0.1:${port}/images/${fileValue.proof[0].filename}`;
+   
+
+      // Create new product with the data
+      const newWatch = new Watch({
+         model,
+     company,
+         price,
+        
+         WatchId,
+         colorId,
+         UserId,
+         color,
+         offer,
+         shopId,
+         waranty,
+         discount,
+         stock,
+         productDesc,
+         watch_Category,
+         user_Category,
+         profileImage: profileimgsrc,
+         proofImage :proofimgsrc ,
+      });
+
+      await newWatch.save();
+
+      const populatedWatch = await Watch.findById(newWatch._id)
+         .populate('WatchId')
+         .populate('UserId')
+         .populate('colorId')
+         .populate('shopId');
+
+    
+      res.status(200).json({
+         message: 'Product registration successful',
+         data: populatedWatch, 
+      });
+
+   } catch (error) {
+      console.error('Error during product registration:', error);
+      res.status(500).json({ message: 'Error registering product. Please try again.' });
+   }
+});
+app.put("/booking/:id", async (req, res) => {
+   try {
+     const { id } = req.params;
+     const { status } = req.body;
+ 
+     if (!status) {
+       return res.status(400).json({ message: "Status is required" });
+     }
+ 
+     const updatedBooking = await Booking.findByIdAndUpdate(id, { status }, { new: true });
+ 
+     if (!updatedBooking) {
+       return res.status(404).json({ message: "Booking not found" });
+     }
+ 
+     res.json({ message: "Booking status updated successfully", booking: updatedBooking });
+   } catch (error) {
+     console.error("Error updating booking status:", error);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ 
+
+app.put('/shopBooking/:id', async (req, res) => {
+   const { id } = req.params;
+   const { status } = req.body;
+ 
+   try {
+     const updatedItem = await ShopCart.findByIdAndUpdate(id, { status }, { new: true });
+     if (!updatedItem) {
+       return res.status(404).json({ message: "Item not found." });
+     }
+     res.json(updatedItem);
+   } catch (error) {
+     res.status(500).json({ message: "Error updating shop cart item status." });
+   }
+ });
+ 
+ 
+
+app.get("/shopBooking/:userId", async (req, res) => {
+   try {
+     const { userId } = req.params;
+     const status = req.query.status || "pending"; 
+     const bookings = await ShopBooking.find({ UserId: userId, status }).populate("spareId");
+ 
+     res.json(bookings);
+   } catch (error) {
+     console.error("Error fetching cart items:", error);
+     res.status(500).send("Failed to fetch cart items.");
+   }
+ });
+ app.get("/product/:id", async (req, res) => {
+   try {
+     const product = await Product.findById(req.params.id);
+     if (!product) return res.status(404).json({ message: "Product not found" });
+ 
+     res.json(product);
+   } catch (error) {
+     res.status(500).json({ message: "Error fetching product details", error });
+   }
+ });
+ app.delete("/Cart/:itemId", async (req, res) => {
+   const { itemId } = req.params;  
+ 
+   try {
+ 
+     const deletedItem = await Cart.findByIdAndDelete(itemId);
+ 
+    
+     if (!deletedItem) {
+       return res.status(404).json({ message: "Cart item not found" });
+     }
+ 
+     res.status(200).json({
+       message: "Item removed from cart successfully",
+       data: deletedItem
+     });
+   } catch (err) {
+     console.error("Error removing item from cart:", err);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ app.delete("/shopCart/:itemId", async (req, res) => {
+   try {
+     const { itemId } = req.params;
+     const deletedItem = await shopCart.findByIdAndDelete(itemId);
+     if (!deletedItem) {
+       return res.status(404).json({ message: "Shop cart item not found" });
+     }
+     res.status(200).json({ message: "Shop cart item removed successfully" });
+   } catch (error) {
+     console.error("Error removing shop cart item:", error);
+     res.status(500).json({ message: "Internal Server Error" });
+   }
+ });
+
+ app.get('/cart/:userId', async (req, res) => {
+   const userId = req.params.userId;
+ 
+   try {
+     
+     const cartItems = await Cart.find({ UserId: userId }).populate('ProductId');
+ 
+     // Calculate the total price
+     let totalPrice = 0;
+     cartItems.forEach(item => {
+       totalPrice += item.totalPrice;
+     });
+ 
+     res.json({ totalPrice });
+   } catch (error) {
+     console.error('Error fetching cart:', error);
+     res.status(500).json({ message: 'Error fetching cart' });
+   }
+ });
+ 
+ 
+app.put('/shopCart/:id', async (req, res) => {
+   try {
+     const updatedItem = await ShopCart.findByIdAndUpdate(
+       req.params.id,
+       { status: req.body.status },
+       { new: true }
+     );
+     res.json(updatedItem);
+   } catch (err) {
+     res.status(400).json({ message: err.message });
+   }
+ });
+ const BookingSchema = new mongoose.Schema({
+   UserId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "User",
+     required: true,
+   },
+   ProductId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "Product",
+     required: true,
+   },
+   quantity: {
+     type: Number,
+     required: true,
+     min: 1,
+   },
+   AgentId:
+   {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Agent",
+      default:null
+   },
+   totalPrice: {
+      type: Number, 
+      required: true,
+    },
+   status: {
+     type: String,
+     enum: ["Pending", "Confirmed", "Cancelled", "Completed","Arrived"],
+     default: "Pending",
+   },
+   createdAt: {
+     type: Date,
+     default: Date.now,
+   },
+ });
+ const Booking =mongoose.model('Booking',BookingSchema)
+
+ app.post("/booking", async (req, res) => {
+   try {
+     const { UserId, ProductId, quantity, status,totalPrice,AgentId } = req.body;
+ 
+     if (!UserId || !ProductId || !quantity || !totalPrice) {
+       return res.status(400).json({ message: "Missing required fields" });
+     }
+ 
+     const newBooking = new Booking({
+       UserId,
+       ProductId,
+       quantity,
+       AgentId,
+      totalPrice,
+       status: status || "Pending",
+     });
+ 
+     await newBooking.save();
+     res.status(201).json(newBooking);
+   } catch (error) {
+     console.error("Error creating booking:", error);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ const shopBookingSchema = new mongoose.Schema({
+   UserId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "User",
+     required: true,
+   },
+   SpareId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "Spare",
+     required: true,
+   },
+   quantity: {
+     type: Number,
+     required: true,
+     min: 1,
+   },
+   AgentId:
+   {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Agent",
+      default:null
+   },
+   status: {
+     type: String,
+     enum: ["Pending", "Confirmed", "Cancelled", "Completed"],
+     default: "Pending",
+   },
+   totalPrice: {
+      type: Number, 
+      required: true,
+    },
+   createdAt: {
+     type: Date,
+     default: Date.now,
+   },
+ });
+ 
+ const ShopBooking = mongoose.model("ShopBooking", shopBookingSchema);
+ 
+ app.post("/shopBooking", async (req, res) => {
+   try {
+     const { UserId, SpareId, quantity, status,  totalPrice,AgentId } = req.body;
+ 
+     if (!UserId || !SpareId || !quantity || !totalPrice) {
+       return res.status(400).json({ message: "Missing required fields" });
+     }
+ 
+     const newShopBooking = new ShopBooking({
+       UserId,
+       SpareId,
+       quantity,
+       AgentId,
+       totalPrice,
+       status: status || "Pending",
+     });
+ 
+     await newShopBooking.save();
+     res.status(201).json(newShopBooking);
+   } catch (error) {
+     console.error("Error creating shop booking:", error);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ app.put("/booking/:bookingId", async (req, res) => {
+   try {
+     const { bookingId } = req.params;
+     console.log(bookingId)
+     const { status } = req.body;
+ 
+   
+     const updatedBooking = await Booking.findByIdAndUpdate(
+       bookingId,
+       { status: status || "confirmed" },
+       { new: true }
+     );
+ 
+     if (!updatedBooking) {
+       return res.status(404).json({ message: "Booking not found!" });
+     }
+ 
+     res.status(200).json({ message: "Booking updated successfully!", booking: updatedBooking });
+   } catch (error) {
+     console.error("Error updating booking:", error);
+     res.status(500).json({ message: "Server error!" });
+   }
+ });
+
+app.put("/ShopBookinghgjhgjk/:ShopBookingId",async (req,res)=>{
+
+   try{
+      console.log(req.body);
+      
+
+      const{ShopBookingId}=req.params;
+      const{status}=req.body;
+
+      const shopBooking = await ShopBooking.findByIdAndUpdate(
+         ShopBookingId,
+         
+            {status:status || "Confirmed"},{new:true}
+         
+      );
+      if(!shopBooking)
+      {
+         return res.status(404).json({message:"shopBooking not found!"});
+      }
+      res.status(200).json({message:"ShopBooking updated",ShopBooking:shopBooking});
+   }
+   catch(error){
+      console.error("error updating booking:",error);
+      res.status(500).json({message:"Internal server"});
+   }
+});
+ const watchBookingSchema = new mongoose.Schema({
+   UserId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "User",
+     required: true,
+   },
+   watchId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "Watch",
+     required: true,
+   },
+   quantity: {
+     type: Number,
+     required: true,
+     min: 1,
+   },
+   AgentId:
+   {
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Agent",
+      default:null
+   },
+   status: {
+     type: String,
+     enum: ["Pending", "Confirmed", "Cancelled", "Completed"],
+     default: "Pending",
+   },
+   totalPrice: {
+      type: Number, 
+      required: true,
+    },
+   createdAt: {
+     type: Date,
+     default: Date.now,
+   },
+ });
+ 
+ const WatchBooking = mongoose.model("WatchBooking", watchBookingSchema);
+ app.post("/watchBooking", async (req, res) => {
+   try {
+     const { UserId, watchId, quantity, status,totalPrice,AgentId } = req.body;
+ 
+     if (!UserId || !watchId || !quantity ||!totalPrice) {
+       return res.status(400).json({ message: "Missing required fields" });
+     }
+ 
+     const newWatchBooking = new WatchBooking({
+       UserId,
+       watchId,
+       AgentId,
+       quantity,
+       totalPrice,
+       status: status || "Pending",
+     });
+ 
+     await newWatchBooking.save();
+     res.status(201).json(newWatchBooking);
+   } catch (error) {
+     console.error("Error creating shop booking:", error);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ app.put("/WatchBooking/:WatchBookingId", async (req, res) => {
+   try {
+     const { WatchBookingId } = req.params;
+     console.log(WatchBookingId)
+     const { status } = req.body;
+    console.log(status)
+   
+     const updatedWatchBooking = await WatchBooking.findByIdAndUpdate(
+       WatchBookingId, 
+       { status: status || "Confirmed" },
+       { new: true }
+     );
+ 
+     if (!updatedWatchBooking) {
+       return res.status(404).json({ message: "shopBooking not found!" });
+     }
+ 
+     res.status(200).json({ message: "ShopBooking updated successfully!", WatchBooking: updatedWatchBooking });
+   } catch (error) {
+     console.error("Error updating booking:", error);
+     res.status(500).json({ message: "Internal  Server error!" });
+   }
+ });
+ 
+
+app.get("/booking/:userId", async (req, res) => {
+   try {
+     const { userId } = req.params;
+     const status = req.query.status || "confirmed";  
+     
+     
+     const bookings = await Booking.find({ UserId: userId, status })  
+       .populate("ProductId")  
+       .exec();
+     
+
+     if (!bookings || bookings.length === 0) {
+       return res.status(404).json({ message: "No bookings found for this user" });
+     }
+ 
+    
+     res.json(bookings);
+   } catch (error) {
+     console.error("Error fetching bookings:", error);
+     res.status(500).send("Failed to fetch bookings");
+   }
+ });
+ 
+app.get("/shopBookings/:userId", async (req, res) => {
+   try {
+     const { userId } = req.params;
+     const status = req.query.status || "Confirmed";  
+     
+     
+     const bookings = await ShopBooking.find({ UserId: userId, status })  
+       .populate("SpareId") 
+       .exec();
+     
+
+     if (!bookings || bookings.length === 0) {
+       return res.status(404).json({ message: "No bookings found for this user" });
+     }
+ 
+    
+     res.json(bookings);
+   } catch (error) {
+     console.error("Error fetching bookings:", error);
+     res.status(500).send("Failed to fetch bookings");
+   }
+ });
+ app.get("/watchBooking/:userId", async (req, res) => {
+   try {
+     const { userId } = req.params;
+     const status = req.query.status || "confirmed";  
+     
+     
+     const watch= await WatchBooking.find({ UserId: userId, status })  
+       .populate("watchId")  
+       .exec();
+     
+
+     if (! watch ||  watch.length === 0) {
+       return res.status(404).json({ message: "No bookings found for this user" });
+     }
+ 
+    
+     res.json( watch);
+   } catch (error) {
+     console.error("Error fetching bookings:", error);
+     res.status(500).send("Failed to fetch bookings");
+   }
+ });
+// app.get('/cart/items',async (req,res)=>
+// {
+//    try{
+
+//       const {sellerId} =req.params;
+
+//       const sellerId=await Cart.find({})
+//    }
+// })
+app.get('/bookingDetails/:bookingId', async (req, res) => {
+   try {
+     const { bookingId } = req.params;
+     console.log(bookingId);
+     
+ 
+     const booking = await Booking.findById(bookingId)
+       .populate({
+         path: 'ProductId',  
+         populate: {
+           path: 'sellerId', 
+           select: 'name' 
+         }
+       });
+
+     if (!booking) {
+       return res.status(404).json({ message: 'Booking not found' });
+     }
+     res.json(booking);
+   } catch (err) {
+     console.error('Error fetching booking details:', err);
+     res.status(500).json({ message: 'Server error' });
+   }
+ });
+
+ app.get('/watchBookingDetails/:WatchBookingId', async (req, res) => {
+   try {
+     const {WatchBookingId} = req.params;
+    console.log(WatchBookingId)
+     const booking = await WatchBooking.findById(WatchBookingId).populate({
+
+      path:'watchId',
+      populate:{
+         path:'shopId',
+         select:'name'
+      }
+      })
+     
+     if (!booking) {
+       return res.status(404).json({ message: 'Booking not found' });
+     }
+     res.json(booking);
+   } catch (err) {
+     console.error('Error fetching booking details:', err);
+     res.status(500).json({ message: 'Server error' });
+   }
+ });
+ app.get('/SpareBookingDetail/:ShopBookingId', async (req, res) => {
+   try {
+     const {ShopBookingId } = req.params;
+    console.log(ShopBookingId)
+     const booking = await ShopBooking.findById(ShopBookingId ).populate({ path:'SpareId',
+
+      populate:{
+
+         path:'shopId',
+         select:'name'
+      }
+      })
+     if (!booking) {
+       return res.status(404).json({ message: 'ShopBooking not found' });
+     }
+     res.json(booking);
+   } catch (err) {
+     console.error('Error fetching booking details:', err);
+     res.status(500).json({ message: 'Server error' });
+   }
+ });
+ app.get('/ViewBookings/:shopId', async (req, res) => {
+   try {
+     const { shopId } = req.params;
+     console.log(shopId);
+ 
+     const bookings = await WatchBooking.aggregate([
+       {
+         $lookup: {
+           from: "watches", // Collection name should be lowercase in MongoDB
+           localField: "watchId",
+           foreignField: "_id",
+           as: "watchDetails",
+         },
+       },
+       { $unwind: "$watchDetails" }, // Unwind the array to get individual objects
+       { $match: { "watchDetails.shopId": new mongoose.Types.ObjectId(shopId) } },
+       {
+         $lookup: {
+           from: "users",
+           localField: "UserId",
+           foreignField: "_id",
+           as: "userDetails",
+         },
+       },
+       { $unwind: "$userDetails" }, // Unwind to get user details
+       {
+         $project: {
+           _id: 1,
+           quantity: 1,
+           status: 1,
+           totalPrice: 1,
+           createdAt: 1,
+           "userDetails.name": 1,
+           "userDetails.email": 1,
+           "watchDetails.model": 1,
+           "watchDetails.profileImage":1,
+           "watchDetails.company": 1,
+         },
+       },
+     ]);
+ 
+     res.status(200).json({ success: true, bookings });
+   } catch (error) {
+     console.error(error);
+     res.status(500).json({ success: false, message: "Server Error" });
+   }
+ });
+
+ app.get('/SpareBooking/:shopId', async (req, res) => {
+   try {
+       const { shopId } = req.params;
+
+       const bookings = await ShopBooking.aggregate([
+           {
+               $lookup: {
+                   from: "spares", // Name of the collection in MongoDB
+                   localField: "SpareId",
+                   foreignField: "_id",
+                   as: "spareDetails"
+               }
+           },
+           {
+               $unwind: "$spareDetails"
+           },
+           {
+               $match: {
+                   "spareDetails.shopId": new mongoose.Types.ObjectId(shopId)
+               }
+           },
+           {
+               $lookup: {
+                   from: "users",
+                   localField: "UserId",
+                   foreignField: "_id",
+                   as: "userDetails"
+               }
+           },
+           {
+               $unwind: "$userDetails"
+           },
+           {
+               $project: {
+                   _id: 1,
+                   "userDetails.name": 1,
+                   "userDetails.email": 1,
+                   "userDetails.contact": 1,
+                   "spareDetails.partName": 1,
+                   "spareDetails.profileImage":1,
+                   quantity: 1,
+                   totalPrice: 1,
+                   status: 1,
+                   createdAt: 1
+               }
+           },
+           { 
+               $sort: { createdAt: -1 } // Sorting by newest bookings first
+           }
+       ]);
+
+       res.status(200).json({ success: true, bookings });
+   } catch (error) {
+       console.error("Error fetching shop bookings:", error);
+       res.status(500).json({ success: false, message: "Server Error" });
+   }
+});
+
+app.get('/WatchComplaint/:sellerId', async (req, res) => {
+   try {
+     const { sellerId } = req.params;
+ 
+     // Check if the sellerId is a valid ObjectId
+     if (!mongoose.Types.ObjectId.isValid(sellerId)) {
+       return res.status(400).json({
+         success: false,
+         message: 'Invalid sellerId format.',
+       });
+     }
+ 
+     const complaints = await Complaint.aggregate([
+       // Step 1: Join Complaint to Booking based on bookingId
+       {
+         $lookup: {
+           from: 'bookings', // Name of the bookings collection
+           localField: 'bookingId',
+           foreignField: '_id',
+           as: 'bookingDetails',
+         },
+       },
+       // Step 2: Unwind the bookingDetails array to get individual booking details
+       {
+         $unwind: {
+           path: '$bookingDetails',
+           preserveNullAndEmptyArrays: false,
+         },
+       },
+       // Step 3: Join the Product details based on ProductId from Booking
+       {
+         $lookup: {
+           from: 'products', // Name of the products collection
+           localField: 'bookingDetails.ProductId',
+           foreignField: '_id',
+           as: 'productDetails',
+         },
+       },
+       // Step 4: Unwind the productDetails array to get individual product details
+       {
+         $unwind: {
+           path: '$productDetails',
+           preserveNullAndEmptyArrays: false,
+         },
+       },
+       // Step 5: Match the complaints where the product's sellerId matches the given sellerId
+       {
+         $match: {
+           'productDetails.sellerId': new mongoose.Types.ObjectId(sellerId), // Instantiate the ObjectId properly
+         },
+       },
+       // Step 6: Join the User collection to get the userName
+       {
+         $lookup: {
+           from: 'users', // Name of the users collection
+           localField: 'bookingDetails.UserId', // Match by UserId in bookingDetails
+           foreignField: '_id', // Match to _id in the users collection
+           as: 'userDetails',
+         },
+       },
+       // Step 7: Unwind the userDetails array to get individual user details
+       {
+         $unwind: {
+           path: '$userDetails',
+           preserveNullAndEmptyArrays: false,
+         },
+       },
+       // Step 8: Project the necessary fields for the response, including userName
+       {
+         $project: {
+           complaintMessage: 1,
+           status: 1,
+           createdAt: 1,
+           'productDetails.productName': 1,
+           'productDetails.modelNum': 1,
+           'bookingDetails.UserId': 1,
+           'userDetails.name': 1,
+           'userDetails.profileImage':1 // Include the userName in the response
+         },
+       },
+       // Step 9: Sort complaints by creation date (desc)
+       {
+         $sort: {
+           createdAt: -1, // Sort by createdAt in descending order
+         },
+       },
+     ]);
+ 
+     // If there are no complaints for the seller
+     if (complaints.length === 0) {
+       return res.status(404).json({
+         success: false,
+         message: 'No complaints found for this seller.',
+       });
+     }
+ 
+     // Return the complaints to the seller
+     return res.status(200).json({
+       success: true,
+       complaints,
+     });
+   } catch (error) {
+     console.error('Error fetching complaints:', error);
+     return res.status(500).json({
+       success: false,
+       message: 'Internal server error.',
+     });
+   }
+ });
+ 
+ 
+
+ app.get('/bookings/:sellerId', async (req, res) => {
+   try {
+      const { sellerId } = req.params;
+
+      const bookings = await Booking.aggregate([
+       
+         {
+            $lookup: {
+               from: "products",
+               localField: "ProductId",
+               foreignField: "_id",
+               as: "productDetails"
+            }
+         },
+       
+         {
+            $unwind: "$productDetails"
+         },
+      
+         {
+            $match: { "productDetails.sellerId": new mongoose.Types.ObjectId(sellerId) }
+         },
+    
+         {
+            $lookup: {
+               from: "users",
+               localField: "UserId",
+               foreignField: "_id",
+               as: "userDetails"
+            }
+         },
+       
+         {
+            $unwind: "$userDetails"
+         },
+       
+         {
+            $project: {
+               _id: 1,
+               quantity: 1,
+               totalPrice: 1,
+               status: 1,
+               createdAt: 1,
+               "productDetails.productName": 1,
+               "productDetails.price": 1,
+               "productDetails.profileImage":1,
+               "userDetails.name": 1,
+               "userDetails.email": 1
+            }
+         }
+      ]);
+
+      res.status(200).json(bookings);
+   } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server Error", error });
+   }
+});
+app.get("/confirmed-bookings", async (req, res) => {
+   try {
+     const confirmedBookings = await Booking.find({ status: "confirmed" })
+       .populate("UserId", "name email contact")
+       .populate("ProductId", "name price profileImage");
+     res.status(200).json(confirmedBookings);
+   } catch (error) {
+     res.status(500).json({ message: "Error fetching confirmed bookings", error });
+   }
+ });
+ app.get("/WatchConfirmed-bookings", async (req, res) => {
+   try {
+     const confirmedBookings = await WatchBooking.find({ status: "confirmed" })
+       .populate("UserId", "name email contact")
+       .populate("watchId", "model price profileImage");
+     res.status(200).json(confirmedBookings);
+   } catch (error) {
+     res.status(500).json({ message: "Error fetching confirmed bookings", error });
+   }
+ });
+ app.get("/ShopConfirmed-bookings",async(req,res)=>{
+
+ try{
+
+   const confirmedBook=await ShopBooking.find({status:"Confirmed"})
+   .populate("UserId","name email contact").populate("SpareId","partName price profileImage");
+   res.status(200).json(confirmedBook);
+
+ }catch(error){
+
+   res.status(500).json({message:"Error fetching confirmed booking",error})
+ }
+
+ })
+
+ app.put("/update-booking/:id", async (req, res) => {
+   const { id } = req.params;
+   const { AgentId } = req.body; 
+ 
+   try {
+  
+     const updatedBooking = await Booking.findByIdAndUpdate(
+       id,
+       {
+         status: "Completed",
+         AgentId: AgentId,    
+       },
+       { new: true } 
+     );
+ 
+     if (!updatedBooking) {
+       return res.status(404).json({ message: "Booking not found" });
+     }
+ 
+     res.status(200).json(updatedBooking); // Respond with the updated booking
+   } catch (error) {
+     console.error("Error updating booking:", error);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ app.put("/update-WatchBooking/:id", async (req, res) => {
+   const { id } = req.params;
+   const { AgentId } = req.body; 
+ 
+   try {
+  
+     const updatedBooking = await WatchBooking.findByIdAndUpdate(
+       id,
+       {
+         status: "Completed",
+         AgentId: AgentId,    
+       },
+       { new: true } 
+     );
+ 
+     if (!updatedBooking) {
+       return res.status(404).json({ message: "Booking not found" });
+     }
+ 
+     res.status(200).json(updatedBooking); 
+   } catch (error) {
+     console.error("Error updating booking:", error);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+ app.put("/update-SpareBooking/:id", async (req, res) => {
+   const { id } = req.params;
+   const { AgentId } = req.body; 
+ 
+   try {
+  
+     const updatedBooking = await ShopBooking.findByIdAndUpdate(
+       id,
+       {
+         status: "Completed",
+         AgentId: AgentId,    
+       },
+       { new: true } 
+     );
+ 
+     if (!updatedBooking) {
+       return res.status(404).json({ message: "Booking not found" });
+     }
+ 
+     res.status(200).json(updatedBooking); 
+   } catch (error) {
+     console.error("Error updating booking:", error);
+     res.status(500).json({ message: "Internal server error" });
+   }
+ });
+
+
+ app.get("/booking1/:userId", async (req, res) => {
+   try {
+     const userId = req.params.userId;
+     const bookings = await Booking.find({ UserId: userId }) 
+       .populate("ProductId") 
+       .populate("AgentId")   
+       .exec();
+ 
+     if (!bookings) {
+       return res.status(404).json({ message: "No bookings found" });
+     }
+ 
+     res.status(200).json(bookings); // Return the bookings with agent details
+   } catch (err) {
+     console.error("Error fetching bookings:", err);
+     res.status(500).json({ message: "Server error" });
+   }
+ });
+ 
+ app.get("/WatchBookings/:userId", async (req, res) => {
+   try {
+     const userId = req.params.userId;
+     const bookings = await WatchBooking.find({ UserId: userId }) 
+       .populate("watchId") 
+       .populate("AgentId")   
+       .exec();
+ 
+     if (!bookings) {
+       return res.status(404).json({ message: "No bookings found" });
+     }
+ 
+     res.status(200).json(bookings); // Return the bookings with agent details
+   } catch (err) {
+     console.error("Error fetching bookings:", err);
+     res.status(500).json({ message: "Server error" });
+   }
+ });
+ app.get("/WatchBookings/:userId", async (req, res) => {
+   try {
+     const userId = req.params.userId;
+     const bookings = await ShopBooking.find({ UserId: userId }) 
+       .populate("SpareId") 
+       .populate("AgentId")   
+       .exec();
+ 
+     if (!bookings) {
+       return res.status(404).json({ message: "No bookings found" });
+     }
+ 
+     res.status(200).json(bookings); // Return the bookings with agent details
+   } catch (err) {
+     console.error("Error fetching bookings:", err);
+     res.status(500).json({ message: "Server error" });
+   }
+ });
+ const ComplaintSchema = new mongoose.Schema({
+   bookingId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "Booking",
+     required: true, 
+   },
+   complaintMessage: {
+     type: String,
+     required: true, // Complaint description
+     minlength: 10, // Minimum length for the complaint
+   },
+   status: {
+     type: String,
+     enum: ["Pending", "Resolved", "In Progress"],
+     default: "Pending",
+   },
+   createdAt: {
+     type: Date,
+     default: Date.now, // Automatically set the current date
+   },
+ });
+
+const Complaint = mongoose.model("Complaint", ComplaintSchema);
+
+// Make sure you define this route to handle bookingId in the URL path
+app.post("/SubmitComplaint/:bookingId", async (req, res) => {
+   const { bookingId } = req.params; // This gets the bookingId from the URL
+   const { complaintMessage } = req.body; // This gets the complaintMessage from the request body
+ 
+   if (!complaintMessage) {
+     return res.status(400).json({
+       message: "Complaint message is required.",
+     });
+   }
+ 
+   try {
+     const booking = await Booking.findById(bookingId);
+ 
+     if (!booking) {
+       return res.status(404).json({
+         message: "Booking not found.",
+       });
+     }
+ 
+     // Save the complaint in the database
+     const newComplaint = new Complaint({
+       bookingId,
+       complaintMessage,
+     });
+ 
+     await newComplaint.save();
+ 
+     res.status(201).json({
+       success: true,
+       message: "Complaint submitted successfully.",
+     });
+   } catch (error) {
+     console.error("Error submitting complaint:", error);
+     res.status(500).json({
+       success: false,
+       message: "Internal server error.",
+     });
+   }
+ });
+ const SpareComplaintSchema = new mongoose.Schema({
+   ShopBookingId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "ShopBooking",
+     required: true, 
+   },
+   complaintMessage: {
+     type: String,
+     required: true, // Complaint description
+     minlength: 10, // Minimum length for the complaint
+   },
+   status: {
+     type: String,
+     enum: ["Pending", "Resolved", "In Progress"],
+     default: "Pending",
+   },
+   createdAt: {
+     type: Date,
+     default: Date.now, // Automatically set the current date
+   },
+ });
+
+const SpareComplaint = mongoose.model("SpareComplaint", SpareComplaintSchema);
+
+
+app.post("/SubmitComplaints/:ShopBookingId", async (req, res) => {
+   const { ShopBookingId } = req.params; 
+   const { complaintMessage } = req.body; 
+ 
+   if (!complaintMessage) {
+     return res.status(400).json({
+       message: "Complaint message is required.",
+     });
+   }
+ 
+   try {
+     const Booking = await ShopBooking.findById(ShopBookingId);
+ 
+     if (!Booking) {
+       return res.status(404).json({
+         message: "Booking not found.",
+       });
+     }
+ 
+     // Save the complaint in the database
+     const newComplaint = new SpareComplaint({
+      ShopBookingId,
+       complaintMessage,
+     });
+ 
+     await newComplaint.save();
+ 
+     res.status(201).json({
+       success: true,
+       message: "Complaint submitted successfully.",
+     });
+   } catch (error) {
+     console.error("Error submitting complaint:", error);
+     res.status(500).json({
+       success: false,
+       message: "Internal server error.",
+     });
+   }
+ });
+ const WatchComplaintSchema = new mongoose.Schema({
+   WatchBookingId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "WatchBooking",
+     required: true, 
+   },
+   complaintMessage: {
+     type: String,
+     required: true, // Complaint description
+     minlength: 10, // Minimum length for the complaint
+   },
+   status: {
+     type: String,
+     enum: ["Pending", "Resolved", "In Progress"],
+     default: "Pending",
+   },
+   createdAt: {
+     type: Date,
+     default: Date.now, // Automatically set the current date
+   },
+ });
+
+const WatchComplaint = mongoose.model("WatchComplaint", WatchComplaintSchema);
+app.post("/WatchComplaints/:WatchBookingId", async (req, res) => {
+   const { WatchBookingId } = req.params; 
+   const { complaintMessage } = req.body; 
+ 
+   if (!complaintMessage) {
+     return res.status(400).json({
+       message: "Complaint message is required.",
+     });
+   }
+ 
+   try {
+     const Booking = await WatchBooking.findById(WatchBookingId);
+ 
+     if (!Booking) {
+       return res.status(404).json({
+         message: "Booking not found.",
+       });
+     }
+ 
+     // Save the complaint in the database
+     const newComplaint = new WatchComplaint({
+      WatchBookingId,
+       complaintMessage,
+     });
+ 
+     await newComplaint.save();
+ 
+     res.status(201).json({
+       success: true,
+       message: "Complaint submitted successfully.",
+     });
+   } catch (error) {
+     console.error("Error submitting complaint:", error);
+     res.status(500).json({
+       success: false,
+       message: "Internal server error.",
+     });
+   }
+ });
+
+ app.get('/WatchesComplaint/:shopId', async (req, res) => {
+   try {
+     const { shopId } = req.params;
+
+     // Check if shopId is a valid ObjectId
+     if (!mongoose.Types.ObjectId.isValid(shopId)) {
+       return res.status(400).json({
+         success: false,
+         message: 'Invalid shopId format.',
+       });
+     }
+
+     console.log("Fetching complaints for Shop ID:", shopId); // Debugging
+
+     const WatchComplaints = await WatchComplaint.aggregate([
+       {
+         $lookup: {
+           from: 'watchbookings',
+           localField: 'WatchBookingId',
+           foreignField: '_id',
+           as: 'bookingDetails',
+         },
+       },
+       {
+         $unwind: {
+           path: '$bookingDetails',
+           preserveNullAndEmptyArrays: false,
+         },
+       },
+       {
+         $lookup: {
+           from: 'watches',
+           localField: 'bookingDetails.watchId',
+           foreignField: '_id',
+           as: 'watchesDetails',
+         },
+       },
+       {
+         $unwind: {
+           path: '$watchesDetails',
+           preserveNullAndEmptyArrays: false,
+         },
+       },
+       {
+         $match: {
+           'watchesDetails.shopId': new mongoose.Types.ObjectId(shopId),
+         },
+       },
+       {
+         $lookup: {
+           from: 'users',
+           localField: 'bookingDetails.UserId',
+           foreignField: '_id',
+           as: 'userDetails',
+         },
+       },
+       {
+         $unwind: {
+           path: '$userDetails',
+           preserveNullAndEmptyArrays: false,
+         },
+       },
+       {
+         $project: {
+           complaintMessage: 1,
+           status: 1,
+           createdAt: 1,
+           'watchesDetails.model': 1,
+           'watchesDetails.company': 1,
+           'watchesDetails.profileImage':1,
+           'bookingDetails.quantity': 1,
+           'userDetails.name': 1,
+           'userDetails.profileImage': 1,
+         },
+       },
+       {
+         $sort: { createdAt: -1 },
+       },
+     ]);
+
+     if (WatchComplaints.length === 0) {
+       return res.status(404).json({
+         success: false,
+         message: 'No complaints found for this shop.',
+       });
+     }
+
+     return res.status(200).json({
+       success: true,
+       WatchComplaints,
+     });
+   } catch (error) {
+     console.error('Error fetching complaints:', error);
+     return res.status(500).json({
+       success: false,
+       message: 'Internal server error.',
+     });
+   }
+});
+app.get('/SparesComplaint/:shopId', async (req, res) => {
+   try {
+     const { shopId } = req.params;
+
+    
+     if (!mongoose.Types.ObjectId.isValid(shopId)) {
+       return res.status(400).json({
+         success: false,
+         message: 'Invalid shopId format.',
+       });
+     }
+
+     console.log("Fetching complaints for Shop ID:", shopId); // Debugging
+
+     const SpareComplaints = await SpareComplaint.aggregate([
+       {
+         $lookup: {
+           from: 'shopbookings',
+           localField: 'ShopBookingId',
+           foreignField: '_id',
+           as: 'shopBookingDetails',
+         },
+       },
+       {
+         $unwind: {
+           path: '$shopBookingDetails',
+           preserveNullAndEmptyArrays: false,
+         },
+       },
+       {
+         $lookup: {
+           from: 'spares',
+           localField: 'shopBookingDetails.SpareId',
+           foreignField: '_id',
+           as: 'sparesDetails',
+         },
+       },
+       {
+         $unwind: {
+           path: '$sparesDetails',
+           preserveNullAndEmptyArrays: false,
+         },
+       },
+       {
+         $match: {
+           'sparesDetails.shopId': new mongoose.Types.ObjectId(shopId),
+         },
+       },
+       {
+         $lookup: {
+           from: 'users',
+           localField: 'shopBookingDetails.UserId',
+           foreignField: '_id',
+           as: 'userDetails',
+         },
+       },
+       {
+         $unwind: {
+           path: '$userDetails',
+           preserveNullAndEmptyArrays: false,
+         },
+       },
+       {
+         $project: {
+           complaintMessage: 1,
+           status: 1,
+           createdAt: 1,
+           'sparesDetails.partName': 1,
+           'sparesDetails.part': 1,
+            'sparesDetails.profileImage':1,
+           'shopBookingDetails.quantity': 1,
+           'userDetails.name': 1,
+           'userDetails.profileImage': 1,
+         },
+       },
+       {
+         $sort: { createdAt: -1 },
+       },
+     ]);
+
+     if (SpareComplaints .length === 0) {
+       return res.status(404).json({
+         success: false,
+         message: 'No complaints found for this shop.',
+       });
+     }
+
+     return res.status(200).json({
+       success: true,
+       SpareComplaints,
+     });
+   } catch (error) {
+     console.error('Error fetching complaints:', error);
+     return res.status(500).json({
+       success: false,
+       message: 'Internal server error.',
+     });
+   }
 });

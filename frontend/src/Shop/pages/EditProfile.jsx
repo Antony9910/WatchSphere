@@ -8,30 +8,45 @@ import { Grid, TableBody, TableCell, TableRow, TextField } from '@mui/material';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 const EditProfile = () => {
   const [name, setName] = useState('');
   const [shop,setShop] = useState('');
   const [email, setEmail] = useState('');
+  const [place,setPlace] =useState("");
+  const [district,setDistrict] =useState("");
+  const [contact,setContact] = useState('');
+   const [districtRows, setDistrictRows] = useState([]);
+    const [selectedDistrict, setSelectedDistrict] = useState("");
   const [address, setAddress] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword,setConfirmPassword]= useState('');
   const [shopEditId, setShopEditId] = useState(null);
   const [profileImage,setProfileImage]=useState('')
-
+const [selectedPlace, setSelectedPlace] = useState("");
+  const [PlaceRows, setPlaceRows] = useState([]);
   useEffect(() => {
     fetchShop();
+    fetchPlace();
+    fetchDistrict();
   }, []);
 
   const fetchShop = () => {
-    const id = sessionStorage.getItem('aid');
+    const id = sessionStorage.getItem('Sid');
     axios.get(`http://localhost:5000/ShopRegById/${id}`).then((res) => {
       const shop = res.data.shop;
       setName(shop.name);
       setShop(shop.shop);
       setEmail(shop.email);
+      setContact(shop.contact)
       setAddress(shop.address);
       setPassword(shop.password)
+      setPlace(shop.place);
+      setDistrict(shop.district);
       setProfileImage(shop.profileImage)
       setConfirmPassword(shop.confirmPassword)
       setShopEditId(shop._id); 
@@ -39,16 +54,49 @@ const EditProfile = () => {
       console.error(err);
     });
   };
+  const fetchPlace = () => {
+        axios
+          .get("http://localhost:5000/PlacePost")
+          .then((res) => {
+            console.log(res.data.place);
+            setPlaceRows(res.data.place);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      };
+      const handlePlaceChange = (e) => {
+        setSelectedPlace(e.target.value);
+       
+      };
+      const handleDistrictChange = (e) => {
+        setSelectedDistrict(e.target.value);
+       
+      };
+       const fetchDistrict = () => {
+          axios
+            .get("http://localhost:5000/DistrictPost")
+            .then((res) => {
+              console.log(res.data.district);
+              setDistrictRows(res.data.district);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const id = sessionStorage.getItem('aid');
+    const id = sessionStorage.getItem('Sid');
 
     const data = {
       name: name,
       shop:shop,
       email: email,
+      contact:contact,
       address: address,
+      place:selectedPlace,
+      district:selectedDistrict,
       password:password,
       confirmPassword:confirmPassword
     }
@@ -102,13 +150,26 @@ const EditProfile = () => {
                     <TableCell>{email}</TableCell>
                   </TableRow>
                   <TableRow>
+                    <TableCell sx={{fontFamily:'fantasy'}}>Contact:</TableCell>
+                    <TableCell>{contact}</TableCell>
+                  </TableRow>
+                  <TableRow>
                     <TableCell sx={{fontFamily:'fantasy'}}>Address:</TableCell>
                     <TableCell>{address}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{fontFamily:'fantasy'}}>Place</TableCell>
+                    <TableCell>{place}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{fontFamily:'fantasy'}}>District</TableCell>
+                    <TableCell>{district}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell sx={{fontFamily:'fantasy'}}>Password</TableCell>
                     <TableCell>{password}</TableCell>
                   </TableRow>
+                 
                 
                 </TableBody>
               </Box>
@@ -158,6 +219,56 @@ const EditProfile = () => {
                       />
                     </TableCell>
                   </TableRow>
+                  <TableRow>
+                    <TableCell>Contact</TableCell>
+                    <TableCell>
+                      <TextField
+                        fullWidth
+                        value={contact} 
+                        onChange={(e) => setContact(e.target.value)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                    <TableRow>
+                                      <TableCell>Place</TableCell>
+                                      <TableCell>
+                                      <FormControl fullWidth sx={{width:260}}>
+                                                                  <InputLabel id="demo-simple-select-label">Place</InputLabel>
+                                                                  <Select
+                                                                    labelId="demo-simple-select-label"
+                                                                    id="demo-simple-select"
+                                                                    value={selectedPlace}
+                                                                    label="Place"
+                                                                    onChange={handlePlaceChange}
+                                                                  >
+                                                                    {PlaceRows &&
+                                                                      PlaceRows.map((row,index) => (
+                                                                        <MenuItem key={index} value={row.placeName}>{row.placeName}</MenuItem>
+                                                                      ))}
+                                                                  </Select>
+                                                                </FormControl>
+                                      </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                      <TableCell>District</TableCell>
+                                      <TableCell>
+                                      <FormControl fullWidth sx={{width:260}}>
+                                                                  <InputLabel id="demo-simple-select-label">District</InputLabel>
+                                                                  <Select
+                                                                    labelId="demo-simple-select-label"
+                                                                    id="demo-simple-select"
+                                                                    value={selectedDistrict}
+                                                                    label="District"
+                                                                    onChange={handleDistrictChange}
+                                                                  >
+                                                                    {districtRows &&
+                                                                      districtRows.map((row,index) => (
+                                                                        <MenuItem key={index} value={row.districtName}>{row.districtName}</MenuItem>
+                                                                      ))}
+                                                                  </Select>
+                                                                </FormControl>
+                                      </TableCell>
+                                    </TableRow>
                   <TableRow>
                     <TableCell>Password</TableCell>
                     <TableCell>

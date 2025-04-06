@@ -30,17 +30,19 @@ const UserAvatar = () => {
 }
 const Navbar = () => {
    const [profileImage, setProfile] = useState('');
+   const [name,setName]=useState('');
   
     useEffect(() => {
       fetchAgent();
     }, []);
     
     const fetchAgent = () => {
-      const id = sessionStorage.getItem("aid");
+      const id = sessionStorage.getItem("Aid");
       axios.get(`http://localhost:5000/AgentRegById/${id}`).then((res) => {
         const Agent = res.data.agent;
         // Set each individual field with data
         setProfile(Agent.profileImage);
+        setName(Agent.name);
       }).catch((err) => {
         console.error(err);
       });
@@ -81,7 +83,7 @@ const Navbar = () => {
               ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'orange'
             }}
           >
-            <h3>  <Link to={'/agent'}style={{color:'orange',textDecoration:'none'}}><HomeIcon></HomeIcon>Home</Link></h3>
+            <h3>  <Link to={'/agent'}style={{color:'orange',textDecoration:'none',fontFamily:'cursive'}}><HomeIcon></HomeIcon>Home</Link></h3>
           </Box>
           {/* <Box
             sx={{
@@ -99,15 +101,7 @@ const Navbar = () => {
           >
             <h3>Contact</h3>
           </Box> */}
-          <Box
-            sx={{
-              marginLeft: 2,
-              ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'orange'
-            }}
-          >
-            <AddShoppingCartIcon></AddShoppingCartIcon>Cart
-            {/* <h3><Link to={"/Register"} style={{color:'orange',textDecoration:'none'}}>Registration</Link></h3> */}
-          </Box>
+        
           <Box
             sx={{
               marginLeft: 2,
@@ -116,7 +110,7 @@ const Navbar = () => {
           >
              <h3>
               {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
-              <Link to={'/*'} style={{color:'orange',textDecoration:'none'}}><LogoutIcon></LogoutIcon>Logout</Link>
+              <Link to={'/*'} style={{color:'orange',textDecoration:'none',fontFamily:'cursive'}}><LogoutIcon></LogoutIcon>Logout</Link>
             </h3> 
           </Box>
           <Box
@@ -133,10 +127,10 @@ const Navbar = () => {
           <Box
                       sx={{
                         marginLeft: 2,
-                        ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'white',
+                        ":hover": { transform: "scale(1.05)", boxShadow: 6,fontFamily:'cursive' },color:'white',
                       }}
                     >
-                         <Avatar alt="Remy Sharp" src={profileImage} />
+                         <Avatar alt="Remy Sharp" src={profileImage} /><Box sx={{fontFamily:'cursive'}}>{name}</Box>
                         
            
           

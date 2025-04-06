@@ -124,9 +124,9 @@ const District = () => {
             id="fullWidth"  focused 
             value={district}
             onChange={(e) => setDistrict(e.target.value)}
-            sx={{ width: "10%" }}
+            sx={{ width: "10%",fontFamily:'cursive' }}
           />
-          <Button variant="contained" type="submit">
+          <Button variant="contained" type="submit" sx={{fontFamily:'cursive'}}>
             Submit
           </Button>
         </Stack>
@@ -139,9 +139,9 @@ const District = () => {
         <Table sx={{ maxWidth: "100%", margin: "0 auto" }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{fontFamily:'fantasy'}}>SL.NO</TableCell>
-              <TableCell sx={{fontFamily:'fantasy'}}>District</TableCell>
-              <TableCell sx={{fontFamily:'fantasy'}}>Action</TableCell>
+              <TableCell sx={{fontFamily:'cursive'}}>SL.NO</TableCell>
+              <TableCell sx={{fontFamily:'cursive'}}>District</TableCell>
+              <TableCell sx={{fontFamily:'cursive'}}>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -151,8 +151,8 @@ const District = () => {
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{row.districtName}</TableCell>
+                  <TableCell sx={{fontFamily:'cursive'}}>{index + 1}</TableCell>
+                  <TableCell sx={{fontFamily:'cursive'}}>{row.districtName}</TableCell>
                   <TableCell>
                     <IconButton
                     aria-label="delete"
@@ -164,7 +164,7 @@ const District = () => {
                     <Button
                       variant="contained"
                       color="info"
-                      onClick={() => handleUpdate(row._id)}
+                      onClick={() => handleUpdate(row._id)} sx={{fontFamily:'cursive'}}
                     >
                       Edit
                     </Button>

@@ -15,12 +15,49 @@ const ShopRegistration = () => {
   const [password,setPassword]=useState('');
   const [confirmPassword,setConfirmPassword]=useState('');
  const [shop,setShop]=useState('');
+  const [contact, setContact] = useState('');
+   const[state,setState]=useState('');
   const [proof, setProof] = useState(null); 
   const [photo, setPhoto] = useState(null);
   const [message, setMessage] = useState('');
- 
+ const [districtRows, setDistrictRows] = useState([]);
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const [selectedPlace, setSelectedPlace] = useState("");
+  const [PlaceRows, setPlaceRows] = useState([]);
 
+ useEffect(() => {
+    fetchDistrict();
+    fetchPlace();
+  }, []);
+  const fetchPlace = () => {
+    axios
+      .get("http://localhost:5000/PlacePost")
+      .then((res) => {
+        console.log(res.data.place);
+        setPlaceRows(res.data.place);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  const fetchDistrict = () => {
+    axios
+      .get("http://localhost:5000/DistrictPost")
+      .then((res) => {
+        console.log(res.data.district);
+        setDistrictRows(res.data.district);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  const handleDistrictChange = (e) => {
+    setSelectedDistrict(e.target.value);
+  };
 
+  const handlePlaceChange = (e) => {
+    setSelectedPlace(e.target.value);
+  };
   
 
   const handleSubmit = async (e) => {
@@ -31,6 +68,10 @@ const ShopRegistration = () => {
     formDataToSend.append('email', email);
     formDataToSend.append('address', address);
     formDataToSend.append('shop', shop);
+    formDataToSend.append('contact', contact);
+    formDataToSend.append('state', state);
+    formDataToSend.append("district", selectedDistrict);
+    formDataToSend.append("place", selectedPlace);
     formDataToSend.append('password',password);
     // formDataToSend.append('date',setDate)
     formDataToSend.append('confirmPassword',confirmPassword)
@@ -126,7 +167,67 @@ const ShopRegistration = () => {
                     required
                   />
                 </Grid>
-          
+                  <Grid item xs={12} md={6}>
+                                  <TextField
+                                    fullWidth
+                                    label="Contact"
+                                    value={contact}
+                                    onChange={(e) => setContact(e.target.value)}
+                                    pattern="[0-9]{10}"
+                                    required
+                                    placeholder="Enter 10-digit contact number"
+                                  />
+                                </Grid>
+                                  <Grid item xs={12} md={6}>
+                                                  <TextField
+                                                    fullWidth
+                                                    label="State"
+                                                    value={state}
+                                                    onChange={(e) => setState(e.target.value)}
+                                                    
+                                                    required
+                                                    placeholder="Enter state"
+                                                  />
+                                                </Grid>
+                                                
+                                                
+                  <Grid item xs={12} md={6}>
+                                                  <FormControl fullWidth sx={{width:260}}>
+                                                <InputLabel id="demo-simple-select-label">District</InputLabel>
+                                                <Select
+                                                  labelId="demo-simple-select-label"
+                                                  id="demo-simple-select"
+                                                  value={selectedDistrict}
+                                                  label="District"
+                                                  onChange={handleDistrictChange}
+                                                >
+                                                  {districtRows &&
+                                                    districtRows.map((row,index) => (
+                                                      <MenuItem key={index} value={row.districtName}>{row.districtName}</MenuItem>
+                                                    ))}
+                                                </Select>
+                                              </FormControl>
+                                                  </Grid>
+                                                  
+                                                  
+        
+                                              <Grid item xs={12} md={6}>
+                                                            <FormControl fullWidth sx={{width:260}}>
+                                                          <InputLabel id="demo-simple-select-label">Place</InputLabel>
+                                                          <Select
+                                                            labelId="demo-simple-select-label"
+                                                            id="demo-simple-select"
+                                                            value={selectedPlace}
+                                                            label="Place"
+                                                            onChange={handlePlaceChange}
+                                                          >
+                                                            {PlaceRows &&
+                                                              PlaceRows.map((row,index) => (
+                                                                <MenuItem key={index} value={row.placeName}>{row.placeName}</MenuItem>
+                                                              ))}
+                                                          </Select>
+                                                        </FormControl>
+                                                            </Grid>
 
                 {/* <Grid item xs={12} md={6}>
                   <TextField

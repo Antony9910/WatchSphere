@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -24,6 +24,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import ShopIcon from '@mui/icons-material/Shop';
 import StoreIcon from '@mui/icons-material/Store';
+import axios from 'axios';
 
 
 
@@ -38,7 +39,22 @@ const  AgentPage = () => {
 //     autoplaySpeed: 1000, 
 //     arrows: true
 // };
+    useEffect(() => {
+      fetchAgent();
+    }, []);
+    const [name,setName] = useState('');
+    const fetchAgent = () => {
+      const id = sessionStorage.getItem("Aid");
+      axios.get(`http://localhost:5000/AgentRegById/${id}`).then((res) => {
+        const Agent = res.data.agent;
+        // Set each individual field with data
+        setName(Agent.name);
+      }).catch((err) => {
+        console.error(err);
+      });
+    };
   return (
+    
     <Box>
     <Box sx={{ width: "101%", overflow: "hidden",position:'relative' }}>
     {/* <Slider {...settings}> */}
@@ -67,7 +83,7 @@ const  AgentPage = () => {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy',marginTop:-2,marginLeft:9,}}>
-          WELCOME TO WATCHSPHEREa
+          <Typography sx={{fontFamily:'cursive',fontSize:25,marginBottom:15}}>WELCOME  {name}</Typography>
         </Typography>
         
       </CardContent>
@@ -84,17 +100,17 @@ const  AgentPage = () => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
         Edit Profile
         </Typography>
-        <Typography>
+        <Typography sx={{fontFamily:'cursive'}}>
           Edit Details of User 
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/Profile'} style={{textDecoration:'none',color:'white'}}>Edit</Link></Button>
-      
+        <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/Profile'} style={{textDecoration:'none',color:'white'}}>Edit</Link></Button>
+        <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/View'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
       </CardActions>
     </Card>
 
@@ -107,16 +123,16 @@ const  AgentPage = () => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
         Generate Track Details
         </Typography>
-        <Typography>
+        <Typography sx={{fontFamily:'cursive'}}>
           Delivery Agent add Tracking Details
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Product/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add</Link></Button>
+        <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Track/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add</Link></Button>
 
       </CardActions>
     </Card>
@@ -130,16 +146,16 @@ const  AgentPage = () => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
         Generate Delivery Message
         </Typography>
-        <Typography>
+        <Typography sx={{fontFamily:'cursive'}}>
          Send Delivery message to Customers
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><AddIcon></AddIcon>Add</Button>
+        <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><AddIcon></AddIcon>Add</Button>
        
       
       

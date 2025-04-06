@@ -35,7 +35,7 @@ const Navbar = () => {
   }, []);
   
   const fetchShop = () => {
-    const id = sessionStorage.getItem("aid");
+    const id = sessionStorage.getItem("Sid");
     axios.get(`http://localhost:5000/shopRegById/${id}`).then((res) => {
       const Shop = res.data.shop;
       // Set each individual field with data
@@ -115,7 +115,7 @@ const Navbar = () => {
           >
              <h3>
               {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
-             <Link to={'/*'}><LogoutIcon></LogoutIcon>Logout</Link>
+              <LogoutIcon></LogoutIcon><Link to={"/*"} style={{textDecoration:'none',color:'orange'}}>Logout</Link>
             </h3> 
           </Box>
           <Box

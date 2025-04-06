@@ -49,7 +49,7 @@ const ProductList = () => {
                     <s>₹{product.price}</s> ₹{product.discount}
                   </Typography>
                   <Typography variant="h6" color="primary">
-                    {product.offer} offer
+                    {product.offer}% offer
                   </Typography>
                   <Typography variant="h6" color="primary">
                     ₹{product.discount}

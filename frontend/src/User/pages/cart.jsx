@@ -6,11 +6,10 @@ import { Container, Typography, CardMedia, CardContent, Grid, Paper, Box, Card, 
 const Cart = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
-  const [selectedColor, setSelectedColor] = useState(""); // State to track selected color
-  const [quantity, setQuantity] = useState(1); // State to track quantity
-  const [totalPrice, setTotalPrice] = useState(0); // State to track total price
-  const [bookingDate, setBookingDate] = useState(""); // State to track the booking date
-  const [status, setStatus] = useState("pending"); // State to track booking status
+  const [selectedColor, setSelectedColor] = useState(""); // Track selected color
+  const [quantity, setQuantity] = useState(1); // Track quantity
+  const [totalPrice, setTotalPrice] = useState(0); // Track total price
+
   const navigate = useNavigate(); // Hook for navigation
 
   useEffect(() => {
@@ -19,7 +18,7 @@ const Cart = () => {
 
   useEffect(() => {
     if (product) {
-      setTotalPrice(product.price * quantity);
+      setTotalPrice(product.discount * quantity);
     }
   }, [quantity, product]);
 
@@ -34,69 +33,63 @@ const Cart = () => {
     setSelectedColor(color);
   };
 
-  const handleBookingDateChange = (event) => {
-    setBookingDate(event.target.value);
+  const handleQuantityChange = (e) => {
+    const newQuantity = Math.max(1, Math.min(e.target.value, product?.stock || 1)); // Limit quantity to stock
+    setQuantity(newQuantity);
   };
 
   const handleAddToCart = async () => {
-    const userId = sessionStorage.getItem('uid'); // Get user ID from session storage
-  
+    const userId = sessionStorage.getItem("uid");
+    const agentId=sessionStorage.getItem("Aid")|| null; 
+   
     if (!userId) {
       alert("User not logged in");
       return;
     }
-  
+   
+
     if (!selectedColor) {
       alert("Please select a color.");
       return;
     }
-  
+
     if (!product || !product._id) {
       alert("Product not found");
       return;
     }
-  
-    if (!bookingDate) {
-      alert("Please select a booking date.");
-      return;
-    }
-  
+
     try {
-      const response = await axios.post("http://localhost:5000/booking", {
-        UserId: userId, // Use 'UserId' instead of 'userId'
-        ProductId: product._id, // Use 'ProductId' instead of 'productId'
-        quantity: quantity, // Keep 'quantity' as is (it matches backend)
-        status: "pending", // Use 'status' field
-      });
       
-  
-      console.log(response); // Log the response for debugging
-      alert("Booking created successfully!");
-       navigate("/user/cartPage"); // Optional: Uncomment to navigate after success
-    } catch (error) {
-      console.error("Error creating booking:", error.response ? error.response.data : error);
-      alert("Failed to create booking. Please try again.");
-    }
-    try {
-      const response = await axios.post("http://localhost:5000/cart", {
-          UserId: userId, // User's ID
-          ProductId: product._id, // Product ID
-          quantity: quantity, // Quantity of the product to add to the cart
+      const bookingResponse = await axios.post("http://localhost:5000/booking", {
+        UserId: userId,
+        ProductId: product._id,
+        quantity: quantity,
+        AgentId:agentId,
+        totalPrice: totalPrice,
+        status: "Pending"
       });
-  
-      console.log(response); 
+
+      const BookingId = bookingResponse.data._id;
+
+    
+      const cartResponse = await axios.post("http://localhost:5000/cart", {
+        UserId: userId,
+        ProductId: product._id,
+        BookingId: BookingId,
+        quantity: quantity,
+        totalPrice: totalPrice,
+      });
+
+      console.log("Cart updated successfully:", cartResponse);
       alert("Product added to the cart successfully!");
-  
-      // Optional: Navigate to the cart page after success
-      navigate("/user/cart");
-  } catch (error) {
-      console.error("Error adding to cart:", error.response ? error.response.data : error);
+
+      navigate("/user/cartPage");
+    } catch (error) {
+      console.error("Error adding to cart or creating booking:", error.response ? error.response.data : error);
       alert("Failed to add to cart. Please try again.");
-  }
-  
+    }
   };
-  
-  
+
   if (!product) {
     return (
       <Container maxWidth="md" sx={{ mt: 4, textAlign: "center" }}>
@@ -121,7 +114,8 @@ const Cart = () => {
             <CardContent>
               <Typography variant="h4" fontWeight="bold">{product.productName}</Typography>
               <Typography variant="h6" color="textSecondary">Model: {product.modelNum}</Typography>
-              <Typography variant="h5" color="primary" sx={{ mt: 1 }}>₹{product.price}</Typography>
+              <Typography variant="h5" color="primary" sx={{ mt: 1 }}>₹{product.discount}</Typography>
+              <Typography variant="h5" color="primary" sx={{ mt: 1 }}>Stock: {product.stock}</Typography>
               <Typography variant="body1" sx={{ mt: 1, fontFamily: "fantasy" }}>Category: {product.watch_Category}</Typography>
               <Typography variant="body1">For: {product.user_Category}</Typography>
               <Typography variant="body1">Selected Color: {selectedColor || "None"}</Typography>
@@ -131,32 +125,19 @@ const Cart = () => {
                 label="Quantity"
                 type="number"
                 value={quantity}
-                onChange={(e) => setQuantity(Math.max(1, e.target.value))}
-                InputProps={{ inputProps: { min: 1 } }}
+                onChange={handleQuantityChange}
+                InputProps={{ inputProps: { min: 1, max: product.stock } }}
                 sx={{ mt: 2 }}
               />
 
-              {/* Booking Date Input */}
-              <TextField
-                label="Booking Date"
-                type="date"
-                value={bookingDate}
-                onChange={handleBookingDateChange}
-                InputProps={{
-                  inputProps: { min: new Date().toISOString().split("T")[0] }
-                }}
-                sx={{ mt: 2 }}
-              />
-
-              {/* Display Total Price */}
               <Typography variant="h6" color="primary" sx={{ mt: 2 }}>
                 Total Price: ₹{totalPrice}
               </Typography>
 
               <Grid container spacing={2} sx={{ mt: 3 }}>
                 <Grid item>
-                  <Button variant="contained" color="primary" size="large" onClick={handleAddToCart}>
-                    Book Now
+                  <Button variant="contained" sx={{ backgroundColor: 'orange', color: 'white' }} size="large" onClick={handleAddToCart}>
+                    ADD TO CART
                   </Button>
                 </Grid>
               </Grid>
@@ -165,39 +146,25 @@ const Cart = () => {
         </Grid>
       </Paper>
 
-      <Card sx={{ maxWidth: 345, marginTop: 2 }}>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            PRODUCT DESCRIPTION
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            {product.productDesc}
-          </Typography>
-        </CardContent>
-      </Card>
-
+      {/* Available Colors */}
       <Box sx={{ display: 'flex', mt: 2 }}>
         {product.color.map((color, index) => (
           <Card
-            sx={{ maxWidth: 345, marginTop: 2, marginLeft: index > 0 ? 2 : 0 }}
+            sx={{ maxWidth: 345, marginTop: 2, marginLeft: index > 0 ? 2 : 0, cursor: "pointer", border: selectedColor === color ? "2px solid blue" : "none" }}
             key={color}
-            onClick={() => handleColorSelect(color)} // Set color on click
+            onClick={() => handleColorSelect(color)}
           >
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
-                AVAILABLE COLOUR
+                AVAILABLE COLOR
               </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                <img
-                  src={product.profileImage}
-                  width={100}
-                  alt={color}
-                  style={{ objectFit: 'cover', borderRadius: '5px' }}
-                />
-              </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {color}
-              </Typography>
+              <img
+                src={product.profileImage}
+                width={100}
+                alt={color}
+                style={{ objectFit: 'cover', borderRadius: '5px' }}
+              />
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>{color}</Typography>
             </CardContent>
           </Card>
         ))}
@@ -206,4 +173,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default Cart; 

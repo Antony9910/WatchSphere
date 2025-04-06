@@ -24,19 +24,24 @@ const EditProfile = () => {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [place,setPlace] =useState("");
   const [gender, setGender] = useState("");
   const [vehicle,setVehicle] = useState("");
+  const [contact,setContact]=useState("");
   const [VehicleNum,setVehicleNum]=useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [agentEditId, setAgentEditId] = useState(null);
   const [profileImage, setProfileImage] = useState("");
+  const [selectedPlace, setSelectedPlace] = useState("");
+  const [PlaceRows, setPlaceRows] = useState([]);
 
   useEffect(() => {
     fetchAgent();
+    fetchPlace();
   }, []);
 
   const fetchAgent = () => {
-    const id = sessionStorage.getItem("aid");
+    const id = sessionStorage.getItem("Aid");
     axios
       .get(`http://localhost:5000/AgentRegById/${id}`)
       .then((res) => {
@@ -46,7 +51,9 @@ const EditProfile = () => {
         setAddress(agent.address);
         setVehicle(agent.vehicle);
         setPassword(agent.password);
+        setContact(agent.contact);
         setGender(agent.gender);
+        setPlace(agent.place);
         setVehicleNum(agent.VehicleNum);
         setProfileImage(agent.profileImage);
         setConfirmPassword(agent.confirmPassword);
@@ -56,6 +63,20 @@ const EditProfile = () => {
         console.error(err);
       });
   };
+    const fetchPlace = () => {
+      axios
+        .get("http://localhost:5000/PlacePost")
+        .then((res) => {
+          console.log(res.data.place);
+          setPlaceRows(res.data.place);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    };
+    const handlePlaceChange = (e) => {
+      setSelectedPlace(e.target.value);
+    };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -66,6 +87,8 @@ const EditProfile = () => {
       email: email,
       address: address,
       password: password,
+      contact:contact,
+      place:selectedPlace,
       gender:gender,
       vehicle:vehicle,
       VehicleNum:VehicleNum,
@@ -142,9 +165,21 @@ const EditProfile = () => {
                   </TableRow>
                   <TableRow>
                     <TableCell sx={{ fontFamily: "fantasy" }}>
+                      Contact:
+                    </TableCell>
+                    <TableCell>{contact}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ fontFamily: "fantasy" }}>
                       Gender:
                     </TableCell>
                     <TableCell>{gender}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ fontFamily: "fantasy" }}>
+                      place:
+                    </TableCell>
+                    <TableCell>{place}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell sx={{ fontFamily: "fantasy" }}>
@@ -193,6 +228,16 @@ const EditProfile = () => {
                     </TableCell>
                   </TableRow>
                   <TableRow>
+                    <TableCell>Contact</TableCell>
+                    <TableCell>
+                      <TextField
+                        fullWidth
+                        value={contact}
+                        onChange={(e) => setContact(e.target.value)}
+                      />
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
                     <TableCell>Gender</TableCell>
                     <TableCell>
                     <FormControl fullWidth>
@@ -209,6 +254,26 @@ const EditProfile = () => {
                         <MenuItem value="Others">Others</MenuItem>
                       </Select>
                     </FormControl>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Place</TableCell>
+                    <TableCell>
+                    <FormControl fullWidth sx={{width:260}}>
+                                                <InputLabel id="demo-simple-select-label">Place</InputLabel>
+                                                <Select
+                                                  labelId="demo-simple-select-label"
+                                                  id="demo-simple-select"
+                                                  value={selectedPlace}
+                                                  label="Place"
+                                                  onChange={handlePlaceChange}
+                                                >
+                                                  {PlaceRows &&
+                                                    PlaceRows.map((row,index) => (
+                                                      <MenuItem key={index} value={row.placeName}>{row.placeName}</MenuItem>
+                                                    ))}
+                                                </Select>
+                                              </FormControl>
                     </TableCell>
                   </TableRow>
                   <TableRow>

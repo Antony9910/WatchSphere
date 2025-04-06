@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Box, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import PaletteIcon from '@mui/icons-material/Palette';
 import axios from 'axios';
 
 const Color = () => {
@@ -48,7 +49,7 @@ const Color = () => {
         <form onSubmit={handleSubmit}>
           <CardContent>
             <Typography variant="h6" sx={{ fontFamily: 'fantasy', textAlign: 'center', marginBottom: 2 }}>
-              ADD COLOUR
+              ADD COLOUR<PaletteIcon></PaletteIcon>
             </Typography>
 
             <TextField
