@@ -16,6 +16,7 @@ import EditProduct from '../Seller/pages/EditProduct'
 import Book from '../Seller/pages/ViewBooking'
 import Complaint from '../Seller/pages/Complaint'
 import ComplaintReport from '../Seller/pages/ComplaintReport'
+import FeedBack from '../Seller/pages/FeedBack'
 
 const SellerRoutes = () => {
   return (
@@ -34,7 +35,7 @@ const SellerRoutes = () => {
     <Route path="UserCategory" element={<UserCategory/>}/>
     <Route path="Complaint" element={<Complaint/>}/>
     <Route path='ComplaintReport' element={<ComplaintReport/>}/>
-  
+    <Route path='Feedback' element={<FeedBack/>}/>
 
     </Routes>
     </div>

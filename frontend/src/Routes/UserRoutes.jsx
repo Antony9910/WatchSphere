@@ -26,6 +26,8 @@ import Complaint from '../User/pages/Complaint'
 import WatchComplaint from '../User/pages/WatchComplaint'
 import Complaints from '../User/pages/Complaints'
 import SpareComplaint from '../User/pages/SpareComplaint'
+import WatchFeedBack from '../User/pages/WatchFeedBack'
+
 
 
 const UserRoutes = () => {
@@ -54,9 +56,11 @@ const UserRoutes = () => {
      <Route path="/ShopsBill/:ShopBookingId" element={<ShopsBill/>} />
      <Route path="message" element={<Message/>}/>
      <Route path="complaint" element={<Complaint/>}/>
+     <Route path="/WatchFeedback/:bookingId" element={<WatchFeedBack/>} />
      <Route path="/WatchComplaint/:bookingId" element={<WatchComplaint/>} />
      <Route path="/Complaints/:WatchBookingId" element={<Complaints/>} />
      <Route path="/SpareComplaint/:ShopBookingId" element={<SpareComplaint/>} />
+   
     </Routes>
     </div>
   )

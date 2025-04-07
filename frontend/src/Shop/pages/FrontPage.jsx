@@ -184,7 +184,7 @@ useEffect(() => {
       </CardContent>
       <CardActions>
         <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/shop/Complaint'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon>Generate Complaint Report</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/shop/ComplaintReport'} style={{textDecoration:'none',color:'white'}}>Generate Complaint Report</Link></Button>
       
       
       </CardActions>

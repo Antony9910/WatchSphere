@@ -1,111 +1,146 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Select, MenuItem, InputLabel, FormControl, TextField } from '@mui/material';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { Container, Grid, Paper, Card, CardMedia, CardContent, Typography, Button, Box } from "@mui/material";
+import AddCommentIcon from '@mui/icons-material/AddComment';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
-import axios from 'axios';
-import AddIcon from '@mui/icons-material/Add';
-import { Container, Grid, Paper, Card, CardMedia, CardContent, Typography, Button } from "@mui/material";
-import FeedbackIcon from '@mui/icons-material/Feedback';
-import Rating from '@mui/material/Rating';
-import Stack from '@mui/material/Stack';
 
 const Feedback = () => {
   const [bookings, setBookings] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState('');
-  const userId = sessionStorage.getItem("uid");
+  const [watchBooking,setWatchBooking]= useState([]);
+  const [ShopBooking,setShopBooking]= useState([]);
+  const userId = sessionStorage.getItem("uid");  
 
   useEffect(() => {
     if (userId) {
       fetchBookings(userId);
+      fetchWatchBooking(userId);
+      fetchShopBooking(userId);
     }
   }, [userId]);
 
   const fetchBookings = (userId) => {
-    const status = "confirmed";
+    const status = "confirmed"; 
 
+   
     axios
       .get(`http://localhost:5000/booking/${userId}?status=${status}`)
       .then((res) => setBookings(res.data))
       .catch((err) => console.error("Error fetching bookings:", err));
   };
+  const fetchWatchBooking = (userId) => {
+    const status = "confirmed"; 
 
-  const handleSelectChange = (event) => {
-    setSelectedProduct(event.target.value);
+   
+    axios
+      .get(`http://localhost:5000/WatchBooking/${userId}?status=${status}`)
+      .then((res) => setWatchBooking(res.data))
+      .catch((err) => console.error("Error fetching bookings:", err));
+  };
+  const fetchShopBooking = (userId) => {
+    const status = "Confirmed"; 
+
+   
+    axios
+      .get(`http://localhost:5000/shopBookings/${userId}?status=${status}`)
+      .then((res) => setShopBooking(res.data))
+      .catch((err) => console.error("Error fetching bookings:", err));
   };
 
+
   return (
-    <Box sx={{ fontFamily: 'fantasy', fontSize: 20, padding: '20px' }}>
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Box sx={{ fontFamily: 'fantasy', fontSize: 40, display: 'flex', marginLeft: 60, marginBottom: 4 }}>
-          FEEDBACK <FeedbackIcon sx={{ marginLeft: 1 }} />
-        </Box>
-
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
-              <Box sx={{ marginRight: 2 }}>Product:</Box>
-              <FormControl fullWidth>
-                <InputLabel id="product-select-label">Select Product</InputLabel>
-                <Select
-                  labelId="product-select-label"
-                  id="product-select"
-                  value={selectedProduct}
-                  onChange={handleSelectChange}
-                  label="Select Product"
-                >
-                  {bookings.map((booking) => (
-                    <MenuItem key={booking._id} value={booking.ProductId?.productName}>
-                      {booking.ProductId?.productName}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
+    <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Box sx={{fontFamily:'fantasy',marginLeft:50,fontSize:40}}>PRODUCT-FEEDBACK<BookOnlineIcon></BookOnlineIcon></Box>
+      <Grid container spacing={4}mt={2}>
+        {bookings.map((booking) => (
+          <Grid item xs={12} sm={6} md={4} key={booking._id}>
+            <Paper elevation={3} sx={{ p: 3 }}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  image={booking.ProductId?.profileImage || "fallbackImage.jpg"} 
+                  alt={booking.ProductId?.productName || "Product Image"}  
+                  sx={{ height: 200, objectFit: "contain" }}
+                />
+                <CardContent>
+                  <Typography variant="h6"  sx={{fontFamily: 'fantasy'}}>{booking.ProductId?.productName}</Typography>
+                  <Typography variant="body2" color="textSecondary"sx={{fontFamily: 'cursive'}}>Model: {booking.ProductId?.modelNum}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'cursive' }}>Price: ₹{booking.totalPrice}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'cursive' }}>Quantity: {booking.quantity}</Typography>
+                  <Typography variant="body2" sx={{ mt: 1,fontFamily:'cursive' }}>Status: {booking.status}</Typography>
+                   <Button variant="contained"><Link to={`/user/WatchFeedback/${booking._id}`} style={{textDecoration:'none',color:'white',fontFamily:'cursive'}}><AddCommentIcon></AddCommentIcon>FeedBack</Link></Button>
+                  <Grid container spacing={2} sx={{ mt: 2 }}>
+                    <Grid item>
+                   
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Paper>
           </Grid>
-
-          {/* <Grid item xs={12} sm={6}>
-            <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
-              <Box sx={{ marginRight: 2 }}>Seller:</Box>
-              <FormControl fullWidth>
-                <InputLabel id="product-select-label">Select Seller</InputLabel>
-                <Select
-                  labelId="product-select-label"
-                  id="product-select"
-                  value={selectedProduct}
-                  onChange={handleSelectChange}
-                  label="Select Seller"
-                >
-                  {bookings.map((booking) => (
-                    <MenuItem key={booking._id} value={booking.ProductId?.productName}>
-                      {booking.ProductId?.productName}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          </Grid> */}
-
-          <Grid item xs={12} md={6}>
-               {/* <Box sx={{ marginRight: 9 }}>Feedback:</Box>  */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginBottom: 7 }}>
-              <TextField
-                label="Feedback"
-                value={""}
-                required
-                sx={{ width: '190%',marginLeft:10 }}
-                multiline
-                rows={4}
-              />
-            </Box>
+        ))}
+      </Grid>
+      <Grid container spacing={4} mt={2}>
+        {watchBooking.map((watchBooking) => (
+          <Grid item xs={12} sm={6} md={4} key={watchBooking._id}>
+            <Paper elevation={3} sx={{ p: 3 }}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  image={watchBooking.watchId?.profileImage || "fallbackImage.jpg"}  
+                  alt={watchBooking.watchId?.model || "Product Image"} 
+                  sx={{ height: 200, objectFit: "contain" }}
+                />
+                <CardContent>
+                  {/* <Typography variant="h6" sx={{fontFamily:'fantasy'}}>MODELNAME:{watchBooking.watchId?.model}</Typography> */}
+                  <Typography variant="body2" color="textSecondary" sx={{fontFamily: 'cursive'}}>Model: {watchBooking.watchId?.model}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'cursive' }}>Price: ₹{watchBooking.watchId?.price}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'cursive' }}>Quantity: {watchBooking.quantity}</Typography>
+                  <Typography variant="body2" sx={{ mt: 1, fontFamily: "cursive" }}>Status: {watchBooking.status}</Typography>
+                  <Button variant="contained"><Link to={`/user/Complaints/${watchBooking._id}`} style={{textDecoration:'none',color:'white',fontFamily:'cursive'}}> Download</Link></Button>
+                  <Grid container spacing={2} sx={{ mt: 2 }}>
+                    <Grid item>
+                     
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Paper>
           </Grid>
-        </Grid>
-
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-          <Button variant="contained" sx={{ marginLeft: 2 }}>
-            <AddIcon /> Submit
-          </Button>
-        </Box>
-      </Container>
-    </Box>
+        ))}
+        
+      </Grid>
+      <Grid container spacing={4} mt={2}>
+        {ShopBooking.map((ShopBooking) => (
+          <Grid item xs={12} sm={6} md={4} key={ShopBooking._id}>
+            <Paper elevation={3} sx={{ p: 3 }}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  image={ShopBooking.SpareId?.profileImage || "fallbackImage.jpg"}  
+                  alt={ShopBooking.SpareId?.partName || "Product Image"} 
+                  sx={{ height: 200, objectFit: "contain" }}
+                />
+                <CardContent>
+                  {/* <Typography variant="h6" sx={{fontFamily:'fantasy'}}>MODELNAME:{watchBooking.watchId?.model}</Typography> */}
+                  <Typography variant="body2" color="textSecondary">PartName: {ShopBooking.SpareId?.partName}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'cursive' }}>Price: ₹{ShopBooking.SpareId?.price}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'cursive' }}>Material: {ShopBooking.SpareId?.material}</Typography>
+                  <Typography variant="body2" sx={{ mt: 1, fontFamily: "cursive" }}>Status: {ShopBooking.status}</Typography>
+                  <Button variant="contained"><Link to={`/user/SpareFeedBack/${ShopBooking._id}`} style={{textDecoration:'none',color:'white',fontFamily:'cursive'}}>Complaint</Link></Button>
+                  <Grid container spacing={2} sx={{ mt: 2 }}>
+                    <Grid item>
+                   
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Paper>
+          </Grid>
+        ))}
+        
+      </Grid>
+    </Container>
   );
 };
 

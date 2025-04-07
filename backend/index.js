@@ -6,6 +6,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser');
 const multer = require('multer');
 
+
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -3787,6 +3788,106 @@ app.post("/WatchComplaints/:WatchBookingId", async (req, res) => {
      });
    }
 });
+
+app.get('/ProductFeedBack/:sellerId', async (req, res) => {
+   try {
+     const { sellerId } = req.params;
+
+     
+     if (!mongoose.Types.ObjectId.isValid(sellerId)) {
+       return res.status(400).json({
+         success: false,
+         message: 'Invalid shopId format.',
+       });
+     }
+
+     console.log("Fetching complaints for Shop ID:", sellerId); // Debugging
+
+     const ProductFeedBack = await FeedBack.aggregate([
+       {
+         $lookup: {
+           from: 'bookings',
+           localField: 'BookingId',
+           foreignField: '_id',
+           as: 'bookingDetails',
+         },
+       },
+       {
+         $unwind: {
+           path: '$bookingDetails',
+           preserveNullAndEmptyArrays: false,
+         },
+       },
+       {
+         $lookup: {
+           from: 'products',
+           localField: 'bookingDetails.ProductId',
+           foreignField: '_id',
+           as: 'productDetails',
+         },
+       },
+       {
+         $unwind: {
+           path: '$productDetails',
+           preserveNullAndEmptyArrays: false,
+         },
+       },
+       {
+         $match: {
+           'productDetails.sellerId': new mongoose.Types.ObjectId(sellerId),
+         },
+       },
+       {
+         $lookup: {
+           from: 'users',
+           localField: 'bookingDetails.UserId',
+           foreignField: '_id',
+           as: 'userDetails',
+         },
+       },
+       {
+         $unwind: {
+           path: '$userDetails',
+           preserveNullAndEmptyArrays: false,
+         },
+       },
+       {
+         $project: {
+           FeedbackMessage: 1,
+           Rating: 1,
+           createdAt: 1,
+           'productDetails.productName': 1,
+           'productDetails.modelNum': 1,
+           'productDetails.quantity': 1,
+           'userDetails.name': 1,
+           'userDetails.profileImage': 1,
+         },
+       },
+       {
+         $sort: { createdAt: -1 },
+       },
+     ]);
+
+     if (ProductFeedBack .length === 0) {
+       return res.status(404).json({
+         success: false,
+         message: 'No Feedback found for this seller.',
+       });
+     }
+
+     return res.status(200).json({
+       success: true,
+       ProductFeedBack ,
+     });
+   } catch (error) {
+     console.error('Error fetching Feedback', error);
+     return res.status(500).json({
+       success: false,
+       message: 'Internal server error.',
+     });
+   }
+});
+ 
 app.get('/SparesComplaint/:shopId', async (req, res) => {
    try {
      const { shopId } = req.params;
@@ -3886,3 +3987,71 @@ app.get('/SparesComplaint/:shopId', async (req, res) => {
      });
    }
 });
+const FeedBackSchema=new mongoose.Schema({
+
+   BookingId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Booking",
+      required: true, 
+    },
+FeedbackMessage:{
+
+   type:String,
+   required:true,
+},
+Rating:{
+
+   type:String,
+   required:true,
+}
+
+
+});
+const FeedBack=mongoose.model("FeedBack",FeedBackSchema);
+app.post("/ProductFeedbacks/:BookingId", async (req, res) => {
+   const { BookingId } = req.params; 
+   console.log(BookingId)
+   const { FeedbackMessage,Rating} = req.body; 
+ 
+   if (!FeedbackMessage) {
+     return res.status(400).json({
+       message: "Complaint message is required.",
+     });
+   }
+   if (!Rating) {
+      return res.status(400).json({
+        message: "Rating is required.",
+      });
+    }
+ 
+   try {
+     const booking = await Booking.findById(BookingId);
+ 
+     if (!booking) {
+       return res.status(404).json({
+         message: "Booking not found.",
+       });
+     }
+ 
+
+     const newFeedBack = new FeedBack({
+       BookingId,
+       FeedbackMessage,
+       Rating
+     
+     });
+ 
+     await newFeedBack.save();
+ 
+     res.status(201).json({
+       success: true,
+       message: "FeedBack submitted successfully.",
+     });
+   } catch (error) {
+     console.error("Error submitting FeedBack:", error);
+     res.status(500).json({
+       success: false,
+       message: "Internal server error.",
+     });
+   }
+ });
