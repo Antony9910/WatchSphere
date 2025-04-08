@@ -1,64 +1,57 @@
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from 'react-router-dom'; // import useNavigate for redirection
 import Styles from "../navbar/navbar.module.css";
 
-import Stack from "@mui/material/Stack";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MessageIcon from "@mui/icons-material/Message";
-import img from './images/W.jpg';
+import { Box, IconButton, InputBase, Avatar } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { Link } from 'react-router-dom';
-import { InputBase, IconButton, Box, Button } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
-import InfoIcon from '@mui/icons-material/Info';
 import LogoutIcon from '@mui/icons-material/Logout';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import Avatar from "@mui/material/Avatar";
+import MessageIcon from "@mui/icons-material/Message";
 import axios from "axios";
-const UserAvatar = () => {
-  const [anchorEl, setAnchorEl] = useState(null);  // state to manage the dropdown
-  const navigate = useNavigate();  // navigate for redirection after sign out (optional)
+import img from './images/W.jpg';
 
-  // Open menu
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget); // set the element for dropdown
-  };
-
-  // Close menu
-  const handleMenuClose = () => {
-    setAnchorEl(null); // Close the dropdown
-  };
-}
 const Navbar = () => {
-   const [profileImage, setProfile] = useState('');
-   const [name,setName]=useState('');
-  
-    useEffect(() => {
-      fetchAgent();
-    }, []);
-    
-    const fetchAgent = () => {
-      const id = sessionStorage.getItem("Aid");
-      axios.get(`http://localhost:5000/AgentRegById/${id}`).then((res) => {
-        const Agent = res.data.agent;
-        // Set each individual field with data
-        setProfile(Agent.profileImage);
-        setName(Agent.name);
-      }).catch((err) => {
-        console.error(err);
-      });
-    };
+  const [profileImage, setProfile] = useState('');
+  const [name, setName] = useState('');
+  const navigate = useNavigate(); // Initialize navigate hook
+
+  useEffect(() => {
+    fetchAgent();
+  }, []);
+
+  const fetchAgent = () => {
+    const id = sessionStorage.getItem("Aid");
+    axios.get(`http://localhost:5000/AgentRegById/${id}`).then((res) => {
+      const Agent = res.data.agent;
+      setProfile(Agent.profileImage);
+      setName(Agent.name);
+    }).catch((err) => {
+      console.error(err);
+    });
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    // Clear the specific session item or clear everything from sessionStorage
+    sessionStorage.removeItem("Aid");  // If you want to remove just the session ID
+    sessionStorage.clear(); // Clears all data in sessionStorage, effectively logging out
+
+    // Redirect to login page after logging out
+    navigate('/login'); // Assuming you want to go to the login page
+  };
+
   return (
     <div className={Styles.navbar}>
       <div className={Styles.leftSection}>
-      <Box sx={{marginLeft:10}}>
-  <img src={img}  width={80} height={70}alt="Image" style={{borderRadius:50}} />
-</Box>
+        <Box sx={{ marginLeft: 10 }}>
+          <img src={img} width={80} height={70} alt="Image" style={{ borderRadius: 50 }} />
+        </Box>
         <div className={Styles.logo}>
           <span><h3>WATCH-SPHERE</h3></span>
         </div>
       </div>
-     
-      <Box sx={{ flexGrow: 1, display: "flex", marginLeft:69 }}>
+
+      <Box sx={{ flexGrow: 1, display: "flex", marginLeft: 69 }}>
         <div className={Styles.searchBar}>
           <InputBase
             sx={{
@@ -80,77 +73,59 @@ const Navbar = () => {
           <Box
             sx={{
               marginLeft: 2,
-              ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'orange'
+              ":hover": { transform: "scale(1.05)", boxShadow: 6 }, color: 'orange'
             }}
           >
-            <h3>  <Link to={'/agent'}style={{color:'orange',textDecoration:'none',fontFamily:'cursive'}}><HomeIcon></HomeIcon>Home</Link></h3>
+            <h3>
+              <Link to={'/agent'} style={{ color: 'orange', textDecoration: 'none', fontFamily: 'cursive' }}><HomeIcon />Home</Link>
+            </h3>
           </Box>
-          {/* <Box
-            sx={{
-              marginLeft: 2,
-              ":hover": { transform: "scale(1.05)", boxShadow: 6,color:'orange' },
-            }}
-          >
-              <h3><Link to={"/about"} style={{ color: 'orange',textDecoration:'none' }}><InfoIcon></InfoIcon>About</Link></h3>
-          </Box> */}
-          {/* <Box
-            sx={{
-              marginLeft: 2,
-              ":hover": { transform: "scale(1.05)", boxShadow: 6 },
-            }}
-          >
-            <h3>Contact</h3>
-          </Box> */}
-        
+
           <Box
             sx={{
               marginLeft: 2,
-              ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'orange',
+              ":hover": { transform: "scale(1.05)", boxShadow: 6 }, color: 'orange',
             }}
           >
-             <h3>
-              {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
-              <Link to={'/*'} style={{color:'orange',textDecoration:'none',fontFamily:'cursive'}}><LogoutIcon></LogoutIcon>Logout</Link>
-            </h3> 
+            <h3>
+              <Link to={'/*'} style={{ color: 'orange', textDecoration: 'none', fontFamily: 'cursive' }}><LogoutIcon />Logout</Link>
+            </h3>
           </Box>
+
           <Box
             sx={{
               marginLeft: 2,
-              ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'white',
+              ":hover": { transform: "scale(1.05)", boxShadow: 6 }, color: 'white',
             }}
           >
-             <h3>
-              {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
-              <MessageIcon></MessageIcon>
-            </h3> 
+            <h3>
+              <MessageIcon />
+            </h3>
           </Box>
+
           <Box
-                      sx={{
-                        marginLeft: 2,
-                        ":hover": { transform: "scale(1.05)", boxShadow: 6,fontFamily:'cursive' },color:'white',
-                      }}
-                    >
-                         <Avatar alt="Remy Sharp" src={profileImage} /><Box sx={{fontFamily:'cursive'}}>{name}</Box>
-                        
-           
-          
-                       
-                    </Box>
+            sx={{
+              marginLeft: 2,
+              ":hover": { transform: "scale(1.05)", boxShadow: 6 }, color: 'white',
+            }}
+          >
+            <Avatar alt="Remy Sharp" src={profileImage} />
+            <Box sx={{ fontFamily: 'cursive' }}>{name}</Box>
+          </Box>
         </div>
       </Box>
 
-      {/* Icons Section */}
-      {/* <div className={Styles.rightSection}>
-        <Stack direction="row" spacing={2}>
-          <Avatar className={Styles.avatar} />
-          
-        </Stack>
-
-        <div className={Styles.iconButtons}>
-          <NotificationsIcon className={Styles.icon} />
-          <MessageIcon className={Styles.icon} />
-        </div>
-      </div> */}
+      {/* Logout Button - Trigger the logout function */}
+      <Box
+        sx={{
+          marginLeft: 2,
+          ":hover": { transform: "scale(1.05)", boxShadow: 6 },
+        }}
+      >
+        <IconButton onClick={handleLogout} style={{ color: 'orange' }}>
+          <LogoutIcon />
+        </IconButton>
+      </Box>
     </div>
   );
 };

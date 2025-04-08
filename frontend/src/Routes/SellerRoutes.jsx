@@ -17,6 +17,8 @@ import Book from '../Seller/pages/ViewBooking'
 import Complaint from '../Seller/pages/Complaint'
 import ComplaintReport from '../Seller/pages/ComplaintReport'
 import FeedBack from '../Seller/pages/FeedBack'
+import Solutions from '../Seller/pages/Solutions'
+import ProductSolution from '../Seller/pages/ProductSolution'
 
 const SellerRoutes = () => {
   return (
@@ -36,6 +38,8 @@ const SellerRoutes = () => {
     <Route path="Complaint" element={<Complaint/>}/>
     <Route path='ComplaintReport' element={<ComplaintReport/>}/>
     <Route path='Feedback' element={<FeedBack/>}/>
+    <Route path="solutions" element={<Solutions/>}/>
+    <Route path="/ProductSolution/:ComplaintId" element={<ProductSolution/>} />
 
     </Routes>
     </div>

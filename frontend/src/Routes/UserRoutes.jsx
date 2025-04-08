@@ -27,6 +27,9 @@ import WatchComplaint from '../User/pages/WatchComplaint'
 import Complaints from '../User/pages/Complaints'
 import SpareComplaint from '../User/pages/SpareComplaint'
 import WatchFeedBack from '../User/pages/WatchFeedBack'
+import WatchesFeed from '../User/pages/WatchesFeed'
+import SpareFeedBack from '../User/pages/SpareFeedBack'
+import ViewSolutions from '../User/pages/ViewSolutions'
 
 
 
@@ -56,11 +59,13 @@ const UserRoutes = () => {
      <Route path="/ShopsBill/:ShopBookingId" element={<ShopsBill/>} />
      <Route path="message" element={<Message/>}/>
      <Route path="complaint" element={<Complaint/>}/>
+     <Route path="ViewSolution" element={<ViewSolutions/>}/>
      <Route path="/WatchFeedback/:bookingId" element={<WatchFeedBack/>} />
      <Route path="/WatchComplaint/:bookingId" element={<WatchComplaint/>} />
      <Route path="/Complaints/:WatchBookingId" element={<Complaints/>} />
      <Route path="/SpareComplaint/:ShopBookingId" element={<SpareComplaint/>} />
-   
+     <Route path="/WatchesFeedback/:ShopBookingId" element={<WatchesFeed/>} />
+     <Route path="/SpareFeedback/:WatchBookingId" element={<SpareFeedBack/>} />
     </Routes>
     </div>
   )

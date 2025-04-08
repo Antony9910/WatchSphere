@@ -74,8 +74,8 @@ const Complaint = () => {
   return (
     <Container maxWidth="lg">
       <Box sx={{ padding: "2rem" }}>
-        <Typography variant="h4" gutterBottom align="center" color="primary">
-          Complaints for Seller
+        <Typography variant="h4" gutterBottom align="center" color="primary" sx={{fontFamily:'fantasy'}}>
+          COMPLAINTS FROM CUSTOMER
         </Typography>
 
         {error && (

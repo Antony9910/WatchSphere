@@ -27,6 +27,7 @@ const Complaints = () => {
         },
         body: JSON.stringify({
           complaintMessage,
+          Reply,
         }),
       });
 

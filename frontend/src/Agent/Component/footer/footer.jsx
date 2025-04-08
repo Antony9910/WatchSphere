@@ -3,6 +3,7 @@ import React from 'react'
 import img1 from './images/insta.jpg';
 import img2 from './images/facebook.jpg';
 import img3 from './images/twitter.png';
+
 import img4 from './images/visa.png';
 
 const Footer = () => {

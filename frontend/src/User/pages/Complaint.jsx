@@ -20,7 +20,7 @@ const Complaint = () => {
   }, [userId]);
 
   const fetchBookings = (userId) => {
-    const status = "confirmed"; 
+    const status = "Completed"; 
 
    
     axios
@@ -50,7 +50,7 @@ const Complaint = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
-      <Box sx={{fontFamily:'fantasy',marginLeft:50,fontSize:40,fontFamily:'cursive'}}>COMPLAINTS<BookOnlineIcon></BookOnlineIcon></Box>
+      <Box sx={{fontFamily:'fantasy',marginLeft:50,fontSize:40,fontFamily:'fantasy'}}>PRODUCT-COMPLAINTS<BookOnlineIcon></BookOnlineIcon></Box>
       <Grid container spacing={4}mt={2}>
         {bookings.map((booking) => (
           <Grid item xs={12} sm={6} md={4} key={booking._id}>
@@ -63,12 +63,12 @@ const Complaint = () => {
                   sx={{ height: 200, objectFit: "contain" }}
                 />
                 <CardContent>
-                  <Typography variant="h6" fontWeight="bold" sx={{fontFamily: 'cursive'}}>{booking.ProductId?.productName}</Typography>
-                  <Typography variant="body2" color="textSecondary"sx={{fontFamily: 'cursive'}}>Model: {booking.ProductId?.modelNum}</Typography>
-                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'cursive' }}>Price: ₹{booking.totalPrice}</Typography>
-                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'cursive' }}>Quantity: {booking.quantity}</Typography>
-                  <Typography variant="body2" sx={{ mt: 1,fontFamily:'cursive' }}>Status: {booking.status}</Typography>
-                   <Button variant="contained"><Link to={`/user/WatchComplaint/${booking._id}`} style={{textDecoration:'none',color:'white',fontFamily:'cursive'}}><AddCommentIcon></AddCommentIcon>Complaint</Link></Button>
+                  <Typography variant="h6" fontWeight="bold" sx={{fontFamily: 'fantasy'}}>{booking.ProductId?.productName}</Typography>
+                  <Typography variant="body2" color="textSecondary"sx={{fontFamily: 'fantasy'}}>Model: {booking.ProductId?.modelNum}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'fantasy' }}>Price: ₹{booking.totalPrice}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'fantasy' }}>Quantity: {booking.quantity}</Typography>
+                  <Typography variant="body2" sx={{ mt: 1,fontFamily:'fantasy' }}>Status: {booking.status}</Typography>
+                   <Button variant="contained"><Link to={`/user/WatchComplaint/${booking._id}`} style={{textDecoration:'none',color:'white',fontFamily:'fantasy',display:'flex'}}><AddCommentIcon></AddCommentIcon>Complaint</Link></Button>
                   <Grid container spacing={2} sx={{ mt: 2 }}>
                     <Grid item>
                    
@@ -93,11 +93,11 @@ const Complaint = () => {
                 />
                 <CardContent>
                   {/* <Typography variant="h6" sx={{fontFamily:'fantasy'}}>MODELNAME:{watchBooking.watchId?.model}</Typography> */}
-                  <Typography variant="body2" color="textSecondary" sx={{fontFamily: 'cursive'}}>Model: {watchBooking.watchId?.model}</Typography>
-                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'cursive' }}>Price: ₹{watchBooking.watchId?.price}</Typography>
-                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'cursive' }}>Quantity: {watchBooking.quantity}</Typography>
-                  <Typography variant="body2" sx={{ mt: 1, fontFamily: "cursive" }}>Status: {watchBooking.status}</Typography>
-                  <Button variant="contained"><Link to={`/user/Complaints/${watchBooking._id}`} style={{textDecoration:'none',color:'white',fontFamily:'cursive'}}> Download</Link></Button>
+                  <Typography variant="body2" color="textSecondary" sx={{fontFamily: 'fantasy'}}>Model: {watchBooking.watchId?.model}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'fantasy' }}>Price: ₹{watchBooking.watchId?.price}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'fantasy' }}>Quantity: {watchBooking.quantity}</Typography>
+                  <Typography variant="body2" sx={{ mt: 1, fontFamily: "fantasy" }}>Status: {watchBooking.status}</Typography>
+                  <Button variant="contained"><Link to={`/user/Complaints/${watchBooking._id}`} style={{textDecoration:'none',color:'white',fontFamily:'fantasy',display:'flex'}}><AddCommentIcon></AddCommentIcon>Complaint</Link></Button>
                   <Grid container spacing={2} sx={{ mt: 2 }}>
                     <Grid item>
                      
@@ -124,10 +124,24 @@ const Complaint = () => {
                 <CardContent>
                   {/* <Typography variant="h6" sx={{fontFamily:'fantasy'}}>MODELNAME:{watchBooking.watchId?.model}</Typography> */}
                   <Typography variant="body2" color="textSecondary">PartName: {ShopBooking.SpareId?.partName}</Typography>
-                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'cursive' }}>Price: ₹{ShopBooking.SpareId?.price}</Typography>
-                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'cursive' }}>Material: {ShopBooking.SpareId?.material}</Typography>
-                  <Typography variant="body2" sx={{ mt: 1, fontFamily: "cursive" }}>Status: {ShopBooking.status}</Typography>
-                  <Button variant="contained"><Link to={`/user/SpareComplaint/${ShopBooking._id}`} style={{textDecoration:'none',color:'white',fontFamily:'cursive'}}>Complaint</Link></Button>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'fantasy' }}>Price: ₹{ShopBooking.SpareId?.price}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1,fontFamily:'fantasy' }}>Material: {ShopBooking.SpareId?.material}</Typography>
+                  <Typography variant="body2" sx={{ mt: 1, fontFamily: "fantasy" }}>Status: {ShopBooking.status}</Typography>
+                  <Button variant="contained">
+  <Link 
+    to={`/user/SpareComplaint/${ShopBooking._id}`} 
+    style={{
+      textDecoration: 'none',
+      color: 'white',
+      fontFamily: 'fantasy',
+      display: 'flex',
+      alignItems: 'center'
+    }}
+  >
+    <AddCommentIcon style={{ marginRight: '8px' }} /> Complaint
+  </Link>
+</Button>
+
                   <Grid container spacing={2} sx={{ mt: 2 }}>
                     <Grid item>
                    

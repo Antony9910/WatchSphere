@@ -37,7 +37,7 @@ const Book = () => {
 
    return (
       <Box sx={{ maxWidth: "1200px", margin: "auto", padding: "20px", textAlign: "center" }}>
-         <Typography variant="h4" sx={{fontFamily:'cursive'}} gutterBottom>
+         <Typography variant="h4" sx={{fontFamily:'fantasy'}} gutterBottom>
             📦 Seller Bookings
          </Typography>
 
@@ -49,7 +49,7 @@ const Book = () => {
                         <CardContent>
                            <Box display="flex" justifyContent="space-between" alignItems="center">
                               
-                              <Typography variant="h6" sx={{ fontWeight: "bold",fontFamily:'cursive' }}>
+                              <Typography variant="h6" sx={{fontFamily:'fantasy' }}>
                                  {booking.productDetails.productName}
                               </Typography>
                               <Chip label={booking.status} color={getStatusColor(booking.status)} />

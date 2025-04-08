@@ -78,7 +78,7 @@ const fetchSeller = () => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy',marginTop:-2,marginLeft:9,}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy',marginTop:-2,marginLeft:13,}}>
           WELCOME TO SELLER PAGE <Box sx={{color:'green',marginLeft:12}}>{name}</Box>
         </Typography>
         
@@ -209,7 +209,7 @@ const fetchSeller = () => {
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon>View</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/seller/solutions'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
       
       </CardActions>
     </Card>

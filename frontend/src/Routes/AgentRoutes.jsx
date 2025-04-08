@@ -6,6 +6,7 @@ import EditImage from '../Agent/pages/EditImage'
 import EditProfile from '../Agent/pages/EditProfile'
 import ViewBooking from '../Agent/pages/ViewBooking'
 import Track from '../Agent/pages/Track'
+import DeliveredProduct from '../Agent/pages/DeliveredProduct'
 // import Product from '../Seller/pages/product'
 
 const AgentRoutes = () => {
@@ -17,7 +18,7 @@ const AgentRoutes = () => {
     <Route path='Profile' element={<EditProfile/>}/>
     <Route path='Pro' element={<EditImage/>}/>
     <Route path='View' element={<ViewBooking/>}/>
-    <Route path='Track' element={<Track/>}/>
+    <Route path='Delivery' element={<DeliveredProduct/>}/>
 
     </Routes>
     </div>

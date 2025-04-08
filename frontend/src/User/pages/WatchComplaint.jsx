@@ -3,11 +3,13 @@ import { TextField, Button, Typography, Container, Box, CircularProgress, Paper 
 import { useParams } from "react-router-dom";
 
 const WatchComplaint = () => {
-  const { bookingId } = useParams();  
+  const { bookingId } = useParams();
   const [complaintMessage, setComplaintMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+
+  const userId = sessionStorage.getItem('uid');  // Replace with dynamic userId if necessary
 
   const handleComplaintSubmit = async (e) => {
     e.preventDefault();
@@ -20,13 +22,14 @@ const WatchComplaint = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:5000/SubmitComplaint/${bookingId}`, { // Include bookingId in the URL
+      const response = await fetch(`http://localhost:5000/SubmitComplaint/${bookingId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           complaintMessage,
+          userId, // Include userId in the request body
         }),
       });
 

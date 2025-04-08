@@ -115,7 +115,7 @@ const fetchUser = () => {
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><Link  to={'Profile/'} style={{color:'white',textDecoration:'none'}}><EditIcon></EditIcon>Edit</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><Link  to={'Profile/'} style={{color:'white',textDecoration:'none'}}><EditIcon></EditIcon>Edit</Link></Button>
       
       </CardActions>
     </Card>
@@ -138,8 +138,8 @@ const fetchUser = () => {
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33,fontFamily:'cursive'}}><Link  to={'Product/'} style={{color:'white',textDecoration:'none'}}><ShopIcon></ShopIcon>Seller</Link></Button>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33,fontFamily:'cursive'}}><Link  to={'shop/'} style={{color:'white',textDecoration:'none'}}><StoreIcon></StoreIcon>Shop</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33,fontFamily:'cursive'}}><Link  to={'Product/'} style={{color:'white',textDecoration:'none',display:'flex'}}><ShopIcon></ShopIcon>Seller</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33,fontFamily:'cursive'}}><Link  to={'shop/'} style={{color:'white',textDecoration:'none',display:'flex'}}><StoreIcon></StoreIcon>Shop</Link></Button>
         <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33,fontFamily:'cursive'}}><Link  to={'orders/'} style={{color:'white',textDecoration:'none'}}><StoreIcon></StoreIcon>view</Link></Button>
       </CardActions>
     </Card>
@@ -162,7 +162,7 @@ const fetchUser = () => {
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><Link to={'/user/message'} style={{textDecoration:'none',color:'white'}}><VisibilityIcon></VisibilityIcon>View</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive',display:'flex'}}><Link to={'/user/message'} style={{textDecoration:'none',color:'white'}}><VisibilityIcon></VisibilityIcon>View</Link></Button>
       
       </CardActions>
     </Card>
@@ -339,7 +339,7 @@ const fetchUser = () => {
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon>View</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/user/ViewSolution'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
       
       </CardActions>
     </Card>

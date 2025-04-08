@@ -104,13 +104,13 @@ const  AgentPage = () => {
         Edit Profile
         </Typography>
         <Typography sx={{fontFamily:'cursive'}}>
-          Edit Details of User 
+          Edit Details of Delivery Agent 
         </Typography>
       
       </CardContent>
       <CardActions>
         <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/Profile'} style={{textDecoration:'none',color:'white'}}>Edit</Link></Button>
-        <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/View'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
+        {/* <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/View'} style={{textDecoration:'none',color:'white'}}>View</Link></Button> */}
       </CardActions>
     </Card>
 
@@ -124,7 +124,7 @@ const  AgentPage = () => {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
-        Generate Track Details
+        View Bookings From Customer
         </Typography>
         <Typography sx={{fontFamily:'cursive'}}>
           Delivery Agent add Tracking Details
@@ -132,8 +132,8 @@ const  AgentPage = () => {
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Track/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add</Link></Button>
-
+      <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/View'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
+      <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/Delivery'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
       </CardActions>
     </Card>
 

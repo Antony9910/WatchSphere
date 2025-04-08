@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 
 
+
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -3341,6 +3342,29 @@ app.get("/confirmed-bookings", async (req, res) => {
      res.status(500).json({ message: "Error fetching confirmed bookings", error });
    }
  });
+ app.get("/Delivered-bookings/:AgentId", async (req, res) => {
+  try {
+    const { AgentId } = req.params;  
+
+   
+    const DeliveredBookings = await Booking.find({ 
+      status: "Completed", 
+      AgentId: AgentId 
+    })
+      .populate("UserId", "name email contact")
+      .populate("ProductId", "name price profileImage");
+
+    if (!DeliveredBookings.length) {
+      return res.status(404).json({ message: "No completed bookings found for this agent." });
+    }
+
+    res.status(200).json(DeliveredBookings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching confirmed bookings", error });
+  }
+});
+
  app.get("/WatchConfirmed-bookings", async (req, res) => {
    try {
      const confirmedBookings = await WatchBooking.find({ status: "confirmed" })
@@ -3416,31 +3440,33 @@ app.get("/confirmed-bookings", async (req, res) => {
      res.status(500).json({ message: "Internal server error" });
    }
  });
- app.put("/update-SpareBooking/:id", async (req, res) => {
-   const { id } = req.params;
-   const { AgentId } = req.body; 
- 
-   try {
-  
-     const updatedBooking = await ShopBooking.findByIdAndUpdate(
-       id,
-       {
-         status: "Completed",
-         AgentId: AgentId,    
-       },
-       { new: true } 
-     );
- 
-     if (!updatedBooking) {
-       return res.status(404).json({ message: "Booking not found" });
-     }
- 
-     res.status(200).json(updatedBooking); 
-   } catch (error) {
-     console.error("Error updating booking:", error);
-     res.status(500).json({ message: "Internal server error" });
-   }
- });
+ app.put("/Reply/:ComplaintId", async (req, res) => {
+  try {
+    const { ComplaintId } = req.params;
+    const { Reply, status } = req.body;
+
+    // Ensure ComplaintId, Reply, and status are valid
+    if (!ComplaintId || !Reply || !status) {
+      return res.status(400).json({ message: "ComplaintId, Reply, or status is missing." });
+    }
+
+    // Update complaint with the new reply and status
+    const updatedReply = await Complaint.findByIdAndUpdate(
+      ComplaintId,
+      { Reply, status }, // Dynamic status
+      { new: true }
+    );
+
+    if (!updatedReply) {
+      return res.status(404).json({ message: "Complaint not found!" });
+    }
+
+    res.status(200).json({ message: "Complaint updated successfully!", Reply: updatedReply });
+  } catch (error) {
+    console.error("Error updating complaint:", error);
+    res.status(500).json({ message: "Server error!" });
+  }
+});
 
 
  app.get("/booking1/:userId", async (req, res) => {
@@ -3498,6 +3524,73 @@ app.get("/confirmed-bookings", async (req, res) => {
      res.status(500).json({ message: "Server error" });
    }
  });
+ const SolutionSchema=new mongoose.Schema({
+
+   ComplaintId:{
+
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Complaint"
+  },
+  SolutionMessage:{
+    type: String,
+    required: true, 
+    minlength: 10,
+
+  },
+  status:{
+
+    type:String,
+    enum:["Viewed","Not Viewed"],
+    default:"Not Viewed",
+  }
+ });
+ const Solutions=mongoose.model("Solution",SolutionSchema);
+ app.post("/SubmitSolutions/:ComplaintId", async (req, res) => {
+  const { ComplaintId } = req.params; 
+  const { SolutionMessage } = req.body; 
+
+ 
+  if (!SolutionMessage) {
+    return res.status(400).json({
+      success: false,
+      message: "Solution message is required.",
+    });
+  }
+
+  try {
+
+    const complaint = await Complaint.findById(ComplaintId);
+
+  
+    if (!complaint) {
+      return res.status(404).json({
+        success: false,
+        message: "Complaint not found.",
+      });
+    }
+
+    
+    const newSolution = new Solutions({
+      ComplaintId,
+      SolutionMessage,
+    });
+
+    await newSolution.save();
+
+    // Send back a success response
+    res.status(201).json({
+      success: true,
+      message: "Solution submitted successfully.",
+    });
+  } catch (error) {
+    console.error("Error submitting Solution:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+});
+
  const ComplaintSchema = new mongoose.Schema({
    bookingId: {
      type: mongoose.Schema.Types.ObjectId,
@@ -3514,6 +3607,17 @@ app.get("/confirmed-bookings", async (req, res) => {
      enum: ["Pending", "Resolved", "In Progress"],
      default: "Pending",
    },
+   userId:{
+
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true, 
+   },
+   Reply:{
+
+    type:String,
+    default:"NULL"
+   },
    createdAt: {
      type: Date,
      default: Date.now, // Automatically set the current date
@@ -3522,10 +3626,10 @@ app.get("/confirmed-bookings", async (req, res) => {
 
 const Complaint = mongoose.model("Complaint", ComplaintSchema);
 
-// Make sure you define this route to handle bookingId in the URL path
+
 app.post("/SubmitComplaint/:bookingId", async (req, res) => {
-   const { bookingId } = req.params; // This gets the bookingId from the URL
-   const { complaintMessage } = req.body; // This gets the complaintMessage from the request body
+   const { bookingId } = req.params; 
+   const { complaintMessage,userId,Reply } = req.body; 
  
    if (!complaintMessage) {
      return res.status(400).json({
@@ -3542,9 +3646,11 @@ app.post("/SubmitComplaint/:bookingId", async (req, res) => {
        });
      }
  
-     // Save the complaint in the database
+    
      const newComplaint = new Complaint({
        bookingId,
+       userId,
+       Reply,
        complaintMessage,
      });
  
@@ -3589,7 +3695,7 @@ const SpareComplaint = mongoose.model("SpareComplaint", SpareComplaintSchema);
 
 app.post("/SubmitComplaints/:ShopBookingId", async (req, res) => {
    const { ShopBookingId } = req.params; 
-   const { complaintMessage } = req.body; 
+   const { complaintMessage,Reply } = req.body; 
  
    if (!complaintMessage) {
      return res.status(400).json({
@@ -3609,7 +3715,7 @@ app.post("/SubmitComplaints/:ShopBookingId", async (req, res) => {
      // Save the complaint in the database
      const newComplaint = new SpareComplaint({
       ShopBookingId,
-       complaintMessage,
+       complaintMessage,Reply
      });
  
      await newComplaint.save();
@@ -3688,7 +3794,7 @@ app.post("/WatchComplaints/:WatchBookingId", async (req, res) => {
      });
    }
  });
-
+ 
  app.get('/WatchesComplaint/:shopId', async (req, res) => {
    try {
      const { shopId } = req.params;
@@ -4055,3 +4161,383 @@ app.post("/ProductFeedbacks/:BookingId", async (req, res) => {
      });
    }
  });
+ const SpareFeedBackSchema=new mongoose.Schema({
+
+  ShopBookingId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "ShopBooking",
+     required: true, 
+   },
+FeedbackMessage:{
+
+  type:String,
+  required:true,
+},
+Rating:{
+
+  type:String,
+  required:true,
+}
+
+
+});
+const SpareFeedBack=mongoose.model("SpareFeedBack",SpareFeedBackSchema);
+app.post("/SpareFeedbacks/:ShopBookingId", async (req, res) => {
+  const { ShopBookingId } = req.params; 
+  console.log(ShopBookingId)
+  const { FeedbackMessage,Rating} = req.body; 
+
+  if (!FeedbackMessage) {
+    return res.status(400).json({
+      message: "Complaint message is required.",
+    });
+  }
+  if (!Rating) {
+     return res.status(400).json({
+       message: "Rating is required.",
+     });
+   }
+
+  try {
+    const shopBooking = await ShopBooking.findById(ShopBookingId);
+
+    if (!shopBooking) {
+      return res.status(404).json({
+        message: "Booking not found.",
+      });
+    }
+
+
+    const newFeedBack = new SpareFeedBack({
+      ShopBookingId,
+      FeedbackMessage,
+      Rating
+    
+    });
+
+    await newFeedBack.save();
+
+    res.status(201).json({
+      success: true,
+      message: "FeedBack submitted successfully.",
+    });
+  } catch (error) {
+    console.error("Error submitting FeedBack:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+});
+
+app.get('/SparesFeedBack/:shopId', async (req, res) => {
+  try {
+    const { shopId } = req.params;
+
+    
+    if (!mongoose.Types.ObjectId.isValid( shopId )) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid shopId format.',
+      });
+    }
+
+    console.log("Fetching complaints for Shop ID:",  shopId); // Debugging
+
+    const spareFeedBack = await SpareFeedBack.aggregate([
+      {
+        $lookup: {
+          from: 'shopbookings',
+          localField: 'ShopBookingId',
+          foreignField: '_id',
+          as: 'bookingDetails',
+        },
+      },
+      {
+        $unwind: {
+          path: '$bookingDetails',
+          preserveNullAndEmptyArrays: false,
+        },
+      },
+      {
+        $lookup: {
+          from: 'spares',
+          localField: 'bookingDetails.SpareId',
+          foreignField: '_id',
+          as: 'spareDetails',
+        },
+      },
+      {
+        $unwind: {
+          path: '$spareDetails',
+          preserveNullAndEmptyArrays: false,
+        },
+      },
+      {
+        $match: {
+          'spareDetails.shopId': new mongoose.Types.ObjectId(shopId),
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'bookingDetails.UserId',
+          foreignField: '_id',
+          as: 'userDetails',
+        },
+      },
+      {
+        $unwind: {
+          path: '$userDetails',
+          preserveNullAndEmptyArrays: false,
+        },
+      },
+      {
+        $project: {
+          FeedbackMessage: 1,
+          Rating: 1,
+          createdAt: 1,
+          'spareDetails.partName': 1,
+          'spareDetails.part': 1,
+          'spareDetails.quantity': 1,
+          'userDetails.name': 1,
+          'userDetails.profileImage': 1,
+        },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+    ]);
+
+    if (spareFeedBack.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No Feedback found for this seller.',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      spareFeedBack  ,
+    });
+  } catch (error) {
+    console.error('Error fetching Feedback', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error.',
+    });
+  }
+});
+const WatchFeedBackSchema=new mongoose.Schema({
+
+  WatchBookingId: {
+     type: mongoose.Schema.Types.ObjectId,
+     ref: "WatchBooking",
+     required: true, 
+   },
+FeedbackMessage:{
+
+  type:String,
+  required:true,
+},
+Rating:{
+
+  type:String,
+  required:true,
+}
+
+
+});
+const watchFeedBack=mongoose.model("WatchFeedBack",WatchFeedBackSchema);
+app.post("/watchFeedbacks/:WatchBookingId", async (req, res) => {
+  const { WatchBookingId } = req.params; 
+  console.log(WatchBookingId)
+  const { FeedbackMessage,Rating} = req.body; 
+
+  if (!FeedbackMessage) {
+    return res.status(400).json({
+      message: "Complaint message is required.",
+    });
+  }
+  if (!Rating) {
+     return res.status(400).json({
+       message: "Rating is required.",
+     });
+   }
+
+  try {
+    const watchBooking = await WatchBooking.findById(WatchBookingId);
+
+    if (!watchBooking) {
+      return res.status(404).json({
+        message: "Booking not found.",
+      });
+    }
+
+
+    const newFeedBack=new watchFeedBack({
+      WatchBookingId,
+      FeedbackMessage,
+      Rating
+    
+    });
+
+    await newFeedBack.save();
+
+    res.status(201).json({
+      success: true,
+      message: "FeedBack submitted successfully.",
+    });
+  } catch (error) {
+    console.error("Error submitting FeedBack:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error.",
+    });
+  }
+});
+app.get('/WatchFeedBack/:shopId', async (req, res) => {
+  try {
+    const { shopId } = req.params;
+
+    
+    if (!mongoose.Types.ObjectId.isValid( shopId )) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid shopId format.',
+      });
+    }
+
+    console.log("Fetching complaints for Shop ID:",  shopId); // Debugging
+
+    const watchFeedBacks = await watchFeedBack.aggregate([
+      {
+        $lookup: {
+          from: 'watchbookings',
+          localField: 'WatchBookingId',
+          foreignField: '_id',
+          as: 'bookingDetails',
+        },
+      },
+      {
+        $unwind: {
+          path: '$bookingDetails',
+          preserveNullAndEmptyArrays: false,
+        },
+      },
+      {
+        $lookup: {
+          from: 'watches',
+          localField: 'bookingDetails.watchId',
+          foreignField: '_id',
+          as: 'watchDetails',
+        },
+      },
+      {
+        $unwind: {
+          path: '$watchDetails',
+          preserveNullAndEmptyArrays: false,
+        },
+      },
+      {
+        $match: {
+          'watchDetails.shopId': new mongoose.Types.ObjectId(shopId),
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'bookingDetails.UserId',
+          foreignField: '_id',
+          as: 'userDetails',
+        },
+      },
+      {
+        $unwind: {
+          path: '$userDetails',
+          preserveNullAndEmptyArrays: false,
+        },
+      },
+      {
+        $project: {
+          FeedbackMessage: 1,
+          Rating: 1,
+          createdAt: 1,
+          'watchDetails.model': 1,
+          'watchDetails.part': 1,
+          'watchDetails.quantity': 1,
+          'userDetails.name': 1,
+          'userDetails.profileImage': 1,
+        },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+    ]);
+
+    if (watchFeedBacks.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No Feedback found for this seller.',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      watchFeedBacks  ,
+    });
+  } catch (error) {
+    console.error('Error fetching Feedback', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Internal server error.',
+    });
+  }
+});
+
+app.put("/Reply/:ComplaintId", async (req, res) => {
+  try {
+    const { ComplaintId } = req.params;
+    console.log(ComplaintId )
+    const { Reply } = req.body;
+
+  
+    const updatedReply = await Complaint.findByIdAndUpdate(
+      ComplaintId,
+      { Reply,status:"Resolved"},
+      { new: true }
+    );
+
+    if (!updatedReply) {
+      return res.status(404).json({ message: "Booking not found!" });
+    }
+
+    res.status(200).json({ message: "Booking updated successfully!", Reply: updatedReply });
+  } catch (error) {
+    console.error("Error updating booking:", error);
+    res.status(500).json({ message: "Server error!" });
+  }
+});
+app.get('/user/complaints/replies/:userId', async (req, res) => {
+  const { userId } = req.params; 
+
+  try {
+   
+    const complaintsWithReplies = await Complaint.find({
+      userId: userId,
+      Reply: { $ne: 'NULL' } 
+    })
+      .select('complaintMessage status Reply createdAt')
+      .exec();
+
+ 
+    if (complaintsWithReplies.length === 0) {
+      return res.status(404).json({ message: 'No complaints with replies found for this user.' });
+    }
+
+    return res.status(200).json({ complaints: complaintsWithReplies });
+  } catch (error) {
+    console.error("Error fetching complaints:", error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});

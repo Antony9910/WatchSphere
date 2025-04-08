@@ -12,6 +12,7 @@ import EditProduct from '../Shop/pages/EditProduct'
 import ViewBooking from '../Shop/pages/ViewBooking'
 import Complaint from '../Shop/pages/Complaint'
 import ComplaintReport from '../Shop/pages/ComplaintReport'
+import FeedBack from '../Shop/pages/FeedBack'
 
 const ShopRoutes = () => {
   return (
@@ -26,7 +27,8 @@ const ShopRoutes = () => {
     <Route path='/edit/:spareId' element={<EditProduct/>}/> 
     <Route path='View' element={<ViewBooking/>}/>
     <Route path='Complaint' element={<Complaint/>}/>
-      <Route path="ComplaintReport" element={<ComplaintReport/>}/>
+    <Route path="ComplaintReport" element={<ComplaintReport/>}/>
+    <Route path="FeedBack" element={<FeedBack/>}/>
     </Routes>
     </div>
   )

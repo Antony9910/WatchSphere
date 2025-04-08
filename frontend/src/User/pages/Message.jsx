@@ -43,7 +43,7 @@ const Message = () => {
 
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
-      <Box sx={{ fontSize: 32, fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 1, marginLeft: 30, fontFamily: 'cursive' }}>
+      <Box sx={{ fontSize: 32,display: 'flex', alignItems: 'center', gap: 1, marginLeft: 30, fontFamily: 'fantasy' }}>
         DELIVERY-MESSAGES <BookOnlineIcon />
       </Box>
 
@@ -52,13 +52,13 @@ const Message = () => {
         {bookings.map((booking) => (
           <Grid item xs={12} key={booking._id}>
             <Box sx={{ p: 2, border: '1px solid #ccc', borderRadius: 2, mb: 2, backgroundColor: '#f9f9f9' }}>
-              <Typography variant="h6" sx={{ fontWeight: 'bold', fontFamily: 'cursive' }}>
+              <Typography variant="h6" sx={{ fontFamily: 'fantasy' }}>
                 {booking.ProductId?.productName}
               </Typography>
               <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                 <img src={booking.ProductId?.profileImage} width={50} alt="Product" />
               </Typography>
-              <Typography variant="body1" color="primary" sx={{ mt: 1, fontFamily: 'cursive' }}>
+              <Typography variant="body1" color="primary" sx={{ mt: 1, fontFamily: 'fantasy' }}>
                 Price: ₹{booking.totalPrice}
               </Typography>
               <Typography variant="body2" sx={{ mt: 1, fontFamily: 'cursive' }}>
@@ -66,7 +66,7 @@ const Message = () => {
               </Typography>
 
               {/* Conditional Message Based on Status */}
-              <Typography variant="body2" sx={{ mt: 1, fontFamily: 'cursive' }}>
+              <Typography variant="body2" sx={{ mt: 1, fontFamily: 'fantasy' }}>
                 {booking.status === 'confirmed'
                   ? `Message: Your order is confirmed! We'll notify you once it's dispatched.(Booking ID: ${booking._id})`
                   : booking.status === 'Completed'
@@ -77,10 +77,10 @@ const Message = () => {
               {/* Delivery Agent Info */}
               {booking.AgentId && (
                 <Box sx={{ mt: 2 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 'bold', fontFamily: 'cursive' }}>
+                  <Typography variant="body2" sx={{fontFamily:'sans-serif'}}>
                     Delivery Agent: {booking.AgentId?.name || "Not Assigned"}
                   </Typography>
-                  <Typography variant="body2" sx={{ display: 'flex', fontFamily: 'cursive' }}>
+                  <Typography variant="body2" sx={{ display: 'flex', fontFamily: 'sans-serif' }}>
                     <EmailIcon /> Email: {booking.AgentId?.email || "Not Available"}
                   </Typography>
                 </Box>
@@ -118,10 +118,10 @@ const Message = () => {
               {/* Delivery Agent Info */}
               {watchBooking.AgentId && (
                 <Box sx={{ mt: 2 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 'bold', fontFamily: 'cursive' }}>
+                  <Typography variant="body2" sx={{ fontFamily: 'fantasy' }}>
                     Delivery Agent: {watchBooking.AgentId?.name || "Not Assigned"}
                   </Typography>
-                  <Typography variant="body2" sx={{ display: 'flex', fontFamily: 'cursive' }}>
+                  <Typography variant="body2" sx={{ display: 'flex', fontFamily: 'fantasy' }}>
                     <EmailIcon /> Email: {watchBooking.AgentId?.email || "Not Available"}
                   </Typography>
                 </Box>
@@ -134,10 +134,10 @@ const Message = () => {
         {SpareBooking.map((spareBooking) => (
           <Grid item xs={12} key={spareBooking._id}>
             <Box sx={{ p: 2, border: '1px solid #ccc', borderRadius: 2, mb: 2, backgroundColor: '#f9f9f9' }}>
-              <Typography variant="h6" sx={{ fontWeight: 'bold', fontFamily: 'cursive' }}>
+              <Typography variant="h6" sx={{  fontFamily: 'cursive',fontSize:20 }}>
                 {spareBooking.SpareId?.partName}
               </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+              <Typography variant="h6" sx={{ }}>
                 <img src={spareBooking.SpareId?.profileImage} width={50} alt="Product" />
               </Typography>
               <Typography variant="body1" color="primary" sx={{ mt: 1, fontFamily: 'cursive' }}>
@@ -159,7 +159,7 @@ const Message = () => {
               {/* Delivery Agent Info */}
               {spareBookingAgentId && (
                 <Box sx={{ mt: 2 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 'bold', fontFamily: 'cursive' }}>
+                  <Typography variant="body2" sx={{  fontFamily: 'cursive' }}>
                     Delivery Agent: {spareBooking.AgentId?.name || "Not Assigned"}
                   </Typography>
                   <Typography variant="body2" sx={{ display: 'flex', fontFamily: 'cursive' }}>

@@ -74,7 +74,7 @@ const Bill = () => {
     <Grid container justifyContent="center" style={{ marginTop: '20px' }}>
       <Card sx={{ maxWidth: 500, width: '100%' }}>
         <CardContent>
-          <Typography variant="h4" component="h2" gutterBottom sx={{ fontFamily: 'fantasy', marginLeft: 14,fontFamily:'cursive' }}>
+          <Typography variant="h4" component="h2" gutterBottom sx={{ fontFamily: 'fantasy', marginLeft: 14,fontFamily:'fantasy' }}>
             <WatchIcon></WatchIcon>WATCH-BILL
           </Typography>
           {bookingDetails ? (
@@ -85,33 +85,33 @@ const Bill = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'cursive' }}>
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'fantasy' }}>
                  Product Name:{bookingDetails.ProductId?.productName}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'cursive' }}>
-                  <strong>Seller Name:</strong> {bookingDetails.ProductId?.sellerId.name}
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'fantasy' }}>
+                  Seller Name: {bookingDetails.ProductId?.sellerId.name}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'cursive' }}>
-                  <strong>Model Number:</strong> {bookingDetails.ProductId?.modelNum}
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'fantasy' }}>
+                  Model Number: {bookingDetails.ProductId?.modelNum}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'cursive' }}>
-                  <strong>Price:</strong> ₹{bookingDetails.totalPrice}
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'fantasy' }}>
+                  Price: ₹{bookingDetails.totalPrice}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'cursive' }}>
-                  <strong>Quantity:</strong> {bookingDetails.quantity}
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'fantasy' }}>
+                  Quantity:{bookingDetails.quantity}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'cursive' }}>
-                  <strong>Color:</strong> {bookingDetails.ProductId.color}
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'fantasy' }}>
+                  Color:{bookingDetails.ProductId.color}
                 </Typography>
               </Grid>
               {/* <Grid item>

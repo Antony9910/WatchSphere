@@ -254,7 +254,7 @@ useEffect(() => {
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon>View</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/shop/FeedBack'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
       
       </CardActions>
     </Card>

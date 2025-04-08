@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Box, Typography, CircularProgress, Card, CardContent, Divider, Grid, Button, CardActions, Avatar } from '@mui/material';
-
-const Complaint = () => {
+import AddIcon from '@mui/icons-material/Add';
+import { Link } from 'react-router-dom';
+const Solutions = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -40,7 +41,7 @@ const Complaint = () => {
     <Container maxWidth="lg">
       <Box sx={{ padding: '2rem' }}>
         <Typography variant="h4" gutterBottom align="center" color="primary" sx={{fontFamily:'fantasy'}}>
-         COMPLAINTS FROM CUSTOMER
+        CUSTOMER SERVICE SOLUTIONS
         </Typography>
 
         {error && <Typography color="error" variant="h6" align="center">{error}</Typography>}
@@ -63,7 +64,7 @@ const Complaint = () => {
 <Typography variant="body1" color="textSecondary" paragraph>
 <Avatar alt="Cindy Baker" src={complaint.userDetails.profileImage} />
 </Typography>
-                    <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold',fontFamily:'cursive' }}>
+                    <Typography variant="h6" color="primary">
                       Complaint Message:
                     </Typography>
                     <Typography variant="body1" color="textSecondary" paragraph>
@@ -81,19 +82,14 @@ const Complaint = () => {
 
                     <Divider sx={{ marginY: '1rem' }} />
 
-                    <Typography variant="h6" color="primary">
-                      Status:
-                    </Typography>
-                    <Typography variant="body1" color="textSecondary" paragraph>
-                      {complaint.status}
-                    </Typography>
+                 
 
                    
                   </CardContent>
 
                   <CardActions sx={{ justifyContent: 'flex-end' }}>
-                    <Button variant="contained" color="primary" size="small">
-                      Respond
+                    <Button variant="contained" color="primary" size="small" sx={{fontFamily:'fantasy'}}>
+                    <AddIcon></AddIcon><Link to={`/seller/ProductSolution/${complaint._id}`} style={{textDecoration:'none'}}>Respond</Link>
                     </Button>
                   </CardActions>
                 </Card>
@@ -110,4 +106,4 @@ const Complaint = () => {
   );
 };
 
-export default Complaint;
+export default Solutions;
