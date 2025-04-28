@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from 'react-router-dom'; // import useNavigate for redirection
+import { Link, useNavigate } from 'react-router-dom';
 import Styles from "../navbar/navbar.module.css";
 
 import { Box, IconButton, InputBase, Avatar } from "@mui/material";
@@ -13,7 +13,7 @@ import img from './images/W.jpg';
 const Navbar = () => {
   const [profileImage, setProfile] = useState('');
   const [name, setName] = useState('');
-  const navigate = useNavigate(); // Initialize navigate hook
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAgent();
@@ -30,14 +30,12 @@ const Navbar = () => {
     });
   };
 
-  // Handle logout
   const handleLogout = () => {
-    // Clear the specific session item or clear everything from sessionStorage
-    sessionStorage.removeItem("Aid");  // If you want to remove just the session ID
-    sessionStorage.clear(); // Clears all data in sessionStorage, effectively logging out
+    sessionStorage.removeItem("Aid"); 
+    sessionStorage.clear(); 
 
-    // Redirect to login page after logging out
-    navigate('/login'); // Assuming you want to go to the login page
+    // Navigate to the login page and prevent going back to the previous page
+    navigate('/login');  // 'replace: true' ensures the page is not added to the history
   };
 
   return (
@@ -77,7 +75,7 @@ const Navbar = () => {
             }}
           >
             <h3>
-              <Link to={'/agent'} style={{ color: 'orange', textDecoration: 'none', fontFamily: 'cursive' }}><HomeIcon />Home</Link>
+              <Link to={'/agent'} style={{ color: 'orange', textDecoration: 'none' }}><HomeIcon />Home</Link>
             </h3>
           </Box>
 
@@ -88,7 +86,7 @@ const Navbar = () => {
             }}
           >
             <h3>
-              <Link to={'/*'} style={{ color: 'orange', textDecoration: 'none', fontFamily: 'cursive' }}><LogoutIcon />Logout</Link>
+              <Link to={'/*'} style={{ color: 'orange', textDecoration: 'none' }}><LogoutIcon />Logout</Link>
             </h3>
           </Box>
 
@@ -110,13 +108,12 @@ const Navbar = () => {
             }}
           >
             <Avatar alt="Remy Sharp" src={profileImage} />
-            <Box sx={{ fontFamily: 'cursive' }}>{name}</Box>
+            <Box sx={{ fontFamily: 'fantasy' }}></Box>
           </Box>
         </div>
       </Box>
 
-      {/* Logout Button - Trigger the logout function */}
-      <Box
+      {/* <Box
         sx={{
           marginLeft: 2,
           ":hover": { transform: "scale(1.05)", boxShadow: 6 },
@@ -125,7 +122,7 @@ const Navbar = () => {
         <IconButton onClick={handleLogout} style={{ color: 'orange' }}>
           <LogoutIcon />
         </IconButton>
-      </Box>
+      </Box> */}
     </div>
   );
 };

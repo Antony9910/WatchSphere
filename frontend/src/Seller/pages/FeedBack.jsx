@@ -66,7 +66,7 @@ const FeedBack = () => {
                       <Avatar alt={feedback.userDetails ? feedback.userDetails.name : 'User'} src={feedback.userDetails ? feedback.userDetails.profileImage : ''} />
                     </Typography>
 
-                    <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold', fontFamily: 'cursive' }}>
+                    <Typography variant="h6" color="primary" sx={{ fontFamily: 'fantasy' }}>
                       Feedback Message:
                     </Typography>
                     <Typography variant="body1" color="textSecondary" paragraph>

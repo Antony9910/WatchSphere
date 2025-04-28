@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import UpgradeIcon from '@mui/icons-material/Upgrade';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import EditIcon from '@mui/icons-material/Edit';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
+import { Link, useParams } from "react-router-dom";
 import { Container, TextField, Button, Typography, Grid, Paper, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText } from "@mui/material";
 
 const EditProduct = () => {
@@ -113,8 +117,8 @@ const EditProduct = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
       <Paper elevation={3} sx={{ p: 3 }}>
-        <Typography variant="h4" fontWeight="bold">
-          Edit Product
+        <Typography variant="h4"sx={{fontFamily:'fantasy'}}>
+          EDIT-PRODUCT DETAILS<EditIcon></EditIcon>
         </Typography>
 
         <form onSubmit={handleSubmit}>
@@ -161,6 +165,7 @@ const EditProduct = () => {
             </Grid>
             <Grid item xs={12} md={6}>
               <FormControl fullWidth sx={{ width: 260 }}>
+                
                 <InputLabel id="color-select-label">Color</InputLabel>
                 <Select
                   labelId="color-select-label"
@@ -192,10 +197,14 @@ const EditProduct = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button variant="contained" color="primary" type="submit">
-                Update
+              <Button variant="contained" color="primary" type="submit"sx={{fontFamily:'fantasy'}}>
+                Update<UpgradeIcon></UpgradeIcon>
+              </Button>
+              <Button variant="contained" color="primary" type="submit"sx={{fontFamily:'fantasy',marginLeft:2}}>
+              <ArrowBackIcon></ArrowBackIcon> <Link to={'/shop/views'} style={{textDecoration:'none',color:'white'}}>Back To Product Views</Link>
               </Button>
             </Grid>
+            
           </Grid>
         </form>
       </Paper>

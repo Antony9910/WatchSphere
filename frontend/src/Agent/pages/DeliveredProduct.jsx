@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import WatchIcon from '@mui/icons-material/Watch';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import axios from "axios";
+import VerifiedIcon from '@mui/icons-material/Verified';
 import { 
   Container, 
   Typography, 
@@ -44,11 +45,12 @@ const ViewBooking = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/Delivered-bookings/${AgentId}`);
+        const response = await axios.get(`http://localhost:5000/DeliveredBookings/${AgentId}`);
 
         setBookings(response.data);
+        console.log(response.data)
       } catch (err) {
-        setError("Failed to fetch bookings");
+        setError("Failed to fetch www bookings");
       } finally {
         setLoading(false);
       }
@@ -56,84 +58,32 @@ const ViewBooking = () => {
 
     fetchBookings();
 
-    // const fetchWatchBookings = async () => {
-    //   try {
-    //     const response = await axios.get(`http://localhost:5000/WatchConfirmed-bookings?agentId/${AgentId}`);
-    //     setWatchBooking(response.data);
-    //   } catch (err) {
-    //     setError("Failed to fetch bookings");
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-    // fetchWatchBookings();
+    const fetchWatchBookings = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/DeliveredSecondWatch/${AgentId}`);
+        setWatchBooking(response.data);
+        console.log(response.data)
+      } catch (err) {
+        setError("Failed to fetch Watch bookings");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchWatchBookings();
 
-    // const fetchSpareBookings = async () => {
-    //   try {
-    //     const response = await axios.get(`http://localhost:5000/ShopConfirmed-bookings?AgentId/${AgentId}`);
-    //     setSpareBooking(response.data);
-    //   } catch (err) {
-    //     setError("Failed to fetch bookings");
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-    // fetchSpareBookings();
+    const fetchSpareBookings = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/DeliveredPart/${AgentId}`);
+        setSpareBooking(response.data);
+      } catch (err) {
+        setError("Failed to fetch spare bookings");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSpareBookings();
   }, [AgentId]);
 
-//   const handleAcceptBooking = async (bookingId) => {
-//     try {
-//       const response = await axios.put(`http://localhost:5000/update-booking/${bookingId}`, { AgentId: AgentId });
-
-//       const updatedBooking = response.data;
-//       setBookings(prevBookings =>
-//         prevBookings.map(booking =>
-//           booking._id === updatedBooking._id ? updatedBooking : booking
-//         )
-//       );
-
-//       alert("Booking status updated to Completed!");
-//     } catch (error) {
-//       console.error("Error updating booking:", error);
-//       alert("Failed to update the booking");
-//     }
-//   };
-
-//   const handleAcceptedBooking = async (watchBookingId) => {
-//     try {
-//       const response = await axios.put(`http://localhost:5000/update-WatchBooking/${watchBookingId}`, { AgentId: agentId });
-
-//       const updatedWatchBooking = response.data;
-//       setWatchBooking(prevBookings =>
-//         prevBookings.map(WatchBooking =>
-//           WatchBooking._id === updatedWatchBooking._id ? updatedWatchBooking : WatchBooking
-//         )
-//       );
-
-//       alert("Booking status updated to Completed!");
-//     } catch (error) {
-//       console.error("Error updating booking:", error);
-//       alert("Failed to update the booking");
-//     }
-//   };
-
-//   const handleAcceptedSpareBooking = async (SpareBookingId) => {
-//     try {
-//       const response = await axios.put(`http://localhost:5000/update-SpareBooking/${SpareBookingId}`, { AgentId: agentId });
-
-//       const updatedSpareBooking = response.data;
-//       setSpareBooking(prevBookings =>
-//         prevBookings.map(SpareBooking =>
-//           SpareBooking._id === updatedSpareBooking._id ? updatedSpareBooking : SpareBooking
-//         )
-//       );
-
-//       alert("Booking status updated to Completed!");
-//     } catch (error) {
-//       console.error("Error updating booking:", error);
-//       alert("Failed to update the booking");
-//     }
-//   };
 
   if (loading) return <Container sx={{ textAlign: "center", mt: 5 }}><CircularProgress /></Container>;
   if (error) return <Container sx={{ mt: 5 }}><Alert severity="error">{error}</Alert></Container>;
@@ -159,23 +109,24 @@ const ViewBooking = () => {
                   <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
                     <img src={booking.ProductId?.profileImage} alt="Product" />
                   </Typography>
-                  <Typography variant="h6" sx={{ fontFamily: 'inherit' }}>
+                  <Typography variant="h6" sx={{ fontFamily: 'fantasy' }}>
                     User:{booking.UserId?.name}
                   </Typography>
-                  <Typography variant="h6" sx={{ fontFamily: 'inherit' }}>
+                  <Typography variant="h6" sx={{ fontFamily: 'fantasy' }}>
                     Email:{booking.UserId?.email}
                   </Typography>
-                  <Typography variant="h6" sx={{ fontFamily: 'inherit' }}>
+                  <Typography variant="h6" sx={{ fontFamily: 'fantasy' }}>
                    Contact:{booking.UserId?.contact}
                   </Typography>
-                  <Typography variant="h" sx={{ fontFamily: 'inherit' }} color="textSecondary">
+                  <Typography variant="h" sx={{ fontFamily: 'fantasy' }} color="textSecondary">
                     Total Price:{booking.totalPrice}
                   </Typography>
                   <Box>
+                 
                   <Chip 
                     label={booking.status} 
                     color={statusColors[booking.status] || "Completed"} 
-                    sx={{ mt: 5 }} 
+                    sx={{ mt: 5 }} icon={<VerifiedIcon />}
                   />
                   </Box>
                 </CardContent>
@@ -190,32 +141,32 @@ const ViewBooking = () => {
       ) : (
         <Grid container spacing={3}>
           {watchBookings.map((watchBooking) => (
-            <Grid item xs={12} sm={6} md={4} key={watchBooking._id}>
+            <Grid item xs={12} sm={6} md={4} mt={2} key={watchBooking._id}>
               <StyledCard>
                 <CardHeader 
-                  title={watchBooking.ProductId?.name}
+                  title={watchBooking.watchId?.model}
                   subheader={`Quantity: ${watchBooking.quantity}`}
                 />
                 <CardContent>
-                  <Typography variant="body1" sx={{ fontFamily: 'cursive' }}>
+                  <Typography  sx={{ fontFamily: 'fantasy' }}>
                     <img src={watchBooking.watchId?.profileImage} width={20} alt="Product" />
                   </Typography>
-                  <Typography variant="body1" sx={{ fontFamily: 'cursive' }}>
-                    <strong>User:</strong> {watchBooking.UserId?.name}
+                  <Typography  sx={{ fontFamily: 'fantasy' }}>
+                    User:{watchBooking.UserId?.name}
                   </Typography>
-                  <Typography variant="body1" sx={{ fontFamily: 'cursive' }}>
-                    <strong>Email:</strong> {watchBooking.UserId?.email}
+                  <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
+                    Email:{watchBooking.UserId?.email}
                   </Typography>
-                  <Typography variant="body1" sx={{ fontFamily: 'cursive' }}>
-                    <strong>Contact:</strong> {watchBooking.UserId?.contact}
+                  <Typography variant="body1" sx={{ fontFamily: 'fantasy' }}>
+                    Contact: {watchBooking.UserId?.contact}
                   </Typography>
-                  <Typography variant="body2" sx={{ fontFamily: 'cursive' }} color="textSecondary">
-                    <strong>Total Price:</strong> {watchBooking.totalPrice}
+                  <Typography variant="body2" sx={{ fontFamily: 'fantasy' }} color="textSecondary">
+                    Total Price: {watchBooking.totalPrice}
                   </Typography>
                   <Chip 
                     label={watchBooking.status} 
-                    color={statusColors[watchBooking.status] || "confirmed"} 
-                    sx={{ mt: 2 }} 
+                    color={statusColors[watchBooking.status] || "Completed"} 
+                    sx={{ mt: 2 }} icon={<VerifiedIcon />}
                   />
                 </CardContent>
               </StyledCard>
@@ -236,26 +187,26 @@ const ViewBooking = () => {
                   subheader={`Quantity: ${spareBooking.quantity}`}
                 />
                 <CardContent>
-                  <Typography variant="body1" sx={{ fontFamily: 'cursive' }}>
-                    <img src={spareBooking.SpareId?.profileImage} width={20} alt="Product" />
+                  <Typography  sx={{ fontFamily: 'fantasy' }}>
+                    <img src={spareBooking.SpareId?.profileImage} alt="Product" />
                   </Typography>
-                  <Typography variant="body1" sx={{ fontFamily: 'cursive' }}>
-                    <strong>User:</strong> {spareBooking.UserId?.name}
+                  <Typography  sx={{ fontFamily: 'fantasy' }}>
+                   User: {spareBooking.UserId?.name}
                   </Typography>
-                  <Typography variant="body1" sx={{ fontFamily: 'cursive' }}>
-                    <strong>Email:</strong> {spareBooking.UserId?.email}
+                  <Typography sx={{ fontFamily: 'fantasy' }}>
+                    Email:{spareBooking.UserId?.email}
                   </Typography>
-                  <Typography variant="body1" sx={{ fontFamily: 'cursive' }}>
-                    <strong>Contact:</strong> {spareBooking.UserId?.contact}
+                  <Typography  sx={{ fontFamily: 'fantasy' }}>
+                    Contact:{spareBooking.UserId?.contact}
                   </Typography>
-                  <Typography variant="body2" sx={{ fontFamily: 'cursive' }} color="textSecondary">
-                    <strong>Total Price:</strong> {spareBooking.totalPrice}
+                  <Typography sx={{ fontFamily: 'fantasy' }} color="textSecondary">
+                    Total Price:{spareBooking.totalPrice}
                   </Typography>
                   <Box sx={{ display: 'flex' }}>
                     <Chip 
                       label={spareBooking.status} 
                       color={statusColors[spareBooking.status] || "Completed"} 
-                      sx={{ mt: 2 }} 
+                      sx={{ mt: 2 }} icon={<VerifiedIcon />}
                     />
                   </Box>
                 </CardContent>

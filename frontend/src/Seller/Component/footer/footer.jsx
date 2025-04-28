@@ -9,7 +9,7 @@ const Footer = () => {
   return (
     <Box sx={{backgroundColor:'black',height:'30vh',display:'flex',marginTop:2,width:'130%',position:'relative'}}>
     <Box sx={{color:'white',marginLeft:20}}>
-      <Box sx={{fontFamily:'fantasy',marginTop:2,marginLeft:10}}>CONATCT US</Box>
+      <Box sx={{fontFamily:'fantasy',marginTop:2,marginLeft:10}}>CONTACT US</Box>
       <Box sx={{marginLeft:10,marginTop:3}}>100-100-100</Box>
       <Box sx={{marginLeft:10,marginTop:3}}>customercare@gmail.com</Box>
       <Box sx={{marginLeft:10,marginTop:3}}>Help & Contact</Box>

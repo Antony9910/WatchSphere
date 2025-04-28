@@ -325,6 +325,7 @@ app.post("/Login", async (req, res) => {
       // If no match is found for admin, user, or seller
       return res.send({
          login: "error",
+         
       });
    } catch (err) {
       console.error("Error during login:", err);
@@ -475,6 +476,18 @@ app.get(`/userReg/:id`, async (req, res) => {
    } catch (err) {
       res.status(500).json({ message: 'Error fetching user', error: err });
    }
+});
+app.get(`/adminName/:id`, async (req, res) => {
+  try {
+     const id = req.params.id;
+     const admin = await Admin.findById(id);
+     if (!admin) {
+        return res.status(404).json({ message: 'Admin not found' });
+     }
+     res.status(200).json({ admin });
+  } catch (err) {
+     res.status(500).json({ message: 'Error fetching admin', error: err });
+  }
 });
 
 const sellerSchema = new mongoose.Schema({
@@ -1593,6 +1606,9 @@ user_Category:{
    {
       type:Number,required:true
    },
+   warranty:{
+    type:String,required:true
+   },
    discount:
    {
       type:Number,required:true
@@ -1626,7 +1642,7 @@ app.post('/product', upload.fields([{ name: 'photo' }]), async (req, res) => {
       console.log('Received data:', req.body);
       console.log('Received files:', req.files);
 
-      const { productName, modelNum, colorId, price, WatchId,stock, watch_Category, UserId,color, sellerId,user_Category,offer,discount,productDesc } = req.body;
+      const { productName, modelNum, colorId, price, WatchId,stock, watch_Category, UserId,color,warranty, sellerId,user_Category,offer,discount,productDesc } = req.body;
       const fileValue = req.files ? req.files.photo : [];
 
       if (!fileValue || fileValue.length === 0) {
@@ -1651,6 +1667,7 @@ app.post('/product', upload.fields([{ name: 'photo' }]), async (req, res) => {
          sellerId,
          discount,
          stock,
+         warranty,
          productDesc,
          watch_Category,
          user_Category,
@@ -1681,9 +1698,19 @@ const SpareSchema=new mongoose.Schema({
    partName:{
          type:String,required:true,
    },
-   part:{
+   partNumber:{
       type:Number,required:true,
    },
+   offer:{
+    type:Number,required:true,
+   },
+   discount:{
+    type:Number,required:true,
+   },
+  warranty:{
+
+    type:Number,required:true,
+  },
    material:{
 
       type:String,required:true,
@@ -1748,7 +1775,7 @@ app.post('/spare', upload.fields([{ name: 'photo' }]), async (req, res) => {
       console.log('Received data:', req.body);
       console.log('Received files:', req.files);
 
-      const { partName, part, colorId, price,stock,material,compatibility, watchCategory, color, shopId,productDesc } = req.body;
+      const { partName, partNumber, colorId,offer,discount,warranty,price,stock,material,compatibility, watchCategory, color, shopId,productDesc } = req.body;
       const fileValue = req.files ? req.files.photo : [];
 
       if (!fileValue || fileValue.length === 0) {
@@ -1762,14 +1789,16 @@ app.post('/spare', upload.fields([{ name: 'photo' }]), async (req, res) => {
       // Create new product with the data
       const newSpare = new Spare({
          partName,
-         part,
+         partNumber,
          price,
+         offer,
+         discount,
         material,
         compatibility,
          colorId,
          color,
          shopId,
-   
+        warranty,
          stock,
          productDesc,
          watchCategory,
@@ -2193,7 +2222,7 @@ const shopCartSchema = new mongoose.Schema({
      res.status(500).json({ error: 'Error fetching products' });
    }
  });
- app.get('/spare1/:sellerId', async (req, res) => {
+ app.get('/spare1/:shopId', async (req, res) => {
    const { shopId } = req.params; // Get the sellerId from the URL parameter
    try {
      const spares = await Spare.find({ shopId: shopId }); // Find products that belong to this seller
@@ -2202,6 +2231,15 @@ const shopCartSchema = new mongoose.Schema({
      res.status(500).json({ error: 'Error fetching products' });
    }
  });
+ app.get('/Watche/:shopId', async (req, res) => {
+  const { shopId } = req.params; // Get the sellerId from the URL parameter
+  try {
+    const watches = await Watch.find({ shopId: shopId }); // Find products that belong to this seller
+    res.json(watches);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching products' });
+  }
+});
  
  app.get('/spare', async (req, res) => {
    try {
@@ -2375,6 +2413,26 @@ app.put("/spare/:id", async (req, res) => {
      res.status(500).json({ error: 'Internal server error' });
    }
  });
+ app.put("/watch/:id", async (req, res) => {
+  try {
+    const { model,company,price,stock,productDesc,watchCategory,color } = req.body;
+    const watch = await Watch.findByIdAndUpdate(
+      req.params.id,
+      { model,price,company,stock,productDesc,watchCategory,color},
+      { new: true }
+    );
+
+    if (!watch) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    res.json({ message: "Watch Product updated successfully", watch });
+  } catch (err) {
+    console.error("Error updating product", err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
  //second hand watch
  const watchSchema=new mongoose.Schema({
@@ -2912,28 +2970,32 @@ app.put("/ShopBookinghgjhgjk/:ShopBookingId",async (req,res)=>{
  });
  
 
-app.get("/booking/:userId", async (req, res) => {
-   try {
-     const { userId } = req.params;
-     const status = req.query.status || "confirmed";  
-     
-     
-     const bookings = await Booking.find({ UserId: userId, status })  
-       .populate("ProductId")  
-       .exec();
-     
+ app.get("/booking/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const status = req.query.status || "Confirmed";  
 
-     if (!bookings || bookings.length === 0) {
-       return res.status(404).json({ message: "No bookings found for this user" });
-     }
- 
-    
-     res.json(bookings);
-   } catch (error) {
-     console.error("Error fetching bookings:", error);
-     res.status(500).send("Failed to fetch bookings");
-   }
- });
+    const bookings = await Booking.find({ UserId: userId, status })
+      .populate({
+        path: "ProductId",        // Populate ProductId
+        populate: {
+          path: "sellerId",       // Populate sellerId inside ProductId
+          select: "name"          // Only select the name field of the seller
+        }
+      })
+      .exec();
+
+    if (!bookings || bookings.length === 0) {
+      return res.status(404).json({ message: "No bookings found for this user" });
+    }
+
+    res.json(bookings);
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    res.status(500).send("Failed to fetch bookings");
+  }
+});
+
  
 app.get("/shopBookings/:userId", async (req, res) => {
    try {
@@ -2942,8 +3004,13 @@ app.get("/shopBookings/:userId", async (req, res) => {
      
      
      const bookings = await ShopBooking.find({ UserId: userId, status })  
-       .populate("SpareId") 
-       .exec();
+     .populate({
+      path: "SpareId",  // Populating SpareId
+      populate: {
+        path: "shopId", // Assuming SpareId references a shop object
+        select: "shop"  // Only select the name field of the shop
+      }
+    })
      
 
      if (!bookings || bookings.length === 0) {
@@ -2964,7 +3031,13 @@ app.get("/shopBookings/:userId", async (req, res) => {
      
      
      const watch= await WatchBooking.find({ UserId: userId, status })  
-       .populate("watchId")  
+       .populate({
+        path: "watchId",  // Populating SpareId
+        populate: {
+          path: "shopId", // Assuming SpareId references a shop object
+          select: "shop"  // Only select the name field of the shop
+        }
+      })
        .exec();
      
 
@@ -3080,7 +3153,16 @@ app.get('/bookingDetails/:bookingId', async (req, res) => {
            as: "userDetails",
          },
        },
-       { $unwind: "$userDetails" }, // Unwind to get user details
+       {
+        $lookup: {
+           from: "agents",
+           localField: "AgentId",
+           foreignField: "_id",
+           as: "agentDetails"
+        }
+     },
+       { $unwind: "$userDetails" },
+       { $unwind: "$agentDetails" }, // Unwind to get user details
        {
          $project: {
            _id: 1,
@@ -3093,6 +3175,7 @@ app.get('/bookingDetails/:bookingId', async (req, res) => {
            "watchDetails.model": 1,
            "watchDetails.profileImage":1,
            "watchDetails.company": 1,
+          //  "agentDetails.name":1
          },
        },
      ]);
@@ -3107,11 +3190,12 @@ app.get('/bookingDetails/:bookingId', async (req, res) => {
  app.get('/SpareBooking/:shopId', async (req, res) => {
    try {
        const { shopId } = req.params;
+       console.log(shopId)
 
-       const bookings = await ShopBooking.aggregate([
+       const SpareBooking = await ShopBooking.aggregate([
            {
                $lookup: {
-                   from: "spares", // Name of the collection in MongoDB
+                   from: "spares", 
                    localField: "SpareId",
                    foreignField: "_id",
                    as: "spareDetails"
@@ -3120,11 +3204,8 @@ app.get('/bookingDetails/:bookingId', async (req, res) => {
            {
                $unwind: "$spareDetails"
            },
-           {
-               $match: {
-                   "spareDetails.shopId": new mongoose.Types.ObjectId(shopId)
-               }
-           },
+        
+         { $match: { "spareDetails.shopId": new mongoose.Types.ObjectId(shopId) } },
            {
                $lookup: {
                    from: "users",
@@ -3134,16 +3215,39 @@ app.get('/bookingDetails/:bookingId', async (req, res) => {
                }
            },
            {
-               $unwind: "$userDetails"
-           },
+            $lookup: {
+               from: "agents",
+               localField: "AgentId",
+               foreignField: "_id",
+               as: "agentDetails"
+            }
+         },
+           {
+            $unwind: "$userDetails"
+        },
+           {
+            $lookup: {
+                from: "agents",
+                localField: "AgentId",
+                foreignField: "_id",
+                as: "agentDetails"
+            }
+        },
+          
+           {
+            $unwind: "$agentDetails"
+        },
+        
            {
                $project: {
                    _id: 1,
                    "userDetails.name": 1,
                    "userDetails.email": 1,
                    "userDetails.contact": 1,
+                  //  "agentDetails.name":1,
                    "spareDetails.partName": 1,
                    "spareDetails.profileImage":1,
+                  
                    quantity: 1,
                    totalPrice: 1,
                    status: 1,
@@ -3155,7 +3259,7 @@ app.get('/bookingDetails/:bookingId', async (req, res) => {
            }
        ]);
 
-       res.status(200).json({ success: true, bookings });
+       res.status(200).json({ success: true, SpareBooking  });
    } catch (error) {
        console.error("Error fetching shop bookings:", error);
        res.status(500).json({ success: false, message: "Server Error" });
@@ -3233,6 +3337,7 @@ app.get('/WatchComplaint/:sellerId', async (req, res) => {
        {
          $project: {
            complaintMessage: 1,
+           Reply:1,
            status: 1,
            createdAt: 1,
            'productDetails.productName': 1,
@@ -3305,23 +3410,37 @@ app.get('/WatchComplaint/:sellerId', async (req, res) => {
                as: "userDetails"
             }
          },
-       
+         
+      //    {
+      //     $lookup: {
+      //        from: "agents",
+      //        localField: "AgentId",
+      //        foreignField: "_id",
+      //        as: "agentDetails"
+      //     }
+      //  },
          {
             $unwind: "$userDetails"
+             
          },
+      //    {
+      //     $unwind: "$agentDetails"
+           
+      //  },
        
          {
             $project: {
                _id: 1,
                quantity: 1,
                totalPrice: 1,
-               status: 1,
+               status:1,
                createdAt: 1,
                "productDetails.productName": 1,
                "productDetails.price": 1,
                "productDetails.profileImage":1,
                "userDetails.name": 1,
-               "userDetails.email": 1
+               "userDetails.email": 1,
+              //  "agentDetails.name":1
             }
          }
       ]);
@@ -3334,7 +3453,7 @@ app.get('/WatchComplaint/:sellerId', async (req, res) => {
 });
 app.get("/confirmed-bookings", async (req, res) => {
    try {
-     const confirmedBookings = await Booking.find({ status: "confirmed" })
+     const confirmedBookings = await Booking.find({ status: "Confirmed" })
        .populate("UserId", "name email contact")
        .populate("ProductId", "name price profileImage");
      res.status(200).json(confirmedBookings);
@@ -3342,7 +3461,7 @@ app.get("/confirmed-bookings", async (req, res) => {
      res.status(500).json({ message: "Error fetching confirmed bookings", error });
    }
  });
- app.get("/Delivered-bookings/:AgentId", async (req, res) => {
+ app.get("/DeliveredBookings/:AgentId", async (req, res) => {
   try {
     const { AgentId } = req.params;  
 
@@ -3354,9 +3473,7 @@ app.get("/confirmed-bookings", async (req, res) => {
       .populate("UserId", "name email contact")
       .populate("ProductId", "name price profileImage");
 
-    if (!DeliveredBookings.length) {
-      return res.status(404).json({ message: "No completed bookings found for this agent." });
-    }
+   
 
     res.status(200).json(DeliveredBookings);
   } catch (error) {
@@ -3364,10 +3481,51 @@ app.get("/confirmed-bookings", async (req, res) => {
     res.status(500).json({ message: "Error fetching confirmed bookings", error });
   }
 });
+app.get("/DeliveredSecondWatch/:AgentId", async (req, res) => {
+  try {
+    const { AgentId } = req.params;  
+
+   
+    const DeliveredBookings = await WatchBooking.find({ 
+      status: "Completed", 
+      AgentId: AgentId 
+    })
+      .populate("UserId", "name email contact")
+      .populate("watchId", "model price profileImage");
+
+   
+
+    res.status(200).json(DeliveredBookings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching confirmed bookings", error });
+  }
+});
+app.get("/DeliveredPart/:AgentId", async (req, res) => {
+  try {
+    const { AgentId } = req.params;  
+
+   
+    const DeliveredShopBookings = await ShopBooking.find({ 
+      status: "Completed", 
+      AgentId: AgentId 
+    })
+      .populate("UserId", "name email contact")
+      .populate("SpareId", "model price profileImage");
+
+   
+
+    res.status(200).json(DeliveredShopBookings );
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching confirmed bookings", error });
+  }
+});
+
 
  app.get("/WatchConfirmed-bookings", async (req, res) => {
    try {
-     const confirmedBookings = await WatchBooking.find({ status: "confirmed" })
+     const confirmedBookings = await WatchBooking.find({ status: "Confirmed" })
        .populate("UserId", "name email contact")
        .populate("watchId", "model price profileImage");
      res.status(200).json(confirmedBookings);
@@ -3440,6 +3598,31 @@ app.get("/confirmed-bookings", async (req, res) => {
      res.status(500).json({ message: "Internal server error" });
    }
  });
+ app.put("/update-SpareBooking/:id", async (req, res) => {
+  const { id } = req.params;
+  const { AgentId } = req.body; 
+
+  try {
+ 
+    const updatedBooking = await ShopBooking.findByIdAndUpdate(
+      id,
+      {
+        status: "Completed",
+        AgentId: AgentId,    
+      },
+      { new: true } 
+    );
+
+    if (!updatedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.status(200).json(updatedBooking); 
+  } catch (error) {
+    console.error("Error updating booking:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
  app.put("/Reply/:ComplaintId", async (req, res) => {
   try {
     const { ComplaintId } = req.params;
@@ -3506,7 +3689,7 @@ app.get("/confirmed-bookings", async (req, res) => {
      res.status(500).json({ message: "Server error" });
    }
  });
- app.get("/WatchBookings/:userId", async (req, res) => {
+ app.get("/SpareBookings/:userId", async (req, res) => {
    try {
      const userId = req.params.userId;
      const bookings = await ShopBooking.find({ UserId: userId }) 
@@ -3599,9 +3782,16 @@ app.get("/confirmed-bookings", async (req, res) => {
    },
    complaintMessage: {
      type: String,
-     required: true, // Complaint description
-     minlength: 10, // Minimum length for the complaint
+     required: true, 
+     minlength: 10, 
    },
+
+  sellerId:{
+
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Seller",
+    default:null
+  },
    status: {
      type: String,
      enum: ["Pending", "Resolved", "In Progress"],
@@ -3622,6 +3812,7 @@ app.get("/confirmed-bookings", async (req, res) => {
      type: Date,
      default: Date.now, // Automatically set the current date
    },
+   
  });
 
 const Complaint = mongoose.model("Complaint", ComplaintSchema);
@@ -3629,7 +3820,7 @@ const Complaint = mongoose.model("Complaint", ComplaintSchema);
 
 app.post("/SubmitComplaint/:bookingId", async (req, res) => {
    const { bookingId } = req.params; 
-   const { complaintMessage,userId,Reply } = req.body; 
+   const { complaintMessage,userId,Reply,sellerId} = req.body; 
  
    if (!complaintMessage) {
      return res.status(400).json({
@@ -3651,6 +3842,8 @@ app.post("/SubmitComplaint/:bookingId", async (req, res) => {
        bookingId,
        userId,
        Reply,
+       sellerId,
+     
        complaintMessage,
      });
  
@@ -3684,10 +3877,27 @@ app.post("/SubmitComplaint/:bookingId", async (req, res) => {
      enum: ["Pending", "Resolved", "In Progress"],
      default: "Pending",
    },
+   Reply:{
+
+    type:String,
+    default:"NULL"
+   },
+   userId:{
+
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true, 
+   },
    createdAt: {
      type: Date,
-     default: Date.now, // Automatically set the current date
+     default: Date.now, 
    },
+   ShopId:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Shop",
+    default:null
+
+   }
  });
 
 const SpareComplaint = mongoose.model("SpareComplaint", SpareComplaintSchema);
@@ -3695,7 +3905,7 @@ const SpareComplaint = mongoose.model("SpareComplaint", SpareComplaintSchema);
 
 app.post("/SubmitComplaints/:ShopBookingId", async (req, res) => {
    const { ShopBookingId } = req.params; 
-   const { complaintMessage,Reply } = req.body; 
+   const { complaintMessage,Reply,userId,ShopId} = req.body; 
  
    if (!complaintMessage) {
      return res.status(400).json({
@@ -3712,10 +3922,10 @@ app.post("/SubmitComplaints/:ShopBookingId", async (req, res) => {
        });
      }
  
-     // Save the complaint in the database
+    
      const newComplaint = new SpareComplaint({
       ShopBookingId,
-       complaintMessage,Reply
+       complaintMessage,Reply,userId,ShopId
      });
  
      await newComplaint.save();
@@ -3740,24 +3950,40 @@ app.post("/SubmitComplaints/:ShopBookingId", async (req, res) => {
    },
    complaintMessage: {
      type: String,
-     required: true, // Complaint description
-     minlength: 10, // Minimum length for the complaint
+     required: true,
+     minlength: 10, 
    },
    status: {
      type: String,
      enum: ["Pending", "Resolved", "In Progress"],
      default: "Pending",
    },
+   Reply:{
+    type:String,
+    default:"NULL"
+   },
+   ShopId:
+   {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Shop",
+    default:null
+   },
+   userId:{
+
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true, 
+   },
    createdAt: {
      type: Date,
-     default: Date.now, // Automatically set the current date
+     default: Date.now, 
    },
  });
 
 const WatchComplaint = mongoose.model("WatchComplaint", WatchComplaintSchema);
 app.post("/WatchComplaints/:WatchBookingId", async (req, res) => {
    const { WatchBookingId } = req.params; 
-   const { complaintMessage } = req.body; 
+   const { complaintMessage,Reply,userId,ShopId } = req.body; 
  
    if (!complaintMessage) {
      return res.status(400).json({
@@ -3774,10 +4000,11 @@ app.post("/WatchComplaints/:WatchBookingId", async (req, res) => {
        });
      }
  
-     // Save the complaint in the database
+ 
      const newComplaint = new WatchComplaint({
       WatchBookingId,
        complaintMessage,
+       userId,Reply,ShopId
      });
  
      await newComplaint.save();
@@ -3799,7 +4026,7 @@ app.post("/WatchComplaints/:WatchBookingId", async (req, res) => {
    try {
      const { shopId } = req.params;
 
-     // Check if shopId is a valid ObjectId
+     
      if (!mongoose.Types.ObjectId.isValid(shopId)) {
        return res.status(400).json({
          success: false,
@@ -3807,7 +4034,7 @@ app.post("/WatchComplaints/:WatchBookingId", async (req, res) => {
        });
      }
 
-     console.log("Fetching complaints for Shop ID:", shopId); // Debugging
+     console.log("Fetching complaints for Shop ID:", shopId); 
 
      const WatchComplaints = await WatchComplaint.aggregate([
        {
@@ -3860,6 +4087,7 @@ app.post("/WatchComplaints/:WatchBookingId", async (req, res) => {
        {
          $project: {
            complaintMessage: 1,
+           Reply:1,
            status: 1,
            createdAt: 1,
            'watchesDetails.model': 1,
@@ -3907,7 +4135,7 @@ app.get('/ProductFeedBack/:sellerId', async (req, res) => {
        });
      }
 
-     console.log("Fetching complaints for Shop ID:", sellerId); // Debugging
+     console.log("Fetching complaints for Shop ID:", sellerId); 
 
      const ProductFeedBack = await FeedBack.aggregate([
        {
@@ -4006,7 +4234,7 @@ app.get('/SparesComplaint/:shopId', async (req, res) => {
        });
      }
 
-     console.log("Fetching complaints for Shop ID:", shopId); // Debugging
+     console.log("Fetching complaints for Shop ID:", shopId); 
 
      const SpareComplaints = await SpareComplaint.aggregate([
        {
@@ -4495,16 +4723,43 @@ app.get('/WatchFeedBack/:shopId', async (req, res) => {
   }
 });
 
-app.put("/Reply/:ComplaintId", async (req, res) => {
+app.put("/Reply/:ComplaintId/:sellerId", async (req, res) => {
   try {
-    const { ComplaintId } = req.params;
+    const { ComplaintId, sellerId } = req.params;
     console.log(ComplaintId )
     const { Reply } = req.body;
+    console.log(sellerId);
+   
 
   
     const updatedReply = await Complaint.findByIdAndUpdate(
       ComplaintId,
-      { Reply,status:"Resolved"},
+      { Reply,status:"Resolved", sellerId:sellerId},
+      { new: true }
+    );
+    console.log(updatedReply)
+
+    if (!updatedReply) {
+      return res.status(404).json({ message: "Booking not found!" });
+    }
+
+    res.status(200).json({ message: "Booking updated successfully!", Reply: updatedReply });
+  } catch (error) {
+    console.error("Error updating booking:", error);
+    res.status(500).json({ message: "Server error!" });
+  }
+});
+
+app.put("/Replies/:ComplaintId/:ShopId", async (req, res) => {
+  try {
+    const { ComplaintId,ShopId } = req.params;
+    console.log(ComplaintId )
+    const { Reply} = req.body;
+
+  
+    const updatedReply = await WatchComplaint.findByIdAndUpdate(
+      ComplaintId,
+      { Reply,ShopId:ShopId,status:"Resolved"},
       { new: true }
     );
 
@@ -4518,26 +4773,279 @@ app.put("/Reply/:ComplaintId", async (req, res) => {
     res.status(500).json({ message: "Server error!" });
   }
 });
+app.put("/Rep/:SpareComplaintId/:ShopId", async (req, res) => {
+  try {
+    const { SpareComplaintId,ShopId } = req.params;
+    console.log("Received SpareComplaintId:", SpareComplaintId);
+    
+    const { Reply, status } = req.body;
+
+    const complaint = await SpareComplaint.findById(SpareComplaintId);
+    if (!complaint) {
+      return res.status(404).json({ message: "Complaint not found!" });
+    }
+
+   
+    const updatedProductReply = await SpareComplaint.findByIdAndUpdate(
+      SpareComplaintId,
+      { Reply, status,ShopId:ShopId },
+      { new: true }
+    );
+
+    res.status(200).json({
+      message: "Complaint updated successfully!",
+      Reply: updatedProductReply,
+    });
+  } catch (error) {
+    console.error("Error updating complaint:", error);
+    res.status(500).json({ message: "Server error!" });
+  }
+});
+
 app.get('/user/complaints/replies/:userId', async (req, res) => {
-  const { userId } = req.params; 
+  const { userId } = req.params;
 
   try {
-   
+    // Fetch complaints with non-null, non-empty replies or no replies
     const complaintsWithReplies = await Complaint.find({
       userId: userId,
-      Reply: { $ne: 'NULL' } 
+      $or: [
+        { Reply: { $ne: 'NULL' } }, // Exclude 'NULL' replies
+        { Reply: { $ne: null } }, // Exclude null replies
+        { Reply: { $ne: '' } } // Exclude empty replies
+      ]
     })
-      .select('complaintMessage status Reply createdAt')
-      .exec();
+    .populate('sellerId', 'name')
+    .select('complaintMessage status Reply createdAt bookingId sellerId')
+    .exec();
 
- 
-    if (complaintsWithReplies.length === 0) {
-      return res.status(404).json({ message: 'No complaints with replies found for this user.' });
-    }
+    
 
     return res.status(200).json({ complaints: complaintsWithReplies });
   } catch (error) {
     console.error("Error fetching complaints:", error);
     return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+app.get('/user/SpareComplaints/Replies/:userId', async (req, res) => {
+  const { userId } = req.params; 
+
+  try {
+   
+    const complainted = await SpareComplaint.find({
+      userId: userId,
+      Reply: { $ne: 'NULL' }
+    }).populate('ShopId','shop')
+
+ 
+   
+
+    return res.status(200).json({ SpareComplaints: complainted });
+  } catch (error) {
+    console.error("Error fetching complaints:", error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+app.get('/user/WatchComplaints/Replied/:userId', async (req, res) => {
+  const { userId } = req.params; 
+  console.log(userId)
+  try {
+   
+    const complaintsReplies = await WatchComplaint.find({
+      userId: userId,
+      Reply: { $ne: 'NULL' } 
+    }).populate('ShopId','shop')
+      .select('complaintMessage status Reply createdAt WatchBookingId')
+      .exec();
+   
+ 
+   
+
+    return res.status(200).json({ WatchComplaints: complaintsReplies });
+  } catch (error) {
+    console.error("Error fetching complaints:", error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.get("/ProductProfileById/:productId", async (req, res) => {
+  try {
+    const productId = req.params.productId; 
+    const product = await Product.findById(productId);
+    
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    } else {
+      return res.status(200).send({ product });
+    }
+  } catch (err) {
+    console.error("Error fetching product", err);
+    return res.status(500).send("Internal server error");
+  }
+});
+app.get("/ShopWatchById/:spareId", async (req, res) => {
+  try {
+    const spareId = req.params.spareId; 
+    const spare = await Spare.findById(spareId);
+    
+    if (!spare) {
+      return res.status(404).json({ message: "Spare Parts not found" });
+    } else {
+      return res.status(200).send({ spare });
+    }
+  } catch (err) {
+    console.error("Error fetching product", err);
+    return res.status(500).send("Internal server error");
+  }
+});
+app.get("/WatchById/:watchId", async (req, res) => {
+  try {
+    const watchId = req.params.watchId; 
+    const watch = await Watch.findById(watchId);
+    
+    if (!watch) {
+      return res.status(404).json({ message: "Second hand Watch not found" });
+    } else {
+      return res.status(200).send({ watch  });
+    }
+  } catch (err) {
+    console.error("Error fetching product", err);
+    return res.status(500).send("Internal server error");
+  }
+});
+
+app.put("/ProductsProfileById/:productId", async (req, res) => {
+  try {
+     const productId = req.params.productId;
+     const { profileImage } = req.body;
+
+   
+     let products = await Product.findByIdAndUpdate(productId, { profileImage }, { new: true });
+     
+     if (!products) {
+        return res.status(404).json({ message: "Product not found" });
+     }
+
+     res.json({ message: "Product Image updated successfully",products });
+  } catch (err) {
+     console.error("Error Updating User", err);
+     res.status(500).send("Internal server error");
+  }
+});
+app.put("/ShopSpareById/:spareId", async (req, res) => {
+  try {
+     const spareId = req.params.spareId;
+     const { profileImage } = req.body;
+
+   
+     let spares = await Spare.findByIdAndUpdate(spareId, { profileImage }, { new: true });
+     
+     if (!spares) {
+        return res.status(404).json({ message: "Spare part not found" });
+     }
+
+     res.json({ message: "Spare part Image updated successfully",spares  });
+  } catch (err) {
+     console.error("Error Updating User", err);
+     res.status(500).send("Internal server error");
+  }
+});
+app.put("/ShopWatchById/:watchId", async (req, res) => {
+  try {
+     const watchId = req.params.watchId;
+     const { profileImage } = req.body;
+
+   
+     let watches = await Watch.findByIdAndUpdate(watchId, { profileImage }, { new: true });
+     
+     if (!watches) {
+        return res.status(404).json({ message: "Spare part not found" });
+     }
+
+     res.json({ message: "Second hand watch Image updated successfully",watches });
+  } catch (err) {
+     console.error("Error Updating User", err);
+     res.status(500).send("Internal server error");
+  }
+});
+app.post('/SpareUploadById/:spareId', upload.fields([{ name: 'photo' }]), async (req, res) => {
+  try {
+     
+      console.log('Received files:', req.files);
+
+      const fileValue = req.files ? JSON.parse(JSON.stringify(req.files)) : {};
+      const profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.photo[0].filename}`;
+
+   
+      const spareId = req.params.spareId;
+      const spares = await Spare.findByIdAndUpdate(
+        spareId,
+          { profileImage: profileimgsrc },
+          { new: true }
+      );
+
+      if (!spares) {
+          return res.status(404).json({ message: 'Spare part  not found' });
+      }
+
+      res.status(200).json({ message: 'Profile updated successfully', data: spares });
+  } catch (error) {
+      console.error('Error during Image Upload:', error);
+      res.status(500).json({ message: 'Error uploading Image. Please try again.' });
+  }
+});
+app.post('/WatchUploadById/:watchId', upload.fields([{ name: 'photo' }]), async (req, res) => {
+  try {
+     
+      console.log('Received files:', req.files);
+
+      const fileValue = req.files ? JSON.parse(JSON.stringify(req.files)) : {};
+      const profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.photo[0].filename}`;
+
+   
+      const watchId = req.params.watchId;
+      const watches = await Watch.findByIdAndUpdate(
+        watchId,
+          { profileImage: profileimgsrc },
+          { new: true }
+      );
+
+      if (!watches) {
+          return res.status(404).json({ message: 'Second hand watch  not found' });
+      }
+
+      res.status(200).json({ message: 'Profile updated successfully', data: watches });
+  } catch (error) {
+      console.error('Error during Image Upload:', error);
+      res.status(500).json({ message: 'Error uploading Image. Please try again.' });
+  }
+});
+
+
+
+app.post('/ProductUploadById/:productId', upload.fields([{ name: 'photo' }]), async (req, res) => {
+  try {
+     
+      console.log('Received files:', req.files);
+
+      const fileValue = req.files ? JSON.parse(JSON.stringify(req.files)) : {};
+      const profileimgsrc = `http://127.0.0.1:${port}/images/${fileValue.photo[0].filename}`;
+
+   
+      const productId = req.params.productId;
+      const products = await Product.findByIdAndUpdate(
+        productId,
+          { profileImage: profileimgsrc },
+          { new: true }
+      );
+
+      if (!products) {
+          return res.status(404).json({ message: 'Product not found' });
+      }
+
+      res.status(200).json({ message: 'Profile updated successfully', data: products });
+  } catch (error) {
+      console.error('Error during Shop upload:', error);
+      res.status(500).json({ message: 'Error uploading profile. Please try again.' });
   }
 });

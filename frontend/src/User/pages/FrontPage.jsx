@@ -109,7 +109,7 @@ const fetchUser = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         Edit Profile
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
            Edit Details of User
         </Typography>
       
@@ -132,15 +132,15 @@ const fetchUser = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         Buy Product
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
         Customer can Buy product 
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33,fontFamily:'cursive'}}><Link  to={'Product/'} style={{color:'white',textDecoration:'none',display:'flex'}}><ShopIcon></ShopIcon>Seller</Link></Button>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33,fontFamily:'cursive'}}><Link  to={'shop/'} style={{color:'white',textDecoration:'none',display:'flex'}}><StoreIcon></StoreIcon>Shop</Link></Button>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33,fontFamily:'cursive'}}><Link  to={'orders/'} style={{color:'white',textDecoration:'none'}}><StoreIcon></StoreIcon>view</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33,fontFamily:'fantasy'}}><Link  to={'Product/'} style={{color:'white',textDecoration:'none',display:'flex'}}><ShopIcon></ShopIcon>Seller</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33,fontFamily:'fantasy'}}><Link  to={'shop/'} style={{color:'white',textDecoration:'none',display:'flex'}}><StoreIcon></StoreIcon>Shop</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33,fontFamily:'fantasy'}}><Link  to={'orders/'} style={{color:'white',textDecoration:'none'}}><VisibilityIcon></VisibilityIcon>view orders</Link></Button>
       </CardActions>
     </Card>
 
@@ -156,13 +156,13 @@ const fetchUser = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         View Messages
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
         View Messages from Agent
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive',display:'flex'}}><Link to={'/user/message'} style={{textDecoration:'none',color:'white'}}><VisibilityIcon></VisibilityIcon>View</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy',display:'flex'}}><Link to={'/user/message'} style={{textDecoration:'none',color:'white'}}><VisibilityIcon></VisibilityIcon>View</Link></Button>
       
       </CardActions>
     </Card>
@@ -285,13 +285,13 @@ const fetchUser = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         Generate Complaint
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
           Customer Can generate Complaint
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><AddIcon></AddIcon><Link to={'/user/complaint'} style={{textDecoration:'none',color:'white'}}>Add</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><AddIcon></AddIcon><Link to={'/user/complaint'} style={{textDecoration:'none',color:'white'}}>Add</Link></Button>
        
       
       
@@ -333,13 +333,13 @@ const fetchUser = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         View Solution
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
-        View Solution from users
+        <Typography sx={{fontFamily:'fantasy'}}>
+        View Solution from Seller's,shop's
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/user/ViewSolution'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><VisibilityIcon></VisibilityIcon><Link to={'/user/ViewSolution'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
       
       </CardActions>
     </Card>
@@ -356,13 +356,13 @@ const fetchUser = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         Generate Feedback
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
          Customer can Generate Feedback
         </Typography>
       
       </CardContent>
       <CardActions>
-      <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><Link  to={'Feedback/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add</Link></Button>
+      <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><Link  to={'Feedback/'} style={{color:'white',textDecoration:'none'}}><AddIcon></AddIcon>Add</Link></Button>
        
       
       

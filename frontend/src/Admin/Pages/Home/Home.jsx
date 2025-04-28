@@ -89,7 +89,7 @@ function SelectActionCard() {
       ))}
     
     </Box>
-    <Box sx={{color:'blue',fontFamily:'fantasy',display:'flex',justifyContent:'center'}}><h1>Admin Activities</h1></Box>
+    <Box sx={{color:'blue',fontFamily:'fantasy',display:'flex',justifyContent:'center'}}><h1><AdminPanelSettingsIcon></AdminPanelSettingsIcon>ADMIN-ACTIVITIES</h1></Box>
       {/* <Box sx={{marginRight:20,marginLeft:40}}>
       <BarChart 
       series={[
@@ -196,7 +196,7 @@ function SelectActionCard() {
       </CardActions>
     </Card>
     </Box>
-    <Box  >
+    {/* <Box  >
     <Card sx={{ width:240,marginLeft:25 ,":hover":{transform:"scale(1.05)",boxShadow:6,backgroundColor:'grey' }}}>
       <CardActionArea>
         <CardMedia
@@ -214,15 +214,13 @@ function SelectActionCard() {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        {/* <Button size="small" color="primary">
-          Share
-        </Button> */}
+       
       </CardActions>
     </Card>
     </Box>
     <Box>
    
-    </Box>
+    </Box> */}
     </Box>
         </Box>
   );

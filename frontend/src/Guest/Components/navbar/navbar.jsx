@@ -7,8 +7,10 @@ import { Link } from 'react-router-dom';
 import { InputBase, IconButton, Box, Menu, MenuItem, Button } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
+import PersonIcon from '@mui/icons-material/Person';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import LoginIcon from '@mui/icons-material/Login';
+import ShopIcon from '@mui/icons-material/Shop';
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -87,23 +89,23 @@ const Navbar = () => {
               onClose={handleClose}
             >
               <MenuItem onClick={handleClose}>
-                <Link to="/Register" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy',   ":hover": { transform: "scale(1.05)", boxShadow: 6,color:'orange'}}}>
-                  User Registration
+                <Link to="/Register" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy',   ":hover": { transform: "scale(1.05)", boxShadow: 6,color:'orange',display:'flex'}}}>
+                 <PersonIcon></PersonIcon> User Registration
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link to="/SellerRegister" style={{ color: 'orange', textDecoration: 'none' ,fontFamily:'fantasy'}}>
-                  Seller Registration
+                <Link to="/SellerRegister" style={{ color: 'orange', textDecoration: 'none' ,fontFamily:'fantasy',display:'flex'}}>
+                <PersonIcon></PersonIcon> Seller Registration
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link to="/ShopRegister" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy' }}>
-                  Shop Registration
+                <Link to="/ShopRegister" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy',display:'flex' }}>
+                 <ShopIcon></ShopIcon> Shop Registration
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link to="/AgentRegister" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy' }}>
-                 Agent Registration
+                <Link to="/AgentRegister" style={{ color: 'orange', textDecoration: 'none',fontFamily:'fantasy',display:'flex' }}>
+                 <PersonIcon></PersonIcon>Agent Registration
                 </Link>
               </MenuItem>
             </Menu>

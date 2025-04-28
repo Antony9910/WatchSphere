@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Box} from '@mui/material';
+import { Avatar, Box} from '@mui/material';
 import { Link } from 'react-router-dom';
 import img from './images/watch.jpg'
 import img2 from './images/profile.png'
@@ -39,6 +39,7 @@ const FrontPage = () => {
     arrows: true
 };
 const [name,setName] = useState('');
+const [profileImage,setProfileImage]=useState('')
 
 useEffect(() => {
   fetchSeller();
@@ -50,6 +51,7 @@ const fetchSeller = () => {
     const Seller = res.data.seller;
     // Set each individual field with data
     setName(Seller.name);
+    setProfileImage(Seller.profileImage);
   }).catch((err) => {
     console.error(err);
   });
@@ -71,7 +73,7 @@ const fetchSeller = () => {
           
         </Box>
         </Slider>
-        <Card sx={{ width: 470,height:100,marginTop:5,fontFamily:'fantasy',marginLeft:60,backgroundColor:'orange',":hover":{transform:"scale(1.05)",boxShadow:6}}}>
+        <Card sx={{ width: 470,height:150,marginTop:5,fontFamily:'fantasy',marginLeft:60,backgroundColor:'orange',":hover":{transform:"scale(1.05)",boxShadow:6}}}>
       <CardMedia
         sx={{ height: 40 }}
         image="/static/images/cards/contemplative-reptile.jpg"
@@ -79,7 +81,7 @@ const fetchSeller = () => {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy',marginTop:-2,marginLeft:13,}}>
-          WELCOME TO SELLER PAGE <Box sx={{color:'green',marginLeft:12}}>{name}</Box>
+          WELCOME TO SELLER PAGE <Box sx={{color:'green',marginLeft:12}}>{name} <Avatar alt="Remy Sharp" src={profileImage} sx={{marginLeft:1}} /></Box>
         </Typography>
         
       </CardContent>
@@ -99,13 +101,13 @@ const fetchSeller = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
         Edit Profile
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
           Edit Details of Seller 
         </Typography>
       
       </CardContent>
       <CardActions>
-      <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><Link  to={'Profile/'} style={{color:'white',textDecoration:'none'}}><EditIcon></EditIcon>Edit</Link></Button>
+      <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><Link  to={'Profile/'} style={{color:'white',textDecoration:'none'}}><EditIcon></EditIcon>Edit</Link></Button>
      
       </CardActions>
     </Card>
@@ -122,7 +124,7 @@ const fetchSeller = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         Add Product
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
         Add Watch Details
         </Typography>
       
@@ -148,15 +150,15 @@ const fetchSeller = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         View Booking<VisibilityIcon></VisibilityIcon>
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
        View Booking Details of the Customer
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'Cursive',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon><Link to={'/seller/book'} style={{color:'white',textDecoration:'none'}}>View</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon><Link to={'/seller/book'} style={{color:'white',textDecoration:'none'}}>View</Link></Button>
         {/* <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon>Generate Bill</Button> */}
-      
+           <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><VisibilityIcon></VisibilityIcon><Link  to={'report/'} style={{color:'white',textDecoration:'none',fontFamily:'fantasy'}}>Sales Report</Link></Button>
       
       </CardActions>
     </Card>
@@ -178,14 +180,14 @@ const fetchSeller = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         View Complaint
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
           View Complaint from Customer
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/seller/Complaint'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/seller/ComplaintReport'}style={{textDecoration:'none',color:'white'}}>Generate Report</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><VisibilityIcon></VisibilityIcon><Link to={'/seller/Complaint'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><VisibilityIcon></VisibilityIcon><Link to={'/seller/ComplaintReport'}style={{textDecoration:'none',color:'white'}}>Generate Report</Link></Button>
       
       
       </CardActions>
@@ -203,13 +205,13 @@ const fetchSeller = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         Generate Solution
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
           Generate Solutions to Customers
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/seller/solutions'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><VisibilityIcon></VisibilityIcon><Link to={'/seller/solutions'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
       
       </CardActions>
     </Card>
@@ -226,13 +228,13 @@ const fetchSeller = () => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         View Feedback
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
           View Feedback from the Customer
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/seller/Feedback'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><VisibilityIcon></VisibilityIcon><Link to={'/seller/Feedback'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
       
       </CardActions>
     </Card>

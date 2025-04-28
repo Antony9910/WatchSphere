@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { TextField, Button, Typography, Snackbar, CircularProgress, Box, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
@@ -6,7 +7,7 @@ import { TextField, Button, Typography, Snackbar, CircularProgress, Box, MenuIte
 const ProductSolution = () => {
   const { ComplaintId } = useParams();
   const [Reply, setReply] = useState('');
-  const [status, setStatus] = useState('Resolved');  // Default status set to 'Resolved'
+  const [status, setStatus] = useState('Resolved'); 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -33,16 +34,28 @@ const ProductSolution = () => {
     setError(null);
     setSnackbarMessage('');
 
+    
+    const sellerId = sessionStorage.getItem('sid');
+    if (!sellerId) {
+      setError('Seller ID is not found. Please login again.');
+      return;
+    }
+    console.log('Complaint ID:', ComplaintId);
+    console.log('Seller ID:', sellerId);
+    console.log('Reply:', Reply.trim());
+    console.log('Status:', status);
     try {
-      const response = await axios.put(`http://localhost:5000/Reply/${ComplaintId}`, {
+      const response = await axios.put(`http://localhost:5000/Reply/${ComplaintId}/${sellerId}`, {
         Reply: Reply.trim(),
-        status, // Send selected status
+        status,
+        sellerId
       });
+     
 
       if (response.status === 200) {
         setSuccess(true);
-        setReply('');
-        setStatus('Resolved');  // Reset status to 'Resolved' after successful update
+        setReply('');  
+        setStatus('Resolved');  
         setSnackbarMessage('Solution submitted successfully!');
         setOpenSnackbar(true);
       }
@@ -101,7 +114,6 @@ const ProductSolution = () => {
             <MenuItem value="In Progress">In Progress</MenuItem>
             <MenuItem value="Pending">Pending</MenuItem>
             <MenuItem value="Escalated">Escalated</MenuItem>
-            {/* Add more status options as necessary */}
           </Select>
         </FormControl>
 
@@ -111,9 +123,9 @@ const ProductSolution = () => {
             color="primary"
             type="submit"
             disabled={loading}
-            sx={{ padding: '10px 20px' }}
+            sx={{ padding: '10px 20px',fontFamily:'fantasy' }}
           >
-            {loading ? <CircularProgress size={24} /> : 'Submit Solution'}
+            {loading ? <CircularProgress size={24} /> : 'Submit Solution'}<AddIcon></AddIcon>
           </Button>
         </Box>
       </form>

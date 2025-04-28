@@ -89,7 +89,7 @@ const Solutions = () => {
 
                   <CardActions sx={{ justifyContent: 'flex-end' }}>
                     <Button variant="contained" color="primary" size="small" sx={{fontFamily:'fantasy'}}>
-                    <AddIcon></AddIcon><Link to={`/seller/ProductSolution/${complaint._id}`} style={{textDecoration:'none'}}>Respond</Link>
+                    <AddIcon></AddIcon><Link to={`/seller/ProductSolution/${complaint._id}`} style={{textDecoration:'none',color:'white'}}>Respond</Link>
                     </Button>
                   </CardActions>
                 </Card>

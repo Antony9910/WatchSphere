@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Container, Typography, CardMedia, CardContent, Grid, Paper, Box, Card, Button, TextField } from "@mui/material";
 
 const Cart = () => {
@@ -137,7 +138,7 @@ const Cart = () => {
               <Grid container spacing={2} sx={{ mt: 3 }}>
                 <Grid item>
                   <Button variant="contained" sx={{ backgroundColor: 'orange', color: 'white' }} size="large" onClick={handleAddToCart}>
-                    ADD TO CART
+                    <AddShoppingCartIcon></AddShoppingCartIcon>ADD TO CART
                   </Button>
                 </Grid>
               </Grid>

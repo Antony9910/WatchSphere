@@ -5,7 +5,6 @@ import { Container, Typography, CardMedia, CardContent, Grid, Paper, Box, Card, 
 
 const WatchCart = () => {
   const { watchId } = useParams();
-  console.log(watchId);
   const [watch, setWatch] = useState(null);
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -18,7 +17,9 @@ const WatchCart = () => {
 
   useEffect(() => {
     if (watch) {
-      setTotalPrice(watch.price * quantity);
+      // Recalculate the total price based on quantity and unit price
+      const price = watch.discount * quantity; // Watch price * quantity
+      setTotalPrice(price);  // Update the total price state
     }
   }, [quantity, watch]);
 
@@ -33,13 +34,13 @@ const WatchCart = () => {
 
   const handleColorSelect = (color) => setSelectedColor(color);
   const handleQuantityChange = (e) => {
-    const newQuantity = Math.max(1, Math.min(e.target.value, spare?.stock || 1));
+    const newQuantity = Math.max(1, Math.min(e.target.value, watch?.stock || 1));
     setQuantity(newQuantity);
   };
 
   const handleAddToCart = async () => {
     const userId = sessionStorage.getItem("uid");
-    const agentId=sessionStorage.getItem("Aid")|| null; 
+    const agentId = sessionStorage.getItem("Aid") || null;
     if (!userId) return alert("User not logged in");
     if (!selectedColor) return alert("Please select a color.");
     if (!watch) return alert("Product not found");
@@ -49,12 +50,12 @@ const WatchCart = () => {
         UserId: userId,
         watchId: watchId,
         quantity,
-        AgentId:agentId,
+        AgentId: agentId,
         totalPrice,
         status: "Pending",
       });
 
-      const WatchBookingId= WatchBookingResponse.data._id;
+      const WatchBookingId = WatchBookingResponse.data._id;
 
       await axios.post("http://localhost:5000/watchCart", {
         UserId: userId,
@@ -97,7 +98,7 @@ const WatchCart = () => {
             <CardContent>
               <Typography variant="h4" fontWeight="bold">{watch.model}</Typography>
               <Typography variant="h6" color="textSecondary">Model: {watch.model}</Typography>
-              <Typography variant="h5" color="primary" sx={{ mt: 1 }}>₹{watch.price}</Typography>
+              <Typography variant="h5" color="primary" sx={{ mt: 1 }}>₹{watch.discount}</Typography>
               <Typography variant="h6" sx={{ mt: 1 }}>Stock: {watch.stock}</Typography>
               <Typography variant="body1" sx={{ mt: 1 }}>Category: {watch.watchCategory}</Typography>
               <Typography variant="body1">Selected Color: {selectedColor || "None"}</Typography>
@@ -110,6 +111,7 @@ const WatchCart = () => {
           </Grid>
         </Grid>
       </Paper>
+
       <Box sx={{ display: 'flex', mt: 2 }}>
         {watch.color.map((color, index) => (
           <Card key={color} sx={{ maxWidth: 150, margin: 1, cursor: "pointer", border: selectedColor === color ? "2px solid blue" : "none" }} onClick={() => handleColorSelect(color)}>

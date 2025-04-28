@@ -36,7 +36,7 @@ export default function WatchPayment() {
     try {
    
       await axios.put(`http://localhost:5000/WatchBooking/${WatchBookingId }`, {
-        status: "confirmed",
+        status: "Confirmed",
       });
   
       

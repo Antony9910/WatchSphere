@@ -63,7 +63,7 @@ const WatchFeed = () => {
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom sx={{fontFamily:'fantasy',marginLeft:20}}>
-      Customer Feedback<FeedbackIcon></FeedbackIcon>
+      CUSTOMER-FEEDBACK<FeedbackIcon></FeedbackIcon>
       </Typography>
 
       {error && (
@@ -116,7 +116,7 @@ const WatchFeed = () => {
           variant="contained"
           color="primary"
           minWidth
-          sx={{ mt: 2,width:150,marginLeft:20 }}
+          sx={{ mt: 2,width:150,marginLeft:20,fontFamily:'fantasy' }}
         >
           <AddIcon></AddIcon>Submit 
         </Button>

@@ -84,14 +84,14 @@ const Navbar = () => {
           >
             <h3>  <Link to={'/seller'}style={{color:'orange',textDecoration:'none'}}><HomeIcon></HomeIcon>Home</Link></h3>
           </Box>
-          <Box
+          {/* <Box
             sx={{
               marginLeft: 2,
               ":hover": { transform: "scale(1.05)", boxShadow: 6,color:'orange' },
             }}
           >
               <h3><Link to={""} style={{ color: 'orange',textDecoration:'none' }}><InfoIcon></InfoIcon>About</Link></h3>
-          </Box>
+          </Box> */}
           {/* <Box
             sx={{
               marginLeft: 2,
@@ -108,7 +108,7 @@ const Navbar = () => {
           >
             <h3><Link to={"/Register"} style={{color:'orange',textDecoration:'none'}}>Registration</Link></h3>
           </Box> */}
-          <Box
+             <Box
             sx={{
               marginLeft: 2,
               ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'orange',
@@ -116,20 +116,10 @@ const Navbar = () => {
           >
              <h3>
               {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
-             <Link to={'/login'}></Link><LogoutIcon></LogoutIcon>Logout
+              <LogoutIcon></LogoutIcon><Link to={"/*"} style={{textDecoration:'none',color:'orange'}}>Logout</Link>
             </h3> 
           </Box>
-          <Box
-            sx={{
-              marginLeft: 2,
-              ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'white',
-            }}
-          >
-             <h3>
-              {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
-              <MessageIcon></MessageIcon>
-            </h3> 
-          </Box>
+        
           <Box
             sx={{
               marginLeft: 2,

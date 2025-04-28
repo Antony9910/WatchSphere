@@ -72,25 +72,25 @@ const SellerList = () => {
           <TableHead>
             <TableRow>
               <TableCell align="center"></TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Profile-Pic
               </TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Name
               </TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Email
               </TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Address
               </TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Proof
               </TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Action
               </TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Status
               </TableCell>
             </TableRow>
@@ -111,14 +111,14 @@ const SellerList = () => {
                     }}
                   />
                 </TableCell>
-                <TableCell align="center" sx={{fontFamily:'cursive'}}>{seller.name}</TableCell>
-                <TableCell align="center"sx={{fontFamily:'cursive'}}>{seller.email}</TableCell>
-                <TableCell align="center"sx={{fontFamily:'cursive'}}>{seller.address}</TableCell>
+                <TableCell align="center" sx={{fontFamily:'fantasy'}}>{seller.name}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'fantasy'}}>{seller.email}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'fantasy'}}>{seller.address}</TableCell>
                 <TableCell align="center">
                   <Link
                     to={seller.profileImage}
                     target="_blank"
-                    style={{ textDecoration: "none",fontFamily:'cursive' }}
+                    style={{ textDecoration: "none",fontFamily:'fantasy' }}
                   >
                     {seller.name} PROOF
                   </Link>
@@ -127,23 +127,23 @@ const SellerList = () => {
                   <Button
                     variant="contained"
                     onClick={() => handleApprove(seller._id)}
-                    sx={{ marginRight: 2,fontFamily:'cursive' }}
+                    sx={{ marginRight: 2,fontFamily:'fantasy' }}
                   >
                     Accept
                   </Button>
                   <Button
                     variant="contained"
                     color="warning"
-                    onClick={() => handleDelete(seller._id)} sx={{fontFamily:'cursive'}}
+                    onClick={() => handleDelete(seller._id)} sx={{fontFamily:'fantasy'}}
                   >
                     Reject
                   </Button>
                 </TableCell>
                 <TableCell align="center">
     {seller.isApproved ? (
-    <Typography color="green"sx={{fontFamily:'cursive'}}>Approved</Typography>
+    <Typography color="green"sx={{fontFamily:'fantasy'}}>Approved</Typography>
   ) : (
-    <Typography color="orange"sx={{fontFamily:'cursive'}}>Pending</Typography>
+    <Typography color="orange"sx={{fontFamily:'fantasy'}}>Pending</Typography>
   )}
 </TableCell>
 

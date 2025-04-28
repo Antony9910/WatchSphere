@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardContent, Typography, Grid, Box, Chip } from "@mui/material";
-
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 const Book = () => {
    const [bookings, setBookings] = useState([]);
    const sellerId = sessionStorage.getItem("sid");
@@ -11,6 +11,7 @@ const Book = () => {
          try {
             const response = await axios.get(`http://localhost:5000/bookings/${sellerId}`);
             setBookings(response.data);
+            console.log(response.data)
          } catch (error) {
             console.error("Error fetching bookings:", error);
          }
@@ -38,7 +39,7 @@ const Book = () => {
    return (
       <Box sx={{ maxWidth: "1200px", margin: "auto", padding: "20px", textAlign: "center" }}>
          <Typography variant="h4" sx={{fontFamily:'fantasy'}} gutterBottom>
-            📦 Seller Bookings
+           SELLER BOOKINGS
          </Typography>
 
          <Grid container spacing={3} justifyContent="center">
@@ -60,9 +61,7 @@ const Book = () => {
                            <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
                               <strong>Booking ID:</strong> {booking._id}
                            </Typography>
-                           <Typography variant="body2">
-                              <strong>Price:</strong> ${booking.productDetails.price}
-                           </Typography>
+                         
                            <Typography variant="body2">
                               <strong>Quantity:</strong> {booking.quantity}
                            </Typography>
@@ -73,9 +72,10 @@ const Book = () => {
                            <Typography variant="body2">
                               <strong>Customer:</strong> {booking.userDetails.name}
                            </Typography>
-                           <Typography variant="body2" sx={{fontFamily:'cursive'}}>
+                           <Typography variant="body2" >
                               <strong>Email:</strong> {booking.userDetails.email}
                            </Typography>
+                         
                         </CardContent>
                      </Card>
                   </Grid>

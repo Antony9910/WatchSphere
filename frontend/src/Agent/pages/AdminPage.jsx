@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Box} from '@mui/material';
+import { Avatar, Box} from '@mui/material';
 import { Link } from 'react-router-dom';
 import img from './images/Order.png'
 import img2 from './images/profile.png'
@@ -43,12 +43,14 @@ const  AgentPage = () => {
       fetchAgent();
     }, []);
     const [name,setName] = useState('');
+    const [profileImage,setProfileImage] = useState('');
     const fetchAgent = () => {
       const id = sessionStorage.getItem("Aid");
       axios.get(`http://localhost:5000/AgentRegById/${id}`).then((res) => {
         const Agent = res.data.agent;
         // Set each individual field with data
         setName(Agent.name);
+        setProfileImage(Agent.profileImage);
       }).catch((err) => {
         console.error(err);
       });
@@ -77,13 +79,13 @@ const  AgentPage = () => {
         {/* </Slider> */}
         <Card sx={{ width: 430,height:100,marginTop:5,fontFamily:'fantasy',marginLeft:60,backgroundColor:'orange',":hover":{transform:"scale(1.05)",boxShadow:6}}}>
       <CardMedia
-        sx={{ height: 40 }}
+        sx={{ height: 0 }}
         image="/static/images/cards/contemplative-reptile.jpg"
         title="green iguana"
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy',marginTop:-2,marginLeft:9,}}>
-          <Typography sx={{fontFamily:'cursive',fontSize:25,marginBottom:15}}>WELCOME  {name}</Typography>
+          <Typography sx={{fontFamily:'fantasy',fontSize:25,marginTop:2}}>WELCOME  {name}  <Box sx={{marginLeft:12}}><Avatar alt="Remy Sharp" src={profileImage} /></Box></Typography>
         </Typography>
         
       </CardContent>
@@ -92,7 +94,7 @@ const  AgentPage = () => {
     {/* <Box sx={{  backgroundImage: `url(${img})`,height:1400,marginTop:30,width:'101%'}}> */}
       
     <Box sx={{display:'flex',marginTop:-0}}>
-      <Box>
+      <Box sx={{marginLeft:20}}>
       <Card sx={{ width: 400,marginTop:5,marginLeft:5,":hover":{transform:"scale(1.05)",boxShadow:6},marginBottom:2}}>
       <CardMedia
         sx={{ height: 140 }}
@@ -100,22 +102,22 @@ const  AgentPage = () => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         Edit Profile
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
           Edit Details of Delivery Agent 
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/Profile'} style={{textDecoration:'none',color:'white'}}>Edit</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/Profile'} style={{textDecoration:'none',color:'white'}}>Edit</Link></Button>
         {/* <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/View'} style={{textDecoration:'none',color:'white'}}>View</Link></Button> */}
       </CardActions>
     </Card>
 
       </Box>
-      <Box sx={{marginLeft:10}}> 
+      <Box sx={{marginLeft:30}}> 
       <Card sx={{ width: 400,marginTop:5,":hover":{transform:"scale(1.05)",boxShadow:6}}}>
       <CardMedia
         sx={{ height: 140 }}
@@ -123,22 +125,22 @@ const  AgentPage = () => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         View Bookings From Customer
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
-          Delivery Agent add Tracking Details
+        <Typography sx={{fontFamily:'fantasy'}}>
+          View Bookings from Customer
         </Typography>
       
       </CardContent>
       <CardActions>
-      <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/View'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
-      <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to ={'/agent/Delivery'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
+      <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon><Link to ={'/agent/View'} style={{textDecoration:'none',color:'white'}}>View Order</Link></Button>
+      <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><VisibilityIcon></VisibilityIcon><Link to ={'/agent/Delivery'} style={{textDecoration:'none',color:'white'}}>Delivered Product</Link></Button>
       </CardActions>
     </Card>
 
       </Box>
-      <Box>
+      {/* <Box>
       <Card sx={{ width: 400,marginTop:5,marginLeft:5,":hover":{transform:"scale(1.05)",boxShadow:6}}}>
       <CardMedia
         sx={{ height: 140 }}
@@ -155,14 +157,14 @@ const  AgentPage = () => {
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'cursive',backgroundColor:'blue',color:'white'}}><AddIcon></AddIcon>Add</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><AddIcon></AddIcon>Add</Button>
        
       
       
       </CardActions>
     </Card>
 
-      </Box>
+      </Box> */}
       {/* <Box sx={{marginLeft:10}}> 
       <Card sx={{ width: 400,marginTop:5,":hover":{transform:"scale(1.05)",boxShadow:6}}}>
       <CardMedia

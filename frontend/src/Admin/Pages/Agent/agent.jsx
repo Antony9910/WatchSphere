@@ -65,32 +65,32 @@ const AgentList = () => {
         gutterBottom
         sx={{ fontFamily: "fantasy", color: "blue" }}
       >
-        <Person2Icon sx={{ fontSize: 40 }} /> SELLER_LIST
+        <Person2Icon sx={{ fontSize: 40 }} /> AGENT_LIST
       </Typography>
       <TableContainer component={Paper}>
         <Table sx={{ width: "80%", marginLeft: 25 }}>
           <TableHead>
             <TableRow>
               <TableCell align="center"></TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Profile-Pic
               </TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Name
               </TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Email
               </TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Address
               </TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Proof
               </TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Action
               </TableCell>
-              <TableCell sx={{ fontFamily: "cursive" }} align="center">
+              <TableCell sx={{ fontFamily: "fantasy" }} align="center">
                 Status
               </TableCell>
             </TableRow>
@@ -111,14 +111,14 @@ const AgentList = () => {
                     }}
                   />
                 </TableCell>
-                <TableCell align="center" sx={{fontFamily:'cursive'}}>{agent.name}</TableCell>
-                <TableCell align="center"sx={{fontFamily:'cursive'}}>{agent.email}</TableCell>
-                <TableCell align="center"sx={{fontFamily:'cursive'}}>{agent.address}</TableCell>
+                <TableCell align="center" sx={{fontFamily:'fantasy'}}>{agent.name}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'fantasy'}}>{agent.email}</TableCell>
+                <TableCell align="center"sx={{fontFamily:'fantasy'}}>{agent.address}</TableCell>
                 <TableCell align="center">
                   <Link
                     to={agent.profileImage}
                     target="_blank"
-                    style={{ textDecoration: "none",fontFamily:'cursive' }}
+                    style={{ textDecoration: "none",fontFamily:'fantasy' }}
                   >
                     {agent.name} PROOF
                   </Link>
@@ -127,23 +127,23 @@ const AgentList = () => {
                   <Button
                     variant="contained"
                     onClick={() => handleApprove(agent._id)}
-                    sx={{ marginRight: 2,fontFamily:'cursive' }}
+                    sx={{ marginLeft:-1,fontFamily:'fantasy' }}
                   >
                     Accept
                   </Button>
                   <Button
                     variant="contained"
                     color="warning"
-                    onClick={() => handleDelete(agent._id)}sx={{fontFamily:'cursive'}}
+                    onClick={() => handleDelete(agent._id)}sx={{fontFamily:'fantasy'}}
                   >
                     Reject
                   </Button>
                 </TableCell>
                 <TableCell align="center">
     {agent.isApproved ? (
-    <Typography color="green" sx={{fontFamily:'cursive'}}>Approved</Typography>
+    <Typography color="green" sx={{fontFamily:'fantasy'}}>Approved</Typography>
   ) : (
-    <Typography color="orange"sx={{fontFamily:'cursive'}}>Pending</Typography>
+    <Typography color="orange"sx={{fontFamily:'fantasy'}}>Pending</Typography>
   )}
 </TableCell>
 

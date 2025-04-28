@@ -10,7 +10,7 @@ import img8 from './images/fastrack1.jpg';
 import img9 from './images/Titan2.jpg';
 import img10 from './images/Akshay.jpg'
 
-import img12 from './images/Roshny.jpg'
+import img12 from './images/Bhadra.jpg'
 import img13 from './images/Akku.jpg'
 import img14 from './images/bijo.jpg'
 import img15 from './images/stephin.jpg'
@@ -105,7 +105,7 @@ const Home = () => {
       <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
           ANALOG WATCHES
         </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary',fontFamily:'cursive'}}>
+        <Typography variant="body2" sx={{fontFamily:'fantasy'}}>
         Analog watches are timepieces that display time using a traditional dial with hour and minute hands, as opposed to digital watches, which show time with numerical displays. 
         </Typography>
       </CardContent>
@@ -125,7 +125,7 @@ const Home = () => {
       <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         DIGITAL WATCHES
         </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary',fontFamily:'cursive' }}>
+        <Typography variant="body2" sx={{ fontFamily:'fantasy' }}>
         Digital watches are a popular category of timepieces that display the time through a digital interface, typically using an LCD or LED screen, rather than the traditional analog dial. Here’s an overview of digital watches, including types, features, and popular brands
         </Typography>
       </CardContent>
@@ -139,10 +139,10 @@ const Home = () => {
         image={img2}
       />
       <CardContent>
-      <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy',fontStyle:'italic'}}>
+      <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
           SMART WATCHES
         </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary',fontFamily:'cursive' }}>
+        <Typography variant="body2" sx={{ fontFamily:'fantasy' }}>
           Lizards are a widespread group of squamate reptiles, with over 6,000
           species, ranging across all continents except Antarctica
         </Typography>
@@ -162,10 +162,10 @@ const Home = () => {
         image={img2}
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy',fontFamily:'fantasy'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
           SECOND USER WATCHES
         </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary',fontFamily:'cursive' }}>
+        <Typography variant="body2" sx={{ fontFamily:'fantasy' }}>
         Looking for a high-quality timepiece at an affordable price? Our Second User Watches collection offers pre-loved luxury and classic watches that are both stylish and functional.
         </Typography>
       </CardContent>
@@ -185,7 +185,7 @@ const Home = () => {
       <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
       SPARE PARTS
         </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary',fontFamily:'cursive' }}>
+        <Typography variant="body2" sx={{ fontFamily:'fantasy' }}>
         Looking for spare parts to fix or upgrade your watch? Our collection of watch spare parts offers high-quality components that help you maintain, repair, and customize your timepieces.
         </Typography>
       </CardContent>
@@ -240,12 +240,12 @@ const Home = () => {
       
         
 
-<Box sx={{fontSize:30,marginTop:10,justifyContent:'center',display:'flex',flexDirection:'',fontFamily:'fantasy',marginLeft:10,":hover":{transform:"scale(1.05)",boxShadow:6}}}>Happy Customers<EmojiEmotionsIcon></EmojiEmotionsIcon></Box>
+<Box sx={{fontSize:30,marginTop:10,justifyContent:'center',display:'flex',flexDirection:'',fontFamily:'fantasy',marginLeft:10,":hover":{transform:"scale(1.05)",boxShadow:6}}}>HAPPY CUSTOMERS<EmojiEmotionsIcon></EmojiEmotionsIcon></Box>
 <Box sx={{marginRight:88,marginTop:10,borderRadius:50,display:'flex'}}>
 <Box sx={{marginLeft:20,":hover":{transform:"scale(1.05)",boxShadow:6,}}}>
 <img src={img10}width={200} marginLeft={50}></img>
 <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
-<Box sx={{fontFamily:'cursive'}}>Akshay</Box>
+<Box sx={{fontFamily:'fantasy'}}>Akshay</Box>
 
  <Box sx={{fontFamily:'fantasy'}}>Watches brought are good</Box> 
 </Box>
@@ -253,21 +253,21 @@ const Home = () => {
 <img src={img1}width={200} marginLeft={50}></img>
 
 <Box><Rating name="half-rating" defaultValue={2.5} precision={0.5} /></Box> 
-<Box  sx={{fontFamily:'cursive'}}>Abin</Box>
+<Box  sx={{fontFamily:'fantasy'}}>Abin</Box>
  <Box sx={{fontFamily:'fantasy'}}>Overall Its good</Box> 
 </Box>
 <Box sx={{marginLeft:20 ,":hover":{transform:"scale(1.05)",boxShadow:6,}}}>
 <img src={img12}width={200} height={300} marginLeft={50}></img>
 
 <Box><Rating name="half-rating" defaultValue={2.5} precision={0.5} /></Box> 
-<Box  sx={{fontFamily:'cursive'}}>Roshny </Box>
+<Box  sx={{fontFamily:'fantasy'}}>Bhadra</Box>
  <Box sx={{fontFamily:'fantasy'}}>The products are actually good</Box> 
 </Box>
 <Box sx={{marginLeft:20 ,":hover":{transform:"scale(1.05)",boxShadow:6,}}}>
 <img src={img13}width={200} height={300} marginLeft={50}></img>
 
 <Box><Rating name="half-rating" defaultValue={2.5} precision={0.5} /></Box> 
-<Box  sx={{fontFamily:'cursive'}}>R-Akshay</Box>
+<Box  sx={{fontFamily:'fantasy'}}>R-Akshay</Box>
 
  <Box sx={{fontFamily:'fantasy'}}>All products are good</Box> 
 </Box>
@@ -277,14 +277,14 @@ const Home = () => {
 <Box sx={{marginLeft:20,":hover":{transform:"scale(1.05)",boxShadow:6,}}}>
 <img src={img14}width={200} height={300} marginLeft={50}></img>
 <Box><Rating name="half-rating" defaultValue={2.5} precision={0.5} /></Box>
-<Box  sx={{fontFamily:'cursive'}}>Bijo</Box>
+<Box  sx={{fontFamily:'fantasy'}}>Bijo</Box>
  <Box sx={{fontFamily:'fantasy'}}>Really Amazing</Box> 
 </Box>
 <Box sx={{marginLeft:20,":hover":{transform:"scale(1.05)",boxShadow:6,}}}>
 <img src={img15}width={200}height={300} marginLeft={50}></img>
 <Box><Rating name="half-rating" defaultValue={2.5} precision={0.5} /></Box>
-<Box sx={{fontFamily:'cursive'}}>Aparna</Box>
- <Box sx={{fontFamily:'fantasy'}}>Really Amazing </Box> 
+<Box sx={{fontFamily:'fantasy'}}>Aparna</Box>
+ <Box sx={{fontFamily:'fantasy'}}>Really Amazing Products </Box> 
 </Box>
 </Box>
 </div>

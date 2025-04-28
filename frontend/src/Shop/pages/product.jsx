@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { TextField, Button, Container, Grid, Typography, Box, FormControl, InputLabel, MenuItem, Select, Checkbox, ListItemText } from '@mui/material';
-
+import AddIcon from '@mui/icons-material/Add';
 const Product = () => {
 
   const [model, setModel] = useState('');
@@ -300,9 +300,9 @@ const Product = () => {
                       type="submit"
                       variant="contained"
                       color="primary"
-                      sx={{ mt: 2 }}
+                      sx={{ mt: 2,marginLeft:20,fontFamily:'fantasy' }}
                     >
-                      Submit
+                     <AddIcon></AddIcon> Submit
                     </Button>
                   </Grid>
                 </Grid>

@@ -5,6 +5,7 @@ import img2 from './images/facebook.jpg';
 import img3 from './images/twitter.png';
 import img4 from './images/visa.png';
 
+
 const Footer = () => {
   return (
     <Box sx={{backgroundColor:'black',height:'34vh',display:'flex',marginTop:2,width:'130%',position:'relative'}}>
@@ -20,6 +21,7 @@ const Footer = () => {
       <Box sx={{fontFamily:'fantasy',marginTop:2,marginLeft:10}}>FOLLOW US ON</Box>
       <Box sx={{display:'flex'}}>
       <Box sx={{marginLeft:10,marginTop:3}}><img src={img1} width={40}height={40}></img></Box>
+
       <Box sx={{marginLeft:5,marginTop:3}}><img src={img2} width={40}height={40}></img></Box>
       <Box sx={{marginLeft:5,marginTop:3}}><img src={img3} width={40}height={40}></img></Box>
       </Box>
@@ -29,6 +31,7 @@ const Footer = () => {
       <Box sx={{fontFamily:'fantasy',marginTop:2,marginLeft:10}}>WE ACCEPT</Box>
       <Box sx={{display:'flex'}}>
       <Box sx={{marginLeft:10,marginTop:3}}><img src={img4} width={40}height={40}></img></Box>
+      
       <Box sx={{marginLeft:5,marginTop:3}}><img src={img2} width={40}height={40}></img></Box>
       <Box sx={{marginLeft:5,marginTop:3}}><img src={img3} width={40}height={40}></img></Box>
       </Box>

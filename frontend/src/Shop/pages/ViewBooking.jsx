@@ -1,14 +1,32 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { 
-  Grid, Card, CardContent, Typography, 
-  CircularProgress, Alert, Chip, Box 
+import WatchIcon from '@mui/icons-material/Watch';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import {
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  CircularProgress,
+  Alert,
+  Chip,
+  Box,
 } from "@mui/material";
-import { CalendarToday, Person, Watch, Email, AttachMoney, CheckCircle, HourglassEmpty, Cancel } from "@mui/icons-material";
+import {
+  CalendarToday,
+  Person,
+  Watch,
+  Email,
+  AttachMoney,
+  CheckCircle,
+  HourglassEmpty,
+  Cancel,
+  Person2,
+} from "@mui/icons-material";
 
 const ViewBooking = () => {
   const [bookings, setBookings] = useState([]);
-  const [SpareBooking,setSpareBooking]=useState([]);
+  const [SpareBooking, setSpareBooking] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const shopId = sessionStorage.getItem("Sid");
@@ -16,7 +34,9 @@ const ViewBooking = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/ViewBookings/${shopId}`);
+        const response = await axios.get(
+          `http://localhost:5000/ViewBookings/${shopId}`
+        );
         setBookings(response.data.bookings);
       } catch (err) {
         setError("Failed to fetch bookings");
@@ -26,12 +46,15 @@ const ViewBooking = () => {
     };
 
     fetchBookings();
+
     const fetchBooking = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/SpareBooking/${shopId}`);
-        setSpareBooking(response.data.bookings);
+        const response = await axios.get(
+          `http://localhost:5000/SpareBooking/${shopId}`
+        );
+        setSpareBooking(response.data.SpareBooking);
       } catch (err) {
-        setError("Failed to fetch bookings");
+        setError("Failed to fetch SpareBooking");
       } finally {
         setLoading(false);
       }
@@ -40,12 +63,17 @@ const ViewBooking = () => {
     fetchBooking();
   }, [shopId]);
 
-  if (loading) return <Box className="flex justify-center mt-10"><CircularProgress /></Box>;
+  if (loading)
+    return (
+      <Box className="flex justify-center mt-10">
+        <CircularProgress />
+      </Box>
+    );
   if (error) return <Alert severity="error">{error}</Alert>;
 
   const getStatusChip = (status) => {
     const statusColors = {
-      confirmed: { color: "success", icon: <CheckCircle /> },
+      Confirmed: { color: "success", icon: <CheckCircle /> },
       Pending: { color: "warning", icon: <HourglassEmpty /> },
       Cancelled: { color: "error", icon: <Cancel /> },
       Completed: { color: "primary", icon: <CheckCircle /> },
@@ -62,121 +90,225 @@ const ViewBooking = () => {
   };
 
   return (
-    <Box sx={{ background: "linear-gradient(to right, #ece9e6, #ffffff)", minHeight: "100vh", p: 4 }}>
-      <Typography variant="h4" fontWeight="bold" textAlign="center" mb={3} sx={{ color: "#333",fontFamily:'cursive' }}>
-        📅 Watch Bookings
+    <Box
+      sx={{
+        background: "linear-gradient(to right, #ece9e6, #ffffff)",
+        minHeight: "100vh",
+        p: 4,
+      }}
+    >
+      <Typography
+        variant="h4"
+        textAlign="center"
+        mb={3}
+        sx={{ color: "#333", fontFamily: "fantasy" }}
+      >
+        CUSTOMER-BOOKINGS <Person2 />
       </Typography>
-      
-      {bookings.length === 0 ? (
-        <Typography variant="h6" textAlign="center">No bookings found.</Typography>
+
+      {bookings.length === 0 && SpareBooking.length === 0 ? (
+        <Typography variant="h6" textAlign="center">
+          No bookings found.
+        </Typography>
       ) : (
         <Grid container spacing={3}>
-          {bookings.map((booking) => (
-            <Grid item xs={12} sm={6} md={4} key={booking._id}>
-              <Card 
-                sx={{ 
-                  borderRadius: "16px", 
-                  boxShadow: 4, 
-                  backdropFilter: "blur(10px)", 
-                  background: "rgba(255, 255, 255, 0.7)", 
+          {/* Display Watch Bookings */}
+          <Grid item xs={12} sm={6} md={6}>
+            {bookings.length > 0 && (
+              <Typography variant="h6" mb={2} sx={{ fontFamily: "fantasy" }}>
+                SECOND HAND WATCH BOOKINGS<WatchIcon></WatchIcon>
+              </Typography>
+            )}
+            {bookings.map((booking) => (
+              <Card
+                sx={{
+                  borderRadius: "16px",
+                  boxShadow: 4,
+                  marginTop:2,
+                  backdropFilter: "blur(10px)",
+                  background: "rgba(255, 255, 255, 0.7)",
                   transition: "transform 0.2s",
-                  "&:hover": { transform: "scale(1.03)" }
+                  "&:hover": { transform: "scale(1.03)" },
                 }}
+                key={booking._id}
               >
                 <CardContent>
-                  <Typography variant="h6" fontWeight="bold" sx={{ display: "flex", alignItems: "center", gap: 1,fontFamily:'cursive' }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      fontFamily: "fantasy",
+                    }}
+                  >
                     <Watch fontSize="small" /> {booking.watchDetails.model}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{fontFamily:'cursive'}}>
+                  {/* <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ fontFamily: "fantasy" }}
+                  >
                     {booking.watchDetails.company}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    <img src={booking.watchDetails.profileImage} width={50}></img>
-                  </Typography>
-
+                  </Typography> */}
                   <Box mt={2}>
-                    <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1,fontFamily:'cursive' }}>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        fontFamily: "fantasy",
+                      }}
+                    >
                       <Person fontSize="small" /> {booking.userDetails.name}
                     </Typography>
-                    <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Typography
+                      variant="body2"
+                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                    >
                       <Email fontSize="small" /> {booking.userDetails.email}
                     </Typography>
+                    {/* <Typography
+                      variant="body2"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        fontFamily: "fantasy",
+                      }}
+                    >
+                      <Person fontSize="small" />Agent: {booking.agentDetails.name}
+                    </Typography> */}
                   </Box>
 
                   <Box mt={2}>
                     <Typography variant="body2">
                       <strong>Quantity:</strong> {booking.quantity}
                     </Typography>
-                    <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                     <strong>Total Price:</strong> {booking.totalPrice}
+                    <Typography
+                      variant="body2"
+                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                    >
+                      <strong>Total Price:</strong> {booking.totalPrice}
                     </Typography>
                   </Box>
 
                   <Box mt={2}>{getStatusChip(booking.status)} </Box>
 
-                  <Typography variant="body2" mt={2} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <CalendarToday fontSize="small" /> {new Date(booking.createdAt).toLocaleDateString()}
+                  <Typography
+                    variant="body2"
+                    mt={2}
+                    sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                  >
+                    <CalendarToday fontSize="small" />{" "}
+                    {new Date(booking.createdAt).toLocaleDateString()}
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
-        {SpareBooking.length === 0 ? (
-        <Typography variant="h6" textAlign="center">No bookings found.</Typography>
-      ) : (
-        <Grid container spacing={3} mt={3}>
-          {SpareBooking.map((SpareBooking) => (
-            <Grid item xs={12} sm={6} md={4} key={SpareBooking._id}>
-              <Card 
-                sx={{ 
-                  borderRadius: "16px", 
-                  boxShadow: 4, 
-                  backdropFilter: "blur(10px)", 
-                  background: "rgba(255, 255, 255, 0.7)", 
+            ))}
+          </Grid>
+
+          {/* Display Spare Bookings */}
+          <Grid item xs={12} sm={6} md={6}>
+            {SpareBooking.length > 0 && (
+              <Typography variant="h6" mb={2} sx={{ fontFamily: "fantasy" }}>
+                SPARE PARTS BOOKING<WatchIcon></WatchIcon>
+              </Typography>
+            )}
+            {SpareBooking.map((SpareBooking) => (
+              <Card
+                sx={{
+                  borderRadius: "16px",
+                  boxShadow: 4,
+                  marginTop:2,
+                  backdropFilter: "blur(10px)",
+                  background: "rgba(255, 255, 255, 0.7)",
                   transition: "transform 0.2s",
-                  "&:hover": { transform: "scale(1.03)" }
+                  "&:hover": { transform: "scale(1.03)" },
                 }}
+                key={SpareBooking._id}
               >
                 <CardContent>
-                  <Typography variant="h6" fontWeight="bold" sx={{ display: "flex", alignItems: "center", gap: 1,fontFamily:'cursive' }}>
-                    <Watch fontSize="small" /> {SpareBooking.spareDetails.partName}
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      fontFamily: "fantasy",
+                    }}
+                  >
+                    <Watch fontSize="small" />{" "}
+                    {SpareBooking.spareDetails.partName}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{fontFamily:'cursive'}}>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ fontFamily: "fantasy" }}
+                  >
                     {SpareBooking.spareDetails.company}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    <img src={SpareBooking.spareDetails.profileImage} width={50}></img>
-                  </Typography>
-
                   <Box mt={2}>
-                    <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1,fontFamily:'cursive' }}>
-                      <Person fontSize="small" /> {SpareBooking.userDetails.name}
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        fontFamily: "fantasy",
+                      }}
+                    >
+                      <Person fontSize="small" />{" "}
+                      {SpareBooking.userDetails.name}
                     </Typography>
-                    <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <Email fontSize="small" /> {SpareBooking.userDetails.email}
+                    <Typography
+                      variant="body2"
+                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                    >
+                      <Email fontSize="small" />{" "}
+                      {SpareBooking.userDetails.email}
                     </Typography>
+                    {/* <Typography
+                      variant="body2"
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        fontFamily: "fantasy",
+                      }}
+                    >
+                      <Person fontSize="small" />{" "}
+                      {SpareBooking.agentDetails.name}
+                    </Typography> */}
                   </Box>
 
                   <Box mt={2}>
                     <Typography variant="body2">
                       <strong>Quantity:</strong> {SpareBooking.quantity}
                     </Typography>
-                    <Typography variant="body2" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                     <strong>Total Price:</strong> {SpareBooking.totalPrice}
+                    <Typography
+                      variant="body2"
+                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                    >
+                      <strong>Total Price:</strong> {SpareBooking.totalPrice}
                     </Typography>
                   </Box>
 
                   <Box mt={2}>{getStatusChip(SpareBooking.status)} </Box>
 
-                  <Typography variant="body2" mt={2} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <CalendarToday fontSize="small" /> {new Date(SpareBooking.createdAt).toLocaleDateString()}
+                  <Typography
+                    variant="body2"
+                    mt={2}
+                    sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                  >
+                    <CalendarToday fontSize="small" />{" "}
+                    {new Date(SpareBooking.createdAt).toLocaleDateString()}
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
-          ))}
+            ))}
+          </Grid>
         </Grid>
       )}
     </Box>

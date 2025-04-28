@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { TextField, Button, Typography, Container, Box, CircularProgress, Paper } from "@mui/material";
 import { useParams } from "react-router-dom";
-
+import axios from 'axios';
+import AddIcon from '@mui/icons-material/Add';
 const WatchComplaint = () => {
   const { bookingId } = useParams();
   const [complaintMessage, setComplaintMessage] = useState("");
@@ -9,7 +10,8 @@ const WatchComplaint = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  const userId = sessionStorage.getItem('uid');  // Replace with dynamic userId if necessary
+  const userId = sessionStorage.getItem('uid');
+  const sellerId = sessionStorage.getItem("sid") || null;
 
   const handleComplaintSubmit = async (e) => {
     e.preventDefault();
@@ -22,25 +24,18 @@ const WatchComplaint = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:5000/SubmitComplaint/${bookingId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          complaintMessage,
-          userId, // Include userId in the request body
-        }),
+      const response = await axios.post(`http://localhost:5000/SubmitComplaint/${bookingId}`, {
+        complaintMessage,
+        userId,
+        sellerId
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (response.status === 200) {
         setSuccessMessage("Your complaint has been submitted successfully.");
         setComplaintMessage("");
         setError(null);
       } else {
-        setError(data.message || "Error submitting complaint.");
+        setError(response.data.message || "Error submitting complaint.");
       }
     } catch (error) {
       setError("Error submitting complaint.");
@@ -51,10 +46,10 @@ const WatchComplaint = () => {
 
   return (
     <Container maxWidth="xs">
-      <Paper elevation={3} sx={{ padding: "2rem", borderRadius: 2, backgroundColor: "#f5f5f5" }}>
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Typography variant="h4" gutterBottom color="primary" sx={{ fontWeight: "bold" }}>
-            Submit a Complaint
+      <Paper elevation={3} sx={{ padding: "2rem", borderRadius: 2, backgroundColor: "#f5f5f5",marginTop:5 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
+          <Typography variant="h4" gutterBottom color="primary" sx={{ fontFamily:'fantasy'}}>
+            COMPLAINT
           </Typography>
 
           {loading && <CircularProgress sx={{ marginBottom: "1rem" }} />}
@@ -72,7 +67,7 @@ const WatchComplaint = () => {
           )}
 
           <TextField
-            label="Complaint"
+            label="Write Your Complaint here"
             multiline
             rows={4}
             fullWidth
@@ -96,16 +91,16 @@ const WatchComplaint = () => {
             sx={{
               marginTop: "1rem",
               padding: "0.75rem",
-              fontWeight: "bold",
               textTransform: "none",
               borderRadius: "8px",
+              fontFamily:'fantasy',
               boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
               "&:hover": {
-                backgroundColor: "#0077b6",
+                backgroundColor: "#0077b6"
               },
             }}
           >
-            {loading ? "Submitting..." : "Submit Complaint"}
+            <AddIcon></AddIcon>{loading ? "Submitting..." : "SUBMIT"}
           </Button>
         </Box>
       </Paper>

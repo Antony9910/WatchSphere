@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import img from './images/image1.jpg'
-import { TextField, Button, Container, Grid, Typography, Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { TextField, Button, Container, Grid, Typography, Box, FormControl, InputLabel, MenuItem, Select, InputAdornment } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const SellerRegistration = () => {
@@ -84,6 +84,7 @@ const SellerRegistration = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
+                  
                   />
                 </Grid>
 
@@ -95,6 +96,7 @@ const SellerRegistration = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                   
                   />
                 </Grid>
 
@@ -117,6 +119,7 @@ const SellerRegistration = () => {
                                     onChange={(e) => setContact(e.target.value)}
                                     pattern="[0-9]{10}"
                                     required
+                                   
                                     placeholder="Enter 10-digit contact number"
                                   />
                                 </Grid>
@@ -207,7 +210,7 @@ const SellerRegistration = () => {
                     onChange={(e) => setPassword(e.target.value)}
                    
                     required
-                    placeholder="Enter Password"
+                                      placeholder="Enter Password"
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -218,6 +221,8 @@ const SellerRegistration = () => {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                   
                     required
+                 
+                                         
                     placeholder="Enter Confirm Password"
                   />
                 </Grid>

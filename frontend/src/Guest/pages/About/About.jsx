@@ -1,5 +1,5 @@
 import React from 'react'
-
+import InfoIcon from '@mui/icons-material/Info';
 import { Box } from '@mui/material'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -25,10 +25,10 @@ const About = () => {
   return (
     <div>
        
-        <Box sx={{marginTop:5,fontSize:40,fontFamily:'fantasy',marginLeft:80,":hover":{transform:"scale(1.05)",boxShadow:30}}}>About-us</Box>
-        <Box sx={{fontSize:20,marginBottom:2,fontFamily:'cursive'}}><p>
+        <Box sx={{marginTop:5,fontSize:40,fontFamily:'fantasy',marginLeft:80,":hover":{transform:"scale(1.05)",boxShadow:30}}}>ABOUT<InfoIcon></InfoIcon></Box>
+        <Box sx={{fontSize:20,marginBottom:2,fontFamily:'inherit'}}><p>
         In this vibrant and dynamic marketplace, we bring together an extensive collection of watch brands and models from across the globe, creating a single, unified platform for watch enthusiasts of all kinds. Whether you're on the hunt for a classic analog timepiece, a cutting-edge digital watch, or the latest in smartwatch technology, our platform has something for every style, preference, and need. Sellers can easily list their watches with detailed information, including photos and specifications, while buyers can filter through the listings to find the perfect match with ease. This seamless experience not only enhances the shopping journey but also encourages the discovery of unique, rare, or new-to-market timepieces, making it a go-to destination for watch lovers worldwide.</p></Box>
-        <Box sx={{fontSize:20,fontFamily:'cursive'}}>Mr. Antony Augustine, the visionary Chairman of Watchsphere, founded the company on January 1, 2023, with a passion for watches and a commitment to delivering a seamless and user-friendly experience for customers. Through his relentless hard work, dedication, and strategic leadership, he has successfully developed an intuitive online platform that caters to the diverse needs of watch enthusiasts. Over the past two years, Watchsphere has grown significantly, and as of 2025, the company has achieved an impressive turnover of Rs 20,000cr, marking a major milestone in its journey.</Box>
+        <Box sx={{fontSize:20,fontFamily:'inherit'}}>Mr. Antony Augustine, the visionary Chairman of Watchsphere, founded the company on January 1, 2023, with a passion for watches and a commitment to delivering a seamless and user-friendly experience for customers. Through his relentless hard work, dedication, and strategic leadership, he has successfully developed an intuitive online platform that caters to the diverse needs of watch enthusiasts. Over the past two years, Watchsphere has grown significantly, and as of 2025, the company has achieved an impressive turnover of Rs 20,000cr, marking a major milestone in its journey.</Box>
         <Box sx={{marginTop:5,marginLeft:79,fontSize:40,fontFamily:'fantasy',":hover":{transform:"scale(1.05)",boxShadow:30}}}>FOUNDER</Box>
         <Box sx={{marginLeft:73,marginTop:5,display:'flex'}}>
         <Card sx={{ maxWidth: 305,marginRight:15 }}>
@@ -108,7 +108,7 @@ const About = () => {
 
   
   </Box>
-  <Box sx={{marginTop:10,fontFamily:'fantasy',marginLeft:85,fontSize:40,":hover":{transform:"scale(1.05)",boxShadow:30}}}>Our vision</Box>
+  <Box sx={{marginTop:10,fontFamily:'fantasy',marginLeft:85,fontSize:40,":hover":{transform:"scale(1.05)",boxShadow:30}}}>OUR VISION</Box>
   <Box sx={{marginRight:88,marginTop:10,borderRadius:50,display:'flex'}}>
 <Box sx={{marginLeft:20,":hover":{transform:"scale(1.05)",boxShadow:6,}}}>
 <img src={img17}width={200} marginLeft={50}></img>

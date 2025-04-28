@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Box} from '@mui/material';
+import { Avatar, Box} from '@mui/material';
 import { Link } from 'react-router-dom';
 import img from './images/watch1.jpg'
 import img2 from './images/profile.png'
@@ -40,6 +40,7 @@ const FrontPage = () => {
     arrows: true
 };
 const [name,setName] = useState('')
+const [profileImage,setProfileImage]=useState('')
 useEffect(() => {
     fetchShop();
   }, []);
@@ -50,6 +51,7 @@ useEffect(() => {
       const Shop = res.data.shop;
       // Set each individual field with data
       setName(Shop.name);
+      setProfileImage(Shop.profileImage);
     }).catch((err) => {
       console.error(err);
     });
@@ -70,15 +72,15 @@ useEffect(() => {
           
         </Box>
         </Slider>
-        <Card sx={{ width: 430,height:100,marginTop:5,fontFamily:'fantasy',marginLeft:60,backgroundColor:'orange',":hover":{transform:"scale(1.05)",boxShadow:6}}}>
+        <Card sx={{ width: 430,height:110,marginTop:5,fontFamily:'fantasy',marginLeft:60,backgroundColor:'orange',":hover":{transform:"scale(1.05)",boxShadow:6}}}>
       <CardMedia
         sx={{ height: 40 }}
         image="/static/images/cards/contemplative-reptile.jpg"
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy',marginTop:-2,marginLeft:9,}}>
-          WELCOME TO SELLER PAGE  {name}
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy',marginTop:-3,marginLeft:9,}}>
+          WELCOME TO SELLER PAGE  {name} <Avatar alt="Remy Sharp" src={profileImage} sx={{marginLeft:12}} />
         </Typography>
         
       </CardContent>
@@ -98,13 +100,13 @@ useEffect(() => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         Edit Profile
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
           Edit Details of Shop
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to={'/shop/profile'} style={{textDecoration:'none',color:'white',fontFamily:'cursive'}}>Edit</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white'}}><EditIcon></EditIcon><Link to={'/shop/profile'} style={{textDecoration:'none',color:'white',fontFamily:'fantasy'}}>Edit</Link></Button>
       
       </CardActions>
     </Card>
@@ -121,16 +123,16 @@ useEffect(() => {
         <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         Add Product
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
         Add Watch Details and spare parts details
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Product/'} style={{color:'white',textDecoration:'none',fontFamily:'cursive'}}><AddIcon></AddIcon> Second Hand</Link></Button>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Category/'} style={{color:'white',textDecoration:'none',fontFamily:'cursive'}}><AddIcon></AddIcon> Spare parts</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Product/'} style={{color:'white',textDecoration:'none',fontFamily:'fantasy'}}><AddIcon></AddIcon> Second Hand</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'Category/'} style={{color:'white',textDecoration:'none',fontFamily:'fantasy'}}><AddIcon></AddIcon> Spare parts</Link></Button>
     
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'views/'} style={{color:'white',textDecoration:'none',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon>view </Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',height:33}}><Link  to={'views/'} style={{color:'white',textDecoration:'none',fontFamily:'fantasy'}}><VisibilityIcon></VisibilityIcon>view </Link></Button>
         
       </CardActions>
     </Card>
@@ -144,18 +146,17 @@ useEffect(() => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         View Booking
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
        View Booking Details of the Customer
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link  to={'view/'} style={{color:'white',textDecoration:'none',fontFamily:'cursive'}}>view </Link></Button>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon>Generate Bill</Button>
-      
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><VisibilityIcon></VisibilityIcon><Link  to={'view/'} style={{color:'white',textDecoration:'none',fontFamily:'fantasy'}}>View Bookings</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><VisibilityIcon></VisibilityIcon><Link  to={'Report/'} style={{color:'white',textDecoration:'none',fontFamily:'fantasy'}}>SalesReport</Link></Button>
       
       </CardActions>
     </Card>
@@ -174,17 +175,17 @@ useEffect(() => {
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         View Complaint
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
           View Complaint from Customer
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/shop/Complaint'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/shop/ComplaintReport'} style={{textDecoration:'none',color:'white'}}>Generate Complaint Report</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><VisibilityIcon></VisibilityIcon><Link to={'/shop/Complaint'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><VisibilityIcon></VisibilityIcon><Link to={'/shop/ComplaintReport'} style={{textDecoration:'none',color:'white'}}>Generate Complaint Report</Link></Button>
       
       
       </CardActions>
@@ -217,21 +218,21 @@ useEffect(() => {
       <Box>
       <Card sx={{ width: 400,marginTop:5,marginLeft:10,":hover":{transform:"scale(1.05)",boxShadow:6}}}>
       <CardMedia
-        sx={{ height: 125 }}
+        sx={{ height: 140 }}
         image={img8}
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         Generate Solution
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
+        <Typography sx={{fontFamily:'fantasy'}}>
           Generate Solution based on Complaints from Customer
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><AddIcon></AddIcon>Add</Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><AddIcon></AddIcon><Link to={'/shop/Solution'} style={{textDecoration:'none',color:'white'}}>Add</Link></Button>
       
       </CardActions>
     </Card>
@@ -240,21 +241,21 @@ useEffect(() => {
       <Box>
       <Card sx={{ width: 400,marginTop:5,marginLeft:10,":hover":{transform:"scale(1.05)",boxShadow:6}}}>
       <CardMedia
-        sx={{ height: 125 }}
+        sx={{ height: 120 }}
         image={img11}
         title="green iguana"
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'cursive'}}>
+        <Typography gutterBottom variant="h5" component="div" sx={{fontFamily:'fantasy'}}>
         View Feedback
         </Typography>
-        <Typography sx={{fontFamily:'cursive'}}>
-          Generate Solution based on Complaints from Customer
+        <Typography sx={{fontFamily:'fantasy'}}>
+          View Feedbacks from Customer 
         </Typography>
       
       </CardContent>
       <CardActions>
-        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'cursive'}}><VisibilityIcon></VisibilityIcon><Link to={'/shop/FeedBack'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
+        <Button size="small" sx={{fontFamily:'fantasy',backgroundColor:'blue',color:'white',fontFamily:'fantasy'}}><VisibilityIcon></VisibilityIcon><Link to={'/shop/FeedBack'} style={{textDecoration:'none',color:'white'}}>View</Link></Button>
       
       </CardActions>
     </Card>

@@ -1,68 +1,99 @@
-import React, { useState, useEffect } from "react";
+// src/Shop/pages/ComplaintReport.jsx
+
+import React, { useEffect, useState } from "react";
 import {
   Container,
-  Box,
   Typography,
-  CircularProgress,
-  Divider,
-  Grid,
-  Avatar,
-  Paper,
   Card,
   CardContent,
+  Box,
+  Button,
+  CircularProgress,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
 } from "@mui/material";
-import { Bar, Pie } from "react-chartjs-2";
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement } from "chart.js";
+import { Bar } from "react-chartjs-2";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { CSVLink } from "react-csv";
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+} from "chart.js";
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement);
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const ComplaintReport = () => {
-  const [complaints, setComplaints] = useState([]);
-  const [sparesComplaint, setSparesComplaint] = useState([]);
+  const [allComplaints, setAllComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const shopId = sessionStorage.getItem("Sid");
 
   useEffect(() => {
-    const fetchComplaints = async () => {
+    const fetchData = async () => {
       try {
-        setLoading(true);
-        const response = await fetch(`http://localhost:5000/WatchesComplaint/${shopId}`);
-        const data = await response.json();
+        const res1 = await fetch(`http://localhost:5000/WatchesComplaint/${shopId}`);
+        const res2 = await fetch(`http://localhost:5000/SparesComplaint/${shopId}`);
+        const data1 = await res1.json();
+        const data2 = await res2.json();
 
-        if (response.ok) {
-          setComplaints(data.WatchComplaints);
-        } else {
-          setError(data.message || "Failed to fetch complaints.");
-        }
+        const merged = [
+          ...(data1.WatchComplaints || []),
+          ...(data2.SpareComplaints || []),
+        ];
+
+        setAllComplaints(merged);
       } catch (error) {
-        setError("Error fetching complaints.");
+        console.error("Failed to fetch complaint data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    const fetchSparesComplaints = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`http://localhost:5000/SparesComplaint/${shopId}`);
-        const data = await response.json();
-
-        if (response.ok) {
-          setSparesComplaint(data.SpareComplaints);
-        } else {
-          setError(data.message || "Failed to fetch spare complaints.");
-        }
-      } catch (error) {
-        setError("Error fetching spare complaints.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchComplaints();
-    fetchSparesComplaints();
+    fetchData();
   }, [shopId]);
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Complaint Report", 14, 10);
+    autoTable(doc, {
+      head: [["Sl. No", "Name", "Message", "Reply"]],
+      body: allComplaints.map((c, i) => [
+        i + 1,
+        c.userDetails?.name || "N/A",
+        c.complaintMessage,
+        c.reply || "Not Replied",
+      ]),
+    });
+    doc.save("complaint_report.pdf");
+  };
+
+  const csvData = allComplaints.map((c, i) => ({
+    SlNo: i + 1,
+    Name: c.userDetails?.name || "N/A",
+    Message: c.complaintMessage,
+    Reply: c.reply || "Not Replied",
+  }));
+
+  const chartData = {
+    labels: ["Pending", "Resolved"],
+    datasets: [
+      {
+        label: "Complaints",
+        data: [
+          allComplaints.filter((c) => c.status === "Pending").length,
+          allComplaints.filter((c) => c.status !== "Pending").length,
+        ],
+        backgroundColor: ["#f44336", "#4caf50"],
+      },
+    ],
+  };
 
   if (loading) {
     return (
@@ -72,125 +103,55 @@ const ComplaintReport = () => {
     );
   }
 
-  // Pie chart for complaint status distribution
-  const statusDistribution = {
-    labels: ["Resolved", "Pending", "In Progress"],
-    datasets: [
-      {
-        label: "Complaint Status Distribution",
-        data: [
-          complaints.filter((c) => c.status === "Resolved").length,
-          complaints.filter((c) => c.status === "Pending").length,
-          complaints.filter((c) => c.status === "In Progress").length,
-        ],
-        backgroundColor: ["#4caf50", "#ff9800", "#f44336"],
-        hoverOffset: 4,
-      },
-    ],
-  };
-
-  // Bar chart for complaint types (Watches vs. Spares)
-  const complaintTypeDistribution = {
-    labels: ["Watches", "Spares"],
-    datasets: [
-      {
-        label: "Number of Complaints",
-        data: [complaints.length, sparesComplaint.length],
-        backgroundColor: ["#2196f3", "#ff5722"],
-        borderRadius: 4,
-        borderSkipped: false,
-      },
-    ],
-  };
-
   return (
-    <Container maxWidth="md"> {/* Reduced maxWidth */}
-      <Box sx={{ padding: "1rem" }}>
-        <Typography variant="h5" gutterBottom align="center" color="primary">
-          Complaint Report for Shop
-        </Typography>
+    <Container sx={{ mt: 4 }}>
+      <Typography variant="h4" align="center" gutterBottom sx={{ fontFamily: "fantasy" }}>
+        COMPLAINT REPORT
+      </Typography>
 
-        {error && (
-          <Typography color="error" variant="body2" align="center">
-            {error}
+      {/* Graph */}
+      <Box mb={4}>
+        <Bar data={chartData} />
+      </Box>
+
+      {/* Table-style Card */}
+      <Card sx={{ boxShadow: 3 }}>
+        <CardContent>
+          <Typography variant="h6" gutterBottom sx={{ fontFamily: "fantasy" }}>
+            Complaints List
           </Typography>
-        )}
 
-      
-        <Paper elevation={3} sx={{ padding: "1rem", marginBottom: "1.5rem", maxWidth: "350px", margin: "auto" }}>
-          <Typography variant="h6" color="primary" sx={{ marginBottom: "0.5rem", fontWeight: "bold" }}>
-            Complaint Status Distribution
-          </Typography>
-          <Pie data={statusDistribution} options={{ responsive: true, maintainAspectRatio: true, plugins: { legend: { position: "top" } } }} />
-        </Paper>
+          <Table>
+            <TableHead sx={{ backgroundColor: "#e0e0e0" }}>
+              <TableRow>
+                <TableCell><strong>Sl. No</strong></TableCell>
+                <TableCell><strong>Name</strong></TableCell>
+                <TableCell><strong>Message</strong></TableCell>
+                <TableCell><strong>Reply</strong></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {allComplaints.map((complaint, index) => (
+                <TableRow key={complaint._id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{complaint.userDetails?.name || "N/A"}</TableCell>
+                  <TableCell>{complaint.complaintMessage}</TableCell>
+                  <TableCell>{complaint.Reply || "Not Replied"}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
-  
-        <Paper elevation={3} sx={{ padding: "1rem", marginBottom: "1.5rem", maxWidth: "350px", margin: "auto" }}>
-          <Typography variant="h6" color="primary" sx={{ marginBottom: "0.5rem", fontWeight: "bold" }}>
-            Complaint Types (Watches vs. Spares)
-          </Typography>
-          <Bar data={complaintTypeDistribution} options={{ responsive: true, maintainAspectRatio: true, plugins: { legend: { position: "top" } } }} />
-        </Paper>
-
-      
-        <Grid container spacing={3} mt={2} sx={{ marginBottom: "1.5rem" }}>
-          {complaints.length > 0 ? (
-            complaints.map((complaint) => (
-              <Grid item xs={12} sm={6} md={4} key={complaint._id}>
-                <Card sx={{ padding: "1rem", boxShadow: 3 }}>
-                  <CardContent>
-                    <Typography variant="h6" color="primary" sx={{ fontWeight: "bold" }}>
-                      User: {complaint.userDetails.name}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      <strong>Complaint Message:</strong> {complaint.complaintMessage}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      <strong>Product:</strong> {complaint.watchesDetails.model} | {complaint.watchesDetails.company}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      <strong>Status:</strong> {complaint.status}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))
-          ) : (
-            <Typography variant="body2" align="center" color="textSecondary">
-              No complaints found for watches.
-            </Typography>
-          )}
-        </Grid>
-
-        {/* Spares Complaints Section */}
-        <Grid container spacing={3}>
-          {sparesComplaint.length > 0 ? (
-            sparesComplaint.map((spareComplaint) => (
-              <Grid item xs={12} sm={6} md={4} key={spareComplaint._id}>
-                <Card sx={{ padding: "1rem", boxShadow: 3 }}>
-                  <CardContent>
-                    <Typography variant="h6" color="primary" sx={{ fontWeight: "bold" }}>
-                      User: {spareComplaint.userDetails.name}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      <strong>Complaint Message:</strong> {spareComplaint.complaintMessage}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      <strong>Product:</strong> {spareComplaint.sparesDetails.part} | {spareComplaint.sparesDetails.partName}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      <strong>Status:</strong> {spareComplaint.status}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))
-          ) : (
-            <Typography variant="body2" align="center" color="textSecondary">
-              No complaints found for spares.
-            </Typography>
-          )}
-        </Grid>
+      {/* Download Buttons */}
+      <Box mt={4} display="flex" justifyContent="space-between">
+        <Button variant="contained" color="primary" onClick={downloadPDF}>
+          Download PDF
+        </Button>
+        <CSVLink data={csvData} filename="complaint_report.csv" style={{ textDecoration: "none" }}>
+          <Button variant="contained" color="secondary">Download CSV</Button>
+        </CSVLink>
       </Box>
     </Container>
   );

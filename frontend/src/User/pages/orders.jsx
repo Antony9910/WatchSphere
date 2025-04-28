@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import { Container, Grid, Paper, Card, CardMedia, CardContent, Typography, Button, Box, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import DownloadIcon from '@mui/icons-material/Download';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
-
+import WatchIcon from '@mui/icons-material/Watch';
 const Orders = () => {
   const [bookings, setBookings] = useState([]);
   const [watchBooking, setWatchBooking] = useState([]);
   const [spareBooking, setSpareBooking] = useState([]);
-  const [status, setStatus] = useState("confirmed");  // Added state for status filter
+  const [status, setStatus] = useState("Confirmed");  // Added state for status filter
   const userId = sessionStorage.getItem("uid");  
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const Orders = () => {
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
-      <Box sx={{ fontFamily: 'fantasy', marginLeft: 50, fontSize: 40 }}>YOUR BOOKINGS<BookOnlineIcon></BookOnlineIcon></Box>
+      <Box sx={{ fontFamily: 'fantasy', marginLeft: 50, fontSize: 40 }}>YOUR-ORDERS<BookOnlineIcon></BookOnlineIcon></Box>
       
       {/* Status filter dropdown */}
       <FormControl sx={{ minWidth: 120, mt: 2 }}>
@@ -59,14 +59,14 @@ const Orders = () => {
           onChange={handleStatusChange}
           label="Status"
         >
-          <MenuItem value="confirmed">Confirmed</MenuItem>
+          <MenuItem value="Confirmed">Confirmed</MenuItem>
           <MenuItem value="Completed">Completed</MenuItem>
         </Select>
       </FormControl>
-
-      <Grid container spacing={4} mt={2}>
+      <Box sx={{display:'flex'}}>
+      <Grid container spacing={4} mt={1}>
         {bookings.map((booking) => (
-          <Grid item xs={12} sm={6} md={4} key={booking._id}>
+          <Grid item xs={12} sm={6} md={9} key={booking._id}>
             <Paper elevation={3} sx={{ p: 3 }}>
               <Card>
                 <CardMedia
@@ -77,22 +77,22 @@ const Orders = () => {
                 />
                 <CardContent>
                   <Typography variant="h6" sx={{ fontFamily: 'fantasy' }}>{booking.ProductId?.productName}</Typography>
-                  <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'fantasy' }}>Model: {booking.ProductId?.modelNum}</Typography>
+                  <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'fantasy' }}>Model-Num: {booking.ProductId?.modelNum}</Typography>
                   <Typography variant="body1" color="primary" sx={{ mt: 1, fontFamily: 'fantasy' }}>Price: ₹{booking.totalPrice}</Typography>
                   <Typography variant="body1" color="primary" sx={{ mt: 1, fontFamily: 'fantasy' }}>Quantity: {booking.quantity}</Typography>
-                  <Typography variant="body2" sx={{ mt: 1, fontFamily: 'fantasy' }}>Status: {booking.status}</Typography>
-                  <Button variant="contained"><Link to={`/user/Bill/${booking._id}`} style={{ textDecoration: 'none', color: 'white', fontFamily: 'fantasy' }}><DownloadIcon /> Download</Link></Button>
+                
+                  <Button variant="contained"><Link to={`/user/Bill/${booking._id}`} style={{ textDecoration: 'none', color: 'white', fontFamily: 'fantasy' }}><DownloadIcon />DOWNLOAD BILL</Link></Button>
                 </CardContent>
               </Card>
             </Paper>
           </Grid>
         ))}
-      </Grid>
+      </Grid> 
 
-      {/* Render other bookings (watch and spare) similarly */}
-      <Grid container spacing={4} mt={2}>
+     
+      <Grid container spacing={4} mt={1}>
         {watchBooking.map((watchBooking) => (
-          <Grid item xs={12} sm={6} md={4} key={watchBooking._id}>
+          <Grid item xs={12} sm={6} md={9} key={watchBooking._id}>
             <Paper elevation={3} sx={{ p: 3 }}>
               <Card>
                 <CardMedia
@@ -102,11 +102,12 @@ const Orders = () => {
                   sx={{ height: 200, objectFit: "contain" }}
                 />
                 <CardContent>
-                  <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'fantasy' }}>Model: {watchBooking.watchId?.model}</Typography>
-                  <Typography variant="body1" color="primary" sx={{ mt: 1, fontFamily: 'fantasy' }}>Price: ₹{watchBooking.watchId?.price}</Typography>
+                <Typography variant="h6" sx={{ fontFamily: 'fantasy' }}>{watchBooking.watchId?.model}</Typography>
+                <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'fantasy' }}>Model-Num: {watchBooking.watchId?.modelNum}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1, fontFamily: 'fantasy' }}>Price: ₹{watchBooking.totalPrice}</Typography>
                   <Typography variant="body1" color="primary" sx={{ mt: 1, fontFamily: 'fantasy' }}>Quantity: {watchBooking.quantity}</Typography>
-                  <Typography variant="body2" sx={{ mt: 1, fontFamily: 'fantasy' }}>Status: {watchBooking.status}</Typography>
-                  <Button variant="contained"><Link to={`/user/watchBill/${watchBooking._id}`} style={{ textDecoration: 'none', color: 'white', fontFamily: 'fantasy' }}><DownloadIcon /> Download</Link></Button>
+                  {/* <Typography variant="body2" sx={{ mt: 1, fontFamily: 'fantasy' }}>ShopName:{watchBooking.watchId?.shopId?.shop}</Typography> */}
+                  <Button variant="contained"><Link to={`/user/watchBill/${watchBooking._id}`} style={{ textDecoration: 'none', color: 'white', fontFamily: 'fantasy' }}><DownloadIcon /> DOWNLOAD BILL</Link></Button>
                 </CardContent>
               </Card>
             </Paper>
@@ -116,7 +117,7 @@ const Orders = () => {
 
       <Grid container spacing={4} mt={2}>
         {spareBooking.map((spareBooking) => (
-          <Grid item xs={12} sm={6} md={4} key={spareBooking._id}>
+          <Grid item xs={12} sm={6} md={9} key={spareBooking._id}>
             <Paper elevation={3} sx={{ p: 3 }}>
               <Card>
                 <CardMedia
@@ -126,18 +127,21 @@ const Orders = () => {
                   sx={{ height: 200, objectFit: "contain" }}
                 />
                 <CardContent>
-                  <Typography variant="body2" color="textSecondary">PartName: {spareBooking.SpareId?.partName}</Typography>
-                  <Typography variant="body1" color="primary" sx={{ mt: 1, fontFamily: 'fantasy' }}>Price: ₹{spareBooking.SpareId?.price}</Typography>
-                  <Typography variant="body1" color="primary" sx={{ mt: 1, fontFamily: 'fantasy' }}>Material: {spareBooking.SpareId?.material}</Typography>
-                  <Typography variant="body2" sx={{ mt: 1, fontFamily: 'fantasy' }}>Status: {spareBooking.status}</Typography>
-                  <Button variant="contained"><Link to={`/user/ShopsBill/${spareBooking._id}`} style={{ textDecoration: 'none', color: 'white', fontFamily: 'fantasy' }}><DownloadIcon /> Download</Link></Button>
+                  <Typography variant="h6" sx={{ fontFamily: 'fantasy' }}>{spareBooking.SpareId?.partName}</Typography>
+                  <Typography variant="body2" color="textSecondary" sx={{ fontFamily: 'fantasy' }}>PartNumber:{spareBooking.SpareId?.partNumber}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1, fontFamily: 'fantasy' }}>Price: ₹{spareBooking.totalPrice}</Typography>
+                  <Typography variant="body1" color="primary" sx={{ mt: 1, fontFamily: 'fantasy' }}>Quantity: {spareBooking.quantity}</Typography>
+                  {/* <Typography variant="body2" sx={{ mt: 1, fontFamily: 'fantasy' }}>ShopName:{spareBooking.SpareId?.shopId?.shop}</Typography> */}
+                  <Button variant="contained"><Link to={`/user/ShopsBill/${spareBooking._id}`} style={{ textDecoration: 'none', color: 'white', fontFamily: 'fantasy' }}><DownloadIcon /> DOWNLOAD BILL</Link></Button>
                 </CardContent>
               </Card>
             </Paper>
           </Grid>
         ))}
       </Grid>
+      </Box>
     </Container>
+   
   );
 };
 

@@ -1,57 +1,104 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Styles from '../sidebar/sidebar.module.css';
-import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Box, Typography, Avatar, Stack } from '@mui/material';
 import AddLocationIcon from '@mui/icons-material/AddLocation';
 import Person2Icon from '@mui/icons-material/Person2';
-import AdminPanelSettingsTwoToneIcon from '@mui/icons-material/AdminPanelSettingsTwoTone';
 import ShopIcon from '@mui/icons-material/Shop';
-import { Box } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import axios from 'axios';
+import CopyrightIcon from '@mui/icons-material/Copyright';
 
 const Sidebar = () => {
-  return (
-    <div className={Styles.sidebar}>
-      <div className={Styles.avatarContainer}>
-        <Stack direction="row" spacing={2} justifyContent="center">
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={Styles.avatar} />
-        </Stack>
-      </div>
+  const [adminName, setAdminName] = useState('');
 
-      <div className={Styles.links}>
+  useEffect(() => {
+    fetchAdmin();
+  }, []);
+
+  const fetchAdmin = () => {
+    const id = sessionStorage.getItem('aid');
+    axios.get(`http://localhost:5000/adminName/${id}`)
+      .then((res) => {
+        const admin = res.data.admin;
+        setAdminName(admin.adminName);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  return (
+    <Drawer
+      sx={{
+        width: 240,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: 200,
+          boxSizing: 'border-box',
+          backgroundColor: '#2e3b4e',
+          color: 'white',
+          paddingTop: 2,
+        },
+      }}
+      variant="permanent"
+      anchor="left"
+    >
+      <Box sx={{ padding: 2, textAlign: 'center' }}>
+        <Stack direction="row" spacing={2} justifyContent="center">
+          <Avatar alt="Admin" src="/static/images/avatar/1.jpg" sx={{ width: 56, height: 56 }} />
+        </Stack>
+        <Typography variant="h6" sx={{ color: 'white', marginTop: 1 }}>
+          {adminName}
+        </Typography>
+      </Box>
+
+      <List>
+        {[
+          { text: 'Home', icon: <HomeIcon sx={{ color: 'white' }} />, to: '/admin' },
+          { text: 'District', icon: <AddLocationIcon sx={{ color: 'white' }} />, to: '/admin/district' },
+          { text: 'Place', icon: <AddLocationIcon sx={{ color: 'white' }} />, to: '/admin/place' },
+          { text: 'Agent List', icon: <Person2Icon sx={{ color: 'white' }} />, to: '/admin/Agent' },
+          { text: 'User List', icon: <Person2Icon sx={{ color: 'white' }} />, to: '/admin/Customer' },
+          { text: 'Seller List', icon: <Person2Icon sx={{ color: 'white' }} />, to: '/admin/seller' },
+          { text: 'Shop List', icon: <ShopIcon sx={{ color: 'white' }} />, to: '/admin/Shop' },
         
-        <Link to={'/admin/district'} className={Styles.linkItem}>
-          <AddLocationIcon className={Styles.icon} /> <Box sx={{fontFamily:'cursive'}}>District</Box>
-        </Link>
-        <Link to={'/admin/place'} className={Styles.linkItem}>
-          <AddLocationIcon className={Styles.icon} /><Box sx={{fontFamily:'cursive'}}>Place</Box> 
-        </Link>
-        {/* <Link to={'/admin/category'} className={Styles.linkItem}>
-          <Person2Icon className={Styles.icon} /> Category
-        </Link> */}
-        <Link to={'/admin/seller'} className={Styles.linkItem}>
-          <Person2Icon className={Styles.icon} /><Box sx={{fontFamily:'cursive'}}> SellerList</Box> 
-        </Link>
-        <Link to={'/admin/Shop'} className={Styles.linkItem}>
-          <ShopIcon className={Styles.icon} /><Box sx={{fontFamily:'cursive'}}> ShopList</Box> 
-        </Link>
-        <Link to={'/admin/Customer'} className={Styles.linkItem}>
-          <Person2Icon className={Styles.icon} /><Box sx={{fontFamily:'cursive'}}> CustomerList</Box> 
-        </Link>
-        <Link to={'/admin/Agent'} className={Styles.linkItem}>
-          <Person2Icon className={Styles.icon} /><Box sx={{fontFamily:'cursive'}}> Agent-List</Box> 
-        </Link>
-        {/* <Link to={'/admin/subcategory'} className={Styles.linkItem}>
-          <Person2Icon className={Styles.icon} /> Sub-category
-        </Link> */}
-        {/* <Link to={'/admin/brand'} className={Styles.linkItem}>
-          <Person2Icon className={Styles.icon} /> Brand
-        </Link> */}
-        {/* <Link to={'/admin/newAd'} className={Styles.linkItem}>
-          <AdminPanelSettingsTwoToneIcon className={Styles.icon} /> NewAd
-        </Link> */}
-      </div>
-    </div>
+        ].map((item) => (
+          <ListItem
+            button
+            component={Link}
+            to={item.to}
+            key={item.text}
+            sx={{
+              '&:hover': {
+                backgroundColor: 'orange'
+              },
+              '&.Mui-selected': {
+                backgroundColor: '#777', // Change color when selected
+              },
+            }}
+          >
+            <ListItemIcon>
+              {item.icon}
+            </ListItemIcon>
+            <ListItemText
+              primary={item.text}
+              sx={{
+                color: 'white',
+                '&.MuiListItemText-root:hover': {
+                  color: 'white', // Ensures text remains white on hover
+                }
+              }}
+            />
+          </ListItem>
+        ))}
+      </List>
+      <Box sx={{ marginLeft: 2, display: 'flex', alignItems: 'center', marginTop: 20 }}>
+  <CopyrightIcon sx={{ color: 'white' }} />
+  <Box sx={{ marginLeft: 1,color:'white',fontSize:19 }}> 
+    WatchSphere
+  </Box>
+  </Box>
+    </Drawer>
   );
 };
 

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import img from "./images/image1.jpg";
+
+
 import {
   TextField,
   Button,
@@ -12,6 +14,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  InputAdornment,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -151,6 +154,8 @@ const AgentRegistration = () => {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
+                      placeholder="Enter name"
+                    
                     />
                   </Grid>
 
@@ -162,6 +167,8 @@ const AgentRegistration = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
+                      placeholder="Enter email"
+                     
                     />
                   </Grid>
 
@@ -182,6 +189,7 @@ const AgentRegistration = () => {
                                                    onChange={(e) => setContactPhone(e.target.value)}
                                                    pattern="[0-9]{10}"
                                                    required
+                                                 
                                                    placeholder="Enter 10-digit contact number"
                                                  />
                                                </Grid>
@@ -232,7 +240,7 @@ const AgentRegistration = () => {
                         onChange={(e) => setGender(e.target.value)}
                       >
                         <MenuItem value="Male">Male</MenuItem>
-                        <MenuItem>Female</MenuItem>
+                        <MenuItem value="Female">Female</MenuItem>
                         <MenuItem>Others</MenuItem>
                       </Select>
                     </FormControl>
@@ -241,6 +249,7 @@ const AgentRegistration = () => {
                     <FormControl fullWidth>
                       <InputLabel id="demo-simple-select-label">
                         Vehicle
+                        
                       </InputLabel>
                       <Select
                         labelId="demo-simple-select-label"
@@ -261,6 +270,8 @@ const AgentRegistration = () => {
                       value={VehicleNum}
                       onChange={(e) => setVehicleNum(e.target.value)}
                       required
+                      placeholder="Enter Vehicle Number"
+                     
                     />
                   </Grid>
 
@@ -360,6 +371,7 @@ const AgentRegistration = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
+                      
                       placeholder="Enter Password"
                     />
                   </Grid>
@@ -370,6 +382,7 @@ const AgentRegistration = () => {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
+                     
                       placeholder="Enter Confirm Password"
                     />
                   </Grid>

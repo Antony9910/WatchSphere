@@ -1,6 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Box, Typography, CircularProgress, Grid, Card, CardContent, Divider, Paper } from '@mui/material';
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts'; // For charting
+import {
+  Container,
+  Box,
+  Typography,
+  CircularProgress,
+  Grid,
+  Card,
+  CardContent,
+  Button,
+  Avatar
+} from '@mui/material';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from 'recharts';
+import { saveAs } from 'file-saver';
 
 const ComplaintReport = () => {
   const [complaints, setComplaints] = useState([]);
@@ -37,7 +55,6 @@ const ComplaintReport = () => {
     );
   }
 
-  // Calculate complaint statistics (e.g., resolved, pending)
   const complaintStats = complaints.reduce(
     (stats, complaint) => {
       if (complaint.status === 'Resolved') stats.resolved++;
@@ -47,112 +64,153 @@ const ComplaintReport = () => {
     { resolved: 0, pending: 0 }
   );
 
-  // Chart data for pie chart
+  const productComplaintCounts = complaints.reduce((acc, complaint) => {
+    const productName = complaint.productDetails.productName;
+    if (!acc[productName]) {
+      acc[productName] = { count: 0, details: [] };
+    }
+    acc[productName].count++;
+    acc[productName].details.push(complaint);
+    return acc;
+  }, {});
+
   const chartData = [
     { name: 'Resolved', value: complaintStats.resolved },
     { name: 'Pending', value: complaintStats.pending }
   ];
 
-  // Pie chart colors
   const COLORS = ['#4caf50', '#f44336'];
+
+  const generateReport = () => {
+    const csvRows = [];
+    csvRows.push('Product,User,Complaint Status,Complaint Message,Reply');
+
+    complaints.forEach((complaint) => {
+      const userName = complaint.userDetails ? complaint.userDetails.name : 'N/A';
+      const productName = complaint.productDetails.productName;
+      const complaintMessage = complaint.complaintMessage;
+      const status = complaint.status;
+      const Reply = complaint.Reply || 'No reply yet';
+      csvRows.push(`${productName},${userName},${status},${complaintMessage},${Reply}`);
+    });
+
+    const csvData = csvRows.join('\n');
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    saveAs(blob, 'complaint_report.csv');
+  };
 
   return (
     <Container maxWidth="lg">
       <Box sx={{ padding: '2rem', backgroundColor: '#f9f9f9', borderRadius: '10px' }}>
-        <Typography variant="h4" gutterBottom align="center" color="primary">
-          Complaint Report for Seller
+        <Typography variant="h4" gutterBottom align="center" color="primary" sx={{fontFamily:'fantasy'}}>
+          COMPLAINT REPORT FOR SELLER
         </Typography>
 
         {error && <Typography color="error" variant="h6" align="center">{error}</Typography>}
 
-        {/* Complaint Statistics */}
         <Grid container spacing={3} justifyContent="center">
-          <Grid item xs={12} sm={6} md={4}>
+          <Grid item xs={12} sm={6} md={6}>
             <Card sx={{ backgroundColor: '#fff', boxShadow: 3, padding: '1rem' }}>
               <CardContent>
-                <Typography variant="h5" color="primary" gutterBottom>
-                  Complaints Overview
+                <Typography variant="h5" color="primary" gutterBottom sx={{fontFamily:'fantasy'}}>
+                  Complaints Overview & Status Distribution
                 </Typography>
-                <Typography variant="body1" color="textSecondary">
-                  <strong>Total Complaints:</strong> {complaints.length}
-                </Typography>
-                <Typography variant="body1" color="textSecondary">
-                  <strong>Resolved:</strong> {complaintStats.resolved}
-                </Typography>
-                <Typography variant="body1" color="textSecondary">
-                  <strong>Pending:</strong> {complaintStats.pending}
-                </Typography>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <ResponsiveContainer width="100%" height={200}>
+                      <PieChart>
+                        <Pie
+                          data={chartData}
+                          dataKey="value"
+                          nameKey="name"
+                          cx="50%"
+                          cy="50%"
+                          outerRadius={80}
+                          fill="#8884d8"
+                        >
+                          {chartData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                        <Legend />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <Typography variant="body1" color="textSecondary">
+                      <strong>Total Complaints:</strong> {complaints.length}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary">
+                      <strong>Resolved:</strong> {complaintStats.resolved}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary">
+                      <strong>Pending:</strong> {complaintStats.pending}
+                    </Typography>
+                  </Grid>
+                </Grid>
               </CardContent>
             </Card>
           </Grid>
 
-          {/* Pie Chart to display complaint statuses */}
-          <Grid item xs={12} sm={6} md={4}>
-            <Card sx={{ backgroundColor: '#fff', boxShadow: 3, padding: '1rem' }}>
-              <CardContent>
-                <Typography variant="h5" color="primary" gutterBottom>
-                  Complaint Status Distribution
-                </Typography>
-                <ResponsiveContainer width="100%" height={200}>
-                  <PieChart>
-                    <Pie
-                      data={chartData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                      fill="#8884d8"
-                    >
-                      {chartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-
-        {/* Detailed Complaints (Concise Version) */}
-        <Typography variant="h5" color="primary" sx={{ marginTop: '2rem' }} gutterBottom>
-          Complaints Summary
-        </Typography>
-
-        <Grid container spacing={3}>
-          {complaints.length > 0 ? (
-            complaints.map((complaint) => (
-              <Grid item xs={12} sm={6} md={4} key={complaint._id}>
-                <Card sx={{ borderRadius: '10px', marginBottom: '1.5rem', backgroundColor: '#fff', boxShadow: 3 }}>
-                  <CardContent>
-                    <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
-                      <strong>User:</strong> {complaint.userDetails ? complaint.userDetails.name : 'N/A'}
-                    </Typography>
-
-                    <Typography variant="body1" color="textSecondary" paragraph>
-                      <strong>Product:</strong> {complaint.productDetails.productName} | Model: {complaint.productDetails.modelNum}
-                    </Typography>
-
-                    <Typography variant="body1" color="textSecondary" paragraph>
-                      <strong>Complaint:</strong> {complaint.complaintMessage}
-                    </Typography>
-
-                    <Typography variant="body1" color="textSecondary" paragraph>
-                      <strong>Status:</strong> {complaint.status}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))
-          ) : (
-            <Typography variant="h6" align="center" color="textSecondary">
-              No complaints found for this seller.
+          <Grid item xs={12}>
+            <Typography variant="h5" color="primary" sx={{ marginTop: '2rem',fontFamily:'fantasy' }} gutterBottom>
+              PRODUCT-WISE COMPLAINTS
             </Typography>
-          )}
+            {Object.keys(productComplaintCounts).map((productName) => (
+              <Card key={productName} sx={{ marginBottom: '1rem', backgroundColor: '#fff', boxShadow: 3 }}>
+                <CardContent>
+                  <Typography variant="h6" color="primary">
+                    <strong>{productName}</strong> - {productComplaintCounts[productName].count} Complaints
+                  </Typography>
+
+                  {/* Table headings */}
+                  <Box sx={{ marginTop: 2 }}>
+                    <Grid container sx={{ fontWeight: 'bold', borderBottom: '1px solid #ccc', paddingY: 1 }}>
+                      <Grid item xs={1}>SL. NO</Grid>
+                      <Grid item xs={3}>USER</Grid>
+                      <Grid item xs={2}>STATUS</Grid>
+                      <Grid item xs={4}>MESSAGE</Grid>
+                      <Grid item xs={2}>REPLY</Grid>
+                    </Grid>
+
+                    {productComplaintCounts[productName].details.map((complaint, index) => (
+                      <Grid container key={complaint._id} sx={{ borderBottom: '1px solid #eee', paddingY: 1, alignItems: 'center' }}>
+                        <Grid item xs={1}>
+                          {index + 1}
+                        </Grid>
+                        <Grid item xs={3} display="flex" alignItems="center">
+                          <Avatar
+                            alt={complaint.userDetails?.name || "User"}
+                            src={complaint.userDetails?.profileImage}
+                            sx={{ width: 30, height: 30, marginRight: 1 }}
+                          />
+                          {complaint.userDetails ? complaint.userDetails.name : 'N/A'}
+                        </Grid>
+                        <Grid item xs={2}>
+                          {complaint.status}
+                        </Grid>
+                        <Grid item xs={4}>
+                          {complaint.complaintMessage}
+                        </Grid>
+                        <Grid item xs={2} sx={{ color: complaint.Reply ? '#000' : '#999', fontStyle: complaint.Reply ? 'normal' : 'italic' }}>
+                          {complaint.Reply || 'No reply yet'}
+                        </Grid>
+                      </Grid>
+                    ))}
+                  </Box>
+                </CardContent>
+              </Card>
+            ))}
+          </Grid>
         </Grid>
+
+        <Box sx={{ textAlign: 'center', marginTop: '2rem' }}>
+          <Button variant="contained" color="primary" onClick={generateReport}>
+            Download Report (CSV)
+          </Button>
+        </Box>
       </Box>
     </Container>
   );

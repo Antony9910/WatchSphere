@@ -1,31 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Styles from "../navbar/navbar.module.css";
 import Avatar from "@mui/material/Avatar";
-import Stack from "@mui/material/Stack";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MessageIcon from "@mui/icons-material/Message";
 import img from './images/W.jpg';
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from 'react-router-dom';
-import { InputBase, IconButton, Box, Button } from "@mui/material";
+import { InputBase, IconButton, Box } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
-import InfoIcon from '@mui/icons-material/Info';
+import axios from "axios"; // Make sure axios is imported
 
 const Navbar = () => {
+  
+
   return (
     <div className={Styles.navbar}>
       <div className={Styles.leftSection}>
-      <Box sx={{marginLeft:20,marginTop:1}}>
-  <img src={img}  width={80} height={70}alt="Image" style={{borderRadius:50}} />
-</Box>
+        <Box sx={{ marginLeft: 21, marginTop: 1 }}>
+          <img src={img} width={80} height={70} alt="Logo" style={{ borderRadius: 50 }} />
+        </Box>
         <div className={Styles.logo}>
           <span><h3>WATCH-SPHERE</h3></span>
         </div>
       </div>
-     
-      <Box sx={{ flexGrow: 1, display: "flex", marginLeft:50 }}>
-        <div className={Styles.searchBar}>
+
+      <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center", marginLeft: 50 }}>
+        <div className={Styles.searchBar} style={{ display: "flex", alignItems: "center" }}>
           <InputBase
             sx={{
               color: "white",
@@ -43,64 +42,46 @@ const Navbar = () => {
           <IconButton sx={{ padding: "10px" }} aria-label="search">
             <SearchIcon style={{ color: "white" }} />
           </IconButton>
-          <Box
-            sx={{
-              marginLeft: 2,
-              ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'orange'
-            }}
-          >
-            <h3>  <Link to={"/*"}style={{color:'orange',textDecoration:'none'}}><HomeIcon></HomeIcon>Home</Link></h3>
-          </Box>
-          <Box
-            sx={{
-              marginLeft: 2,
-              ":hover": { transform: "scale(1.05)", boxShadow: 6,color:'orange' },
-            }}
-          >
-              <h3><Link to={"/about"} style={{ color: 'orange',textDecoration:'none' }}><InfoIcon></InfoIcon>About</Link></h3>
-          </Box>
-          {/* <Box
-            sx={{
-              marginLeft: 2,
-              ":hover": { transform: "scale(1.05)", boxShadow: 6 },
-            }}
-          >
-            <h3>Contact</h3>
-          </Box> */}
-          {/* <Box
-            sx={{
-              marginLeft: 2,
-              ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'orange'
-            }}
-          >
-            <h3><Link to={"/Register"} style={{color:'orange',textDecoration:'none'}}>Registration</Link></h3>
-          </Box> */}
-         <Box
-            sx={{
-              marginLeft: 2,
-              ":hover": { transform: "scale(1.05)", boxShadow: 6 },color:'orange',
-            }}
-          >
-             <h3>
-              {/* <Link to={"/login"} style={{color:'orange',textDecoration:'none',marginRight:8}}>Logout</Link> */}
-              <LogoutIcon></LogoutIcon><Link to={"/*"} style={{textDecoration:'none',color:'orange'}}>Logout</Link>
-            </h3> 
+
+          {/* Navigation Links */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 3, marginLeft: 20 }}>
+            {/* Home */}
+            <Box
+              sx={{
+                ":hover": { transform: "scale(1.05)", boxShadow: 6 },
+                color: 'orange',
+              }}
+            >
+              <h3>
+                <Link to={"/admin"} style={{ color: 'orange', textDecoration: 'none' }}>
+                  <HomeIcon /> Home
+                </Link>
+              </h3>
+            </Box>
+
+            {/* Logout with Avatar and Admin Name */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                ":hover": { transform: "scale(1.05)", boxShadow: 6 },
+                color: 'orange',
+              }}
+            >
+              <h3 style={{ margin: 0 }}>
+                <LogoutIcon />
+                <Link to={"/*"} style={{ textDecoration: 'none', color: 'orange', marginRight:-30 }}>
+                  Logout
+                </Link>
+              </h3>
+            
+        
+            </Box>
+            
           </Box>
         </div>
       </Box>
-
-      {/* Icons Section */}
-      <div className={Styles.rightSection}>
-        {/* <Stack direction="row" spacing={2}>
-          <Avatar className={Styles.avatar} />
-          
-        </Stack> */}
-
-        <div className={Styles.iconButtons}>
-          <NotificationsIcon className={Styles.icon} />
-          <MessageIcon className={Styles.icon} />
-        </div>
-      </div>
     </div>
   );
 };

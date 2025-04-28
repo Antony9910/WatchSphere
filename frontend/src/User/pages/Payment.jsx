@@ -36,7 +36,7 @@ export default function Payment() {
     try {
    
       await axios.put(`http://localhost:5000/booking/${bookingId}`, {
-        status: "confirmed",
+        status: "Confirmed",
       });
   
       

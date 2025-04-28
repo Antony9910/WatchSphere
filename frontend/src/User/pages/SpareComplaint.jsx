@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { TextField, Button, Typography, Container, Box, CircularProgress, Paper } from "@mui/material";
 import { useParams } from "react-router-dom";
-
+import AddIcon from '@mui/icons-material/Add';
 const SpareComplaint = () => {
   const { ShopBookingId } = useParams();  
   const [complaintMessage, setComplaintMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-
+  const userId=sessionStorage.getItem('uid')
+  const ShopId = sessionStorage.getItem("Sid") || null;
   const handleComplaintSubmit = async (e) => {
     e.preventDefault();
 
@@ -26,7 +27,7 @@ const SpareComplaint = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          complaintMessage,
+          complaintMessage,userId,ShopId 
         }),
       });
 
@@ -50,8 +51,8 @@ const SpareComplaint = () => {
     <Container maxWidth="xs">
       <Paper elevation={3} sx={{ padding: "2rem", borderRadius: 2, backgroundColor: "#f5f5f5",marginTop:5 }}>
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Typography variant="h4" gutterBottom color="primary" sx={{ fontWeight: "bold" }}>
-            Submit a Complaint
+          <Typography variant="h4" gutterBottom color="primary" sx={{ fontFamily: "fantasy" }}>
+             COMPLAINT
           </Typography>
 
           {loading && <CircularProgress sx={{ marginBottom: "1rem" }} />}
@@ -69,7 +70,7 @@ const SpareComplaint = () => {
           )}
 
           <TextField
-            label="Complaint"
+            label="Write your Complaint here"
             multiline
             rows={4}
             fullWidth
@@ -93,7 +94,7 @@ const SpareComplaint = () => {
             sx={{
               marginTop: "1rem",
               padding: "0.75rem",
-              fontWeight: "bold",
+              fontFamily: "fantasy",
               textTransform: "none",
               borderRadius: "8px",
               boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
@@ -102,7 +103,7 @@ const SpareComplaint = () => {
               },
             }}
           >
-            {loading ? "Submitting..." : "Submit Complaint"}
+            <AddIcon></AddIcon>{loading ? "Submitting..." : "SUBMIT"}
           </Button>
         </Box>
       </Paper>

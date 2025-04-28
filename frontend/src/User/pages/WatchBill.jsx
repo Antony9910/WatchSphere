@@ -73,7 +73,7 @@ const WatchBill = () => {
     <Grid container justifyContent="center" style={{ marginTop: '20px' }}>
       <Card sx={{ maxWidth: 500, width: '100%' }}>
         <CardContent>
-          <Typography variant="h6" component="h2" gutterBottom sx={{ fontFamily: 'fantasy', marginLeft: 20,fontFamily:'cursive' }}>
+          <Typography variant="h6" component="h2" gutterBottom sx={{ fontFamily: 'fantasy', marginLeft: 20,fontFamily:'fantasy' }}>
          <WatchIcon></WatchIcon>WATCH BILL
           </Typography>
           {bookingDetails ? (
@@ -84,7 +84,7 @@ const WatchBill = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'cursive' }}>
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'fantasy' }}>
                 Product Name:{bookingDetails.watchId?.model}
                 </Typography>
               </Grid>
@@ -94,17 +94,17 @@ const WatchBill = () => {
                 </Typography>
               </Grid> */}
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'cursive' }}>
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'fantasy' }}>
                  Shop Name: {bookingDetails.watchId?.shopId.name}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'cursive'}}>
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'fantasy'}}>
                  Price: {bookingDetails.totalPrice}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'cursive' }}>
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'fantasy' }}>
                   Model Number: {bookingDetails.watchId?.company}
                 </Typography>
               </Grid>
@@ -114,12 +114,12 @@ const WatchBill = () => {
                 </Typography>
               </Grid> */}
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'cursive' }}>
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'fantasy' }}>
                  Quantity: {bookingDetails.quantity}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'cursive' }}>
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily:'fantasy' }}>
                   Color: {bookingDetails.watchId.color}
                 </Typography>
               </Grid>
@@ -134,7 +134,7 @@ const WatchBill = () => {
               No booking details found.
             </Typography>
           )}
-          <Button variant="contained" sx={{ marginLeft: 20, marginTop: 2,fontFamily:'cursive' }} onClick={handleDownload}>
+          <Button variant="contained" sx={{ marginLeft: 20, marginTop: 2,fontFamily:'fantasy' }} onClick={handleDownload}>
             <DownloadIcon /> DOWNLOAD
           </Button>
         </CardContent>

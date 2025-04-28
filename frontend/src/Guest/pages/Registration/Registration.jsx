@@ -72,6 +72,10 @@ const Registration = () => {
     formDataToSend.append('pinCode', pinCode);
     formDataToSend.append('password',password);
     formDataToSend.append('confirmPassword',confirmPassword)
+    if(password!=confirmPassword)
+    {
+      alert("Password not matching! please give correct password")
+    }
     
     if (proof) formDataToSend.append('proof', proof);
     if (photo) formDataToSend.append('photo', photo);

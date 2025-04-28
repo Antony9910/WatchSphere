@@ -19,6 +19,8 @@ import ComplaintReport from '../Seller/pages/ComplaintReport'
 import FeedBack from '../Seller/pages/FeedBack'
 import Solutions from '../Seller/pages/Solutions'
 import ProductSolution from '../Seller/pages/ProductSolution'
+import EditProductImage from '../Seller/pages/EditProductImage'
+import Report from '../Seller/pages/Report'
 
 const SellerRoutes = () => {
   return (
@@ -36,11 +38,12 @@ const SellerRoutes = () => {
     <Route path='/edit/:productId' element={<EditProduct/>}/> 
     <Route path="UserCategory" element={<UserCategory/>}/>
     <Route path="Complaint" element={<Complaint/>}/>
+    <Route path="report" element={<Report/>}/>
     <Route path='ComplaintReport' element={<ComplaintReport/>}/>
     <Route path='Feedback' element={<FeedBack/>}/>
     <Route path="solutions" element={<Solutions/>}/>
     <Route path="/ProductSolution/:ComplaintId" element={<ProductSolution/>} />
-
+    <Route path='/Edits/:productId' element={<EditProductImage/>}/>
     </Routes>
     </div>
   )

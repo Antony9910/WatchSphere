@@ -3,8 +3,6 @@ import axios from 'axios';
 import img from './images/image1.jpg'
 import { TextField, Button, Container, Grid, Typography, Box, FormControl, InputLabel, MenuItem, Select, InputAdornment } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import EmailIcon from '@mui/icons-material/Email';
-import PasswordIcon from '@mui/icons-material/Password';
 const ShopRegistration = () => {
   const navigate = useNavigate();
   
@@ -148,13 +146,7 @@ const ShopRegistration = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                      InputProps={{
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <EmailIcon />
-                                          </InputAdornment>
-                                        ),
-                                      }}
+                     
                   />
                 </Grid>
 
@@ -328,13 +320,7 @@ const ShopRegistration = () => {
                    
                     required
                     
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <PasswordIcon/>
-                        </InputAdornment>
-                      ),
-                    }}
+                   
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>

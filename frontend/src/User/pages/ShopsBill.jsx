@@ -75,7 +75,7 @@ const ShopsBill = () => {
     <Grid container justifyContent="center" style={{ marginTop: '20px' }}>
       <Card sx={{ maxWidth: 500, width: '100%' }}>
         <CardContent>
-          <Typography variant="h4" component="h2" gutterBottom sx={{ fontFamily: 'cursive', marginLeft: 14 }}>
+          <Typography variant="h4" component="h2" gutterBottom sx={{ fontFamily: 'fantasy', marginLeft: 14 }}>
             <WatchIcon></WatchIcon>WATCH-BILL
           </Typography>
           {bookingDetails ? (
@@ -86,22 +86,22 @@ const ShopsBill = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily: 'cursive' }}>
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily: 'fantasy' }}>
                   Product Name:{bookingDetails.SpareId?.partName}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily: 'cursive' }}>
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily: 'fantasy' }}>
                  Shop Name:{bookingDetails.SpareId?.shopId.name}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily: 'cursive' }}>
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily: 'fantasy' }}>
                   Model Number:{bookingDetails.SpareId?.color}
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily: 'cursive' }}>
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily: 'fantasy' }}>
                 Price: ₹{bookingDetails.totalPrice}
                 </Typography>
               </Grid>
@@ -111,7 +111,7 @@ const ShopsBill = () => {
                 </Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily: 'cursive' }}>
+                <Typography variant="h6" sx={{ marginLeft: 12,fontFamily: 'fantasy' }}>
                  Color:{bookingDetails.SpareId.color}
                 </Typography>
               </Grid>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Typography, CardMedia, CardContent, Grid, Paper, Box, Card, Button, TextField } from "@mui/material";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 const ShopCart = () => {
   const { spareId } = useParams();
@@ -17,7 +18,9 @@ const ShopCart = () => {
 
   useEffect(() => {
     if (spare) {
-      setTotalPrice(spare.price * quantity);
+      // Recalculate total price based on quantity and unit price
+      const price = spare.discount * quantity; // This is assuming no discount per color, if there is a color-based discount, modify here.
+      setTotalPrice(price);
     }
   }, [quantity, spare]);
 
@@ -38,7 +41,7 @@ const ShopCart = () => {
 
   const handleAddToCart = async () => {
     const userId = sessionStorage.getItem("uid");
-    const agentId=sessionStorage.getItem("Aid")|| null; 
+    const agentId = sessionStorage.getItem("Aid") || null; 
     if (!userId) return alert("User not logged in");
     if (!selectedColor) return alert("Please select a color.");
     if (!spare) return alert("Product not found");
@@ -48,12 +51,12 @@ const ShopCart = () => {
         UserId: userId,
         SpareId: spareId,
         quantity,
-        AgentId:agentId,
+        AgentId: agentId,
         totalPrice,
         status: "Pending",
       });
 
-      const ShopBookingId= BookingResponse.data._id;
+      const ShopBookingId = BookingResponse.data._id;
 
       await axios.post("http://localhost:5000/Shopcart", {
         UserId: userId,
@@ -96,19 +99,20 @@ const ShopCart = () => {
             <CardContent>
               <Typography variant="h4" fontWeight="bold">{spare.partName}</Typography>
               <Typography variant="h6" color="textSecondary">Model: {spare.part}</Typography>
-              <Typography variant="h5" color="primary" sx={{ mt: 1 }}>₹{spare.price}</Typography>
+              <Typography variant="h5" color="primary" sx={{ mt: 1 }}>₹{spare.discount}</Typography>
               <Typography variant="h6" sx={{ mt: 1 }}>Stock: {spare.stock}</Typography>
               <Typography variant="body1" sx={{ mt: 1 }}>Category: {spare.watchCategory}</Typography>
               <Typography variant="body1">Selected Color: {selectedColor || "None"}</Typography>
               <TextField label="Quantity" type="number" value={quantity} onChange={handleQuantityChange} sx={{ mt: 2 }} />
               <Typography variant="h6" color="primary" sx={{ mt: 2 }}>Total Price: ₹{totalPrice}</Typography>
-              <Button variant="contained" sx={{ mt: 3, backgroundColor: 'orange', color: 'white' }} size="large" onClick={handleAddToCart}>
-                ADD TO CART
+              <Button variant="contained" sx={{ mt: 3, backgroundColor: 'orange', color: 'white', fontFamily: 'fantasy' }} size="large" onClick={handleAddToCart}>
+                ADD TO CART <AddShoppingCartIcon />
               </Button>
             </CardContent>
           </Grid>
         </Grid>
       </Paper>
+
       <Box sx={{ display: 'flex', mt: 2 }}>
         {spare.color.map((color, index) => (
           <Card key={color} sx={{ maxWidth: 150, margin: 1, cursor: "pointer", border: selectedColor === color ? "2px solid blue" : "none" }} onClick={() => handleColorSelect(color)}>

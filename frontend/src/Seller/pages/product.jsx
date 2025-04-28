@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import AddIcon from '@mui/icons-material/Add';
 import axios from "axios";
 import {
   TextField,
@@ -25,6 +26,7 @@ const Product = () => {
   const [message, setMessage] = useState("");
   const [watchRows, setWatchRows] = useState([]);
   const [stock,setStock] = useState([]);
+  const [warranty,setWarranty] = useState([]);
   const [userRows, setUserRows] = useState([]);
   const [selectedWatch, setSelectedWatch] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
@@ -89,7 +91,8 @@ const Product = () => {
     setSelectedUser(e.target.value);
     console.log("User:", e.target.value);
     if (!selectedUser) {
-      setMessage("User category is required.");
+   
+      
       return;
     }
   };
@@ -97,7 +100,7 @@ const Product = () => {
     const { value } = event.target;
     setSelectedColors(value);
     if (!selectedColors) {
-      setMessage("User category is required.");
+   
       return;
     } // This should already be an array as the select is multiple
   };
@@ -110,6 +113,7 @@ const Product = () => {
     formDataToSend.append("price", price);
     formDataToSend.append("offer", offer);
     formDataToSend.append("discount", discount);
+    formDataToSend.append("warranty",warranty);
     formDataToSend.append("modelNum", model);
     formDataToSend.append("watch_Category", selectedWatch);
     formDataToSend.append("productDesc",productDesc);
@@ -156,7 +160,7 @@ const Product = () => {
                 gutterBottom
                 sx={{ fontFamily: "fantasy" }}
               >
-                SPARE PRODUCT REGISTRATION
+                 PRODUCT-REGISTRATION
               </Typography>
               {message && (
                 <Box sx={{ marginBottom: 2 }}>
@@ -218,6 +222,15 @@ const Product = () => {
                       label="No of stock"
                       value={stock}
                       onChange={(e) => setStock(e.target.value)}
+                      required
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="warranty"
+                      value={warranty}
+                      onChange={(e) => setWarranty(e.target.value)}
                       required
                     />
                   </Grid>
@@ -318,7 +331,7 @@ const Product = () => {
                     />
                 
                 </Box> */}
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} mt={4}>
                     <TextField
                       label="Description"
                       value={productDesc}
@@ -335,9 +348,9 @@ const Product = () => {
                       type="submit"
                       variant="contained"
                       color="primary"
-                      sx={{ mt: 2, ml: 25, fontFamily: "cursive" }}
+                      sx={{ mt: 2, ml: 25, fontFamily: "fantasy" }}
                     >
-                      Submit
+                      <AddIcon></AddIcon>Submit
                     </Button>
                   </Grid>
                 </Grid>
